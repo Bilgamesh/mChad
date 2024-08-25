@@ -1,0 +1,68 @@
+{
+  "name": "net.przegrywy.chat",
+  "displayName": "mChad",
+  "version": "0.9.0",
+  "main": "www/index.html",
+  "scripts": {
+    "build": "cordova build android",
+    "build-docker": "docker run -v %INIT_CWD%:/opt/src --rm cordova //bin/bash -c \"npm run build\"",
+    "docker": "docker run -it -v %INIT_CWD%:/opt/src --rm cordova bash",
+    "adb-install": "adb install .\\platforms\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+    "adb-stop": "adb shell am force-stop net.przegrywy.chat",
+    "adb-start": "adb shell monkey -p net.przegrywy.chat -c android.intent.category.LAUNCHER 1",
+    "start-android": "npm run adb-stop && npm run adb-install && npm run adb-start",
+    "watch-android": "nodemon --watch www -x \"npm run build && npm run start-android\" -e *",
+    "watch-android-docker": "nodemon --watch www -x \"npm run build-docker && npm run start-android\" -e *"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Dorian Dorecki",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "cordova-android": "^12.0.1",
+    "cordova-androidx-build": "^1.0.4",
+    "cordova-browser": "^7.0.0",
+    "cordova-plugin-advanced-http": "^3.3.1",
+    "cordova-plugin-background-fetch": "^7.2.4",
+    "cordova-plugin-badge": "^0.8.9",
+    "cordova-plugin-device": "^3.0.0",
+    "cordova-plugin-file": "^8.0.1",
+    "cordova-plugin-inappbrowser": "^6.0.0",
+    "cordova-plugin-local-notification": "github:katzer/cordova-plugin-local-notifications",
+    "cordova-plugin-navigationbar-color": "github:fquirin/cordova-plugin-navigationbar",
+    "cordova-plugin-screen-orientation": "^3.0.4",
+    "cordova-plugin-secure-key-store": "^1.5.5",
+    "cordova-plugin-statusbar": "^4.0.0",
+    "cordova-plugin-timer": "^1.0.1",
+    "cordova-plugin-velda-devicefeedback": "^0.0.2",
+    "es6-promise-plugin": "^4.2.2",
+    "express": "^4.19.2",
+    "express-formidable": "^1.2.0",
+    "node-fetch": "^3.3.2",
+    "nodemon": "^3.1.0",
+    "watch": "^1.0.2"
+  },
+  "cordova": {
+    "platforms": [
+      "android",
+      "browser"
+    ],
+    "plugins": {
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-velda-devicefeedback": {},
+      "cordova-plugin-screen-orientation": {},
+      "cordova-plugin-advanced-http": {
+        "ANDROIDBLACKLISTSECURESOCKETPROTOCOLS": "SSLv3,TLSv1"
+      },
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-navigationbar-color": {},
+      "cordova-plugin-secure-key-store": {},
+      "cordova-plugin-local-notification": {
+        "ANDROID_SUPPORT_V4_VERSION": "26.+"
+      },
+      "cordova-plugin-background-fetch": {},
+      "cordova-plugin-timer": {}
+    }
+  }
+}

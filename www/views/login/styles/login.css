@@ -1,0 +1,36 @@
+body[page='login'] .main-page {
+  z-index: 998;
+  background-color: var(--surface-container);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+}
+
+body[page='login'] #loading-circle {
+  visibility: visible;
+  position: absolute;
+  top: calc(50vh - 56px);
+  left: 0;
+  right: 0;
+}
+
+body[page='login'] .login-article {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100vh !important;
+  border-radius: 0;
+}
+
+body[page='login'] .bg {
+  position: absolute;
+  top: 35px;
+  bottom: calc(100% - 70px);
+  width: 100%;
+}
+
+body[page='login'] #address-success-icon {
+  color: green;
+}
