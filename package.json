@@ -5,7 +5,9 @@
   "main": "www/index.html",
   "scripts": {
     "build": "cordova build android",
+    "build-release": "cordova build android --release -- --packageType=apk",
     "build-docker": "docker run -v %INIT_CWD%:/opt/src --rm cordova //bin/bash -c \"npm run build\"",
+    "build-docker-release": "docker run -v %INIT_CWD%:/opt/src --rm cordova //bin/bash -c \"npm run build-release\"",
     "docker": "docker run -it -v %INIT_CWD%:/opt/src --rm cordova bash",
     "adb-install": "adb install .\\platforms\\android\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
     "adb-stop": "adb shell am force-stop net.przegrywy.chat",

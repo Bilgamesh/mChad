@@ -3,3 +3,6 @@ proxy-server/node_modules
 todo.txt
 platforms
 plugins
+*.apk
+*.keystore
+*.sha256
