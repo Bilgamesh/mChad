@@ -1,0 +1,61 @@
+body[page='settings'] .bg {
+  position: absolute;
+  top: 64px;
+  width: 100%;
+  /* overflow-y: scroll; */
+  height: calc(100% - 64px - 80px);
+  padding-top: 5px;
+}
+
+body[page='settings'] .space {
+  z-index: 800;
+}
+
+body[page='settings'] .spread {
+  justify-content: space-around;
+}
+
+body[page='settings'] .color-area {
+  /* position: fixed; */
+  width: 80vw;
+  margin-left: 10vw !important;
+  margin-right: 10vw !important;
+  margin-top: 10px !important;
+  line-height: 50px;
+}
+
+body[page='settings'] .main {
+  border-radius: 0;
+  margin: 0;
+  position: fixed;
+  top: 64px !important;
+  width: 100vw;
+  height: calc(100vh - 80px - 64px);
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
+}
+
+body[page='settings'] .setting-label {
+  position: absolute;
+  left: 5vw;
+  margin-top: 10px;
+}
+
+body[page='settings'] .setting-label-additional-info {
+  position: relative;
+  left: 5vw;
+  margin-top: 30px;
+  font-size: 16px;
+  width: 80vw;
+}
+
+body[page='settings'] .details-paragraph {
+  margin-top: 0;
+}
+
+body[page='settings'] .setting {
+  position: absolute;
+  right: 5vw;
+  margin-top: 10px;
+  z-index: 990;
+}

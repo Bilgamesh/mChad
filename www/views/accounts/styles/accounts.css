@@ -1,0 +1,58 @@
+body[page='accounts'] .bg {
+  position: fixed;
+  top: 64px;
+  width: 100%;
+  overflow-y: scroll;
+  height: calc(100% - 64px - 80px);
+  padding-top: 5px;
+}
+
+body[page='accounts'] .bg::-webkit-scrollbar {
+  display: none;
+}
+
+body[page='accounts'] article {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+body[page='accounts'] .logout {
+  color: var(--error) !important;
+}
+
+body[page='accounts'] .success {
+  color: green;
+}
+
+body[page='accounts'] .refresh-error {
+  color: var(--error) !important;
+}
+
+body[page='accounts'] .refresh-error-dark {
+  color: #ba1a1a !important;
+}
+
+body[page='accounts'] #new-account-button {
+  position: fixed;
+  width: fit-content;
+  bottom: 100px;
+  right: 20px;
+  z-index: 900;
+  box-shadow: var(--elevate1);
+}
+
+body[page='accounts'] #confirm-logout {
+  z-index: 992 !important;
+  position: fixed;
+}
+
+body[page='accounts'] .message-count {
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+body[page='accounts'] .refresh-message {
+  height: 30px;
+}

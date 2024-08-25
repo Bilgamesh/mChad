@@ -1,0 +1,32 @@
+<?xml version='0.9.0' encoding='utf-8'?>
+<widget id="net.przegrywy.chat" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>mChad</name>
+    <description>Mobile chat app for phpBB mChat extension</description>
+    <author email="przegrywy@pm.me" href="https://przegrywy.net">
+        Administracja Przegrywy.net
+    </author>
+    <content src="#login" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/img/background.png" />
+    <preference name="AndroidWindowSplashScreenBackground" value="#1c1b1e" />
+    <preference name="SplashScreenDelay" value="500" />
+    <preference name="ShowSplashScreen" value="true" />
+    <preference name="FadeSplashScreen" value="false" />
+    <icon background="www/img/icon/mipmap-mdpi/ic_launcher_background.png" density="mdpi" foreground="www/img/icon/mipmap-mdpi/ic_launcher_foreground.png" monochrome="www/img/icon/mipmap-mdpi/ic_launcher_monochrome.png" />
+    <icon background="www/img/icon/mipmap-hdpi/ic_launcher_background.png" density="hdpi" foreground="www/img/icon/mipmap-hdpi/ic_launcher_foreground.png" monochrome="www/img/icon/mipmap-hdpi/ic_launcher_monochrome.png" />
+    <icon background="www/img/icon/mipmap-xhdpi/ic_launcher_background.png" density="xhdpi" foreground="www/img/icon/mipmap-xhdpi/ic_launcher_foreground.png" monochrome="www/img/icon/mipmap-xhdpi/ic_launcher_monochrome.png" />
+    <icon background="www/img/icon/mipmap-xxhdpi/ic_launcher_background.png" density="xxhdpi" foreground="www/img/icon/mipmap-xxhdpi/ic_launcher_foreground.png" monochrome="www/img/icon/mipmap-xxhdpi/ic_launcher_monochrome.png" />
+    <icon background="www/img/icon/mipmap-xxxhdpi/ic_launcher_background.png" density="xxxhdpi" foreground="www/img/icon/mipmap-xxxhdpi/ic_launcher_foreground.png" monochrome="www/img/icon/mipmap-xxxhdpi/ic_launcher_monochrome.png" />
+    <platform name="android">
+        <resource-file src="www/img/notification-icon/drawable-mdpi/notif.png" target="app/src/main/res/drawable-mdpi/notif.png" />
+        <resource-file src="www/img/notification-icon/drawable-hdpi/notif.png" target="app/src/main/res/drawable-hdpi/notif.png" />
+        <resource-file src="www/img/notification-icon/drawable-xhdpi/notif.png" target="app/src/main/res/drawable-xhdpi/notif.png" />
+        <resource-file src="www/img/notification-icon/drawable-xxhdpi/notif.png" target="app/src/main/res/drawable-xxhdpi/notif.png" />
+        <resource-file src="www/img/notification-icon/drawable-xxxhdpi/notif.png" target="app/src/main/res/drawable-xxxhdpi/notif.png" />
+    </platform>
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <access origin="*" />
+    <allow-navigation href="*" />
+</widget>
