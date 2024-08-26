@@ -38,7 +38,9 @@ function $(selector) {
       value,
       hapticFeedback,
       translation,
-      hasListener
+      hasListener,
+      start,
+      end
     }) {
       const el = document.createElement(element);
       if (id) el.setAttribute('id', id);
@@ -52,7 +54,9 @@ function $(selector) {
       if (hapticFeedback) el.addEventListener('click', hapticsUtil.tapDefault);
       if (translation) el.setAttribute('translation', translation);
       if (hasListener) el.setAttribute('hasListener', hasListener);
-        return el;
+      if (start) el.setAttribute('start', start);
+      if (end) el.setAttribute('end', end);
+      return el;
     }
 
     function removeAllListeners(element) {
@@ -149,6 +153,33 @@ function $(selector) {
       }
     }
 
+    function extractBBtags(doc) {
+      try {
+        for (const script of doc.scripts) {
+          if (script.innerText.includes('bbtags = new Array(')) {
+            const bbTagsArr = script.innerText
+              .split('bbtags = new Array(')
+              .pop()
+              .split(');')[0]
+              .split(',')
+              .map((tag) => tag.replace(/'/g, '').trim());
+            const bbTags = [];
+            for (let i = 0; i < bbTagsArr.length; i += 2)
+              bbTags.push({
+                start: bbTagsArr[i],
+                end: bbTagsArr[i + 1],
+                name: bbTagsArr[i].slice(1, -1)
+              });
+              console.log(bbTags);
+            return bbTags;
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        return '';
+      }
+    }
+
     function extractLogId(doc) {
       try {
         for (const script of doc.scripts) {
@@ -184,6 +215,7 @@ function $(selector) {
       findInputData,
       extractLikeMessage,
       extractLogId,
+      extractBBtags,
       isJSON
     };
   }

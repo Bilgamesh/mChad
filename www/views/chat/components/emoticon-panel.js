@@ -3,8 +3,14 @@
     let html = '';
 
     function init() {
+      html = /* HTML */`<div id="emoticon-panel" class="row scroll page bottom" hide="true">${getEmoticonsHtml()}</div>`;
+    }
+
+    function getEmoticonsHtml() {
+      let emoticonsHtml = '';
       for (const { pictureUrl, code } of emoticons)
-        html += Emoticon({ pictureUrl, code }).getHtml();
+        emoticonsHtml += Emoticon({ pictureUrl, code }).getHtml();
+      return emoticonsHtml;
     }
 
     function registerListeners() {
@@ -35,7 +41,6 @@
           code,
           documentUtil,
           hide: true,
-          hapticFeedback: true,
           hapticsUtil
         }).appendElement();
     }

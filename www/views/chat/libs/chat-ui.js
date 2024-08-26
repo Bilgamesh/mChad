@@ -16,7 +16,9 @@
     Emoticon,
     EmoticonPanel,
     getLikeMessage,
-    ToolsPanel
+    ToolsPanel,
+    BBCode,
+    BBCodesPanel
   }) {
     const cache = { lastSelected: null };
     const messageSubmitListeners = [];
@@ -27,10 +29,11 @@
       getLikeMessage
     });
     let emoticonPanel;
+    let bbcodesPanel;
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
-    async function displayPage(messages, emoticons) {
+    async function displayPage(messages, emoticons, bbtags) {
       /* Emptying the page just before re-rendering
       and giving browser an overhead via dummy timeout
       makes BeerCSS transition animations much smoother */
@@ -43,8 +46,15 @@
         documentUtil,
         hapticsUtil
       });
+      bbcodesPanel = BBCodesPanel({
+        bbtags,
+        BBCode,
+        documentUtil,
+        hapticsUtil
+      });
 
       emoticonPanel.init();
+      bbcodesPanel.init();
 
       el.innerHTML = /* HTML */ `
         <center
@@ -72,15 +82,14 @@
           <i>south</i>
         </button>
 
-        <div id="emoticon-panel" class="row scroll page bottom" hide="true">
-          ${emoticonPanel.getHtml()}
-        </div>
+        ${emoticonPanel.getHtml()} ${bbcodesPanel.getHtml()}
 
         <div id="text-panel" class="page bottom text-panel active">
           <form id="chat-form">
             <div id="text-field" class="field label fill small round">
               <input id="input-box" type="text" class="text-field" />
               <label>${await languages.getTranslation('TYPE_SOMETHING')}</label>
+              <i id="bbcodes-panel-icon" class="bbcodes-panel-icon">code</i>
               <i id="emoji-icon" class="emoji-icon">emoticon</i>
             </div>
           </form>
@@ -95,10 +104,12 @@
       registerHaptics();
       registerButtons();
       emoticonPanel.registerListeners();
+      bbcodesPanel.registerListeners();
     }
 
     function registerHaptics() {
       $('#emoji-icon').addEventListener('click', hapticsUtil.tapDefault);
+      $('#bbcodes-panel-icon').addEventListener('click', hapticsUtil.tapDefault);
       $('#scroll-to-bottom-circle').addEventListener(
         'click',
         hapticsUtil.tapDefault
@@ -185,6 +196,11 @@
       emoticonPanel.update({ emoticons });
     }
 
+    function addBBCodesToUi({ bbtags, forumIndex }) {
+      if (currentForumIndex != forumIndex) return;
+      bbcodesPanel.update({ bbtags });
+    }
+
     function deleteMessage({ id, forumIndex, silent }) {
       if (currentForumIndex != forumIndex) return;
       const index = messageBubbles.findIndex((bubble) => bubble.id == id);
@@ -258,6 +274,7 @@
       navbar.show();
       $('#text-panel').setAttribute('expanded', 'false');
       $('#emoticon-panel').setAttribute('expanded', 'false');
+      $('#bbcodes-panel').setAttribute('expanded', 'false');
       $('#main-page').setAttribute('expanded', 'false');
       $('#scroll-to-bottom-circle').setAttribute('expanded', 'false');
     }
@@ -266,6 +283,7 @@
       navbar.hide();
       $('#text-panel').setAttribute('expanded', 'true');
       $('#emoticon-panel').setAttribute('expanded', 'true');
+      $('#bbcodes-panel').setAttribute('expanded', 'true');
       $('#main-page').setAttribute('expanded', 'true');
       $('#scroll-to-bottom-circle').setAttribute('expanded', 'true');
     }
@@ -345,6 +363,7 @@
 
     function onDestroy() {
       emoticonPanel.onDestroy();
+      bbcodesPanel.onDestroy();
     }
 
     function addMessageSubmitListener(listen) {
@@ -357,6 +376,7 @@
       addMessages,
       buildMessagesHtml,
       addEmoticonsToUi,
+      addBBCodesToUi,
       deleteMessage,
       editMessage,
       submitMessage,
