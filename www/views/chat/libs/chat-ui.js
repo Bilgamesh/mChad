@@ -375,8 +375,6 @@
       messageSubmitListeners.push({ listen });
     }
 
-    function onKeyboardOff() {}
-
     return {
       init,
       displayPage,
