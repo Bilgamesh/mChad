@@ -15,11 +15,17 @@
     Message,
     Emoticon,
     EmoticonPanel,
-    getLikeMessage
+    getLikeMessage,
+    ToolsPanel
   }) {
-    let lastSelected;
+    const cache = { lastSelected: null };
     const messageSubmitListeners = [];
     const messageBubbles = [];
+    const toolsPanel = ToolsPanel({
+      baseUrl,
+      chatUiCache: cache,
+      getLikeMessage
+    });
     let emoticonPanel;
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
@@ -49,12 +55,7 @@
           <progress class="circle large"></progress>
         </center>
 
-        <nav id="tools-panel" class="right-align" hide="true">
-          <i id="reply-button" class="tool-item unhoverable">alternate_email</i>
-          <i id="quote-button" class="tool-item unhoverable">format_quote</i>
-          <i id="like-button" class="tool-item unhoverable">thumb_up</i>
-          <i id="copy-button" class="tool-item unhoverable">content_copy</i>
-        </nav>
+        ${toolsPanel.getHtml()}
 
         <div id="chat" class="chat page active">
           <br /><br />
@@ -116,48 +117,7 @@
       );
       $('#chat').addEventListener('scroll', toggleScrollButtonVisibility);
       $('#chat-form').addEventListener('submit', submitMessage);
-      $('#reply-button').addEventListener('click', reply);
-      $('#quote-button').addEventListener('click', quote);
-      $('#like-button').addEventListener('click', like);
-      $('#copy-button').addEventListener('click', copy);
-    }
-
-    function reply() {
-      const userId = lastSelected.getAttribute('user_id');
-      const userName = lastSelected.getAttribute('user_name');
-      const replyMessage = `@[url=${baseUrl}/memberlist.php?mode=viewprofile&u=${userId}][b]${userName}[/b][/url]`;
-      $('#input-box').value = $('#input-box').value.trim() + ' ' + replyMessage;
-      $('#input-box').value = $('#input-box').value.trim() + ' ';
-      $('#input-box').focus();
-    }
-
-    function quote() {
-      const userId = lastSelected.getAttribute('user_id');
-      const userName = lastSelected.getAttribute('user_name');
-      const postId = lastSelected.getAttribute('id');
-      const postTime = lastSelected.getAttribute('time');
-      const message = lastSelected.getAttribute('message');
-      const quoteMessage = `[quote="${userName}" post_id=${postId} time=${postTime} user_id=${userId}] ${message} [/quote]`;
-      $('#input-box').value = $('#input-box').value.trim() + ' ' + quoteMessage;
-      $('#input-box').value = $('#input-box').value.trim() + ' ';
-      $('#input-box').focus();
-    }
-
-    function like() {
-      const userId = lastSelected.getAttribute('user_id');
-      const userName = lastSelected.getAttribute('user_name');
-      const postId = lastSelected.getAttribute('id');
-      const postTime = lastSelected.getAttribute('time');
-      const message = lastSelected.getAttribute('message');
-      const likeResponse = `[i]${getLikeMessage()}[/i][quote="${userName}" post_id=${postId} time=${postTime} user_id=${userId}] ${message} [/quote]`;
-      $('#input-box').value = $('#input-box').value.trim() + ' ' + likeResponse;
-      $('#input-box').value = $('#input-box').value.trim() + ' ';
-      $('#input-box').focus();
-    }
-
-    function copy() {
-      const message = lastSelected.getAttribute('message');
-      navigator.clipboard.writeText(message);
+      toolsPanel.registerListeners();
     }
 
     function addMessages({ messages, scrollType, forumIndex }) {
@@ -344,7 +304,8 @@
     }
 
     function stopShaking(target) {
-      if (target.getAttribute('shaking') === 'true') lastSelected = target;
+      if (target.getAttribute('shaking') === 'true')
+        cache.lastSelected = target;
       target.setAttribute('shaking', 'false');
     }
 
@@ -375,11 +336,11 @@
     }
 
     function showToolbar() {
-      $('#tools-panel').setAttribute('hide', 'false');
+      toolsPanel.show();
     }
 
     function hideToolbar() {
-      $('#tools-panel')?.setAttribute('hide', 'true');
+      toolsPanel.hide();
     }
 
     function onDestroy() {
