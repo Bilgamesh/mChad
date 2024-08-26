@@ -45,7 +45,8 @@
     NotificationsService,
     LocalNotifications,
     TimeUtil,
-    Timer
+    Timer,
+    EmoticonPanel
   } = window.modules;
 
   document.addEventListener(
@@ -150,7 +151,8 @@
         badges,
         popups,
         timeUtil,
-        Timer
+        Timer,
+        EmoticonPanel
       });
 
       const localNotifications = LocalNotifications({
