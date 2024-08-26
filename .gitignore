@@ -6,3 +6,4 @@ plugins
 *.apk
 *.keystore
 *.sha256
+*.idsig

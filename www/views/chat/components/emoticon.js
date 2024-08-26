@@ -5,7 +5,6 @@
     code,
     documentUtil,
     hide,
-    hapticFeedback,
     hapticsUtil
   }) {
     const html = /* HTML */ `<img
@@ -21,7 +20,7 @@
         className: 'emoticon',
         src: pictureUrl,
         value: code,
-        hapticFeedback,
+        hapticFeedback: true,
         hasListener: 'true'
       });
       addListeners(emoticonElement);

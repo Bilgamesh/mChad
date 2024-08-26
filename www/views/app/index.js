@@ -47,7 +47,9 @@
     TimeUtil,
     Timer,
     EmoticonPanel,
-    ToolsPanel
+    ToolsPanel,
+    BBCode,
+    BBCodesPanel
   } = window.modules;
 
   document.addEventListener(
@@ -154,7 +156,9 @@
         timeUtil,
         Timer,
         EmoticonPanel,
-        ToolsPanel
+        ToolsPanel,
+        BBCode,
+        BBCodesPanel
       });
 
       const localNotifications = LocalNotifications({

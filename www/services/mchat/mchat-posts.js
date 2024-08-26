@@ -1,6 +1,6 @@
 (function () {
   function MchatChatService({ baseUrl, cookieStore, fetchTool, documentUtil }) {
-    async function fetchMessages() {
+    async function fetchMainPage() {
       try {
         const options = {
           method: 'GET',
@@ -16,6 +16,7 @@
         );
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
+        const bbtags = documentUtil.extractBBtags(doc);
         const messages = parseMessages(html);
         const formToken = documentUtil.findInputData(
           doc,
@@ -34,7 +35,7 @@
         let cookie = '';
         if (documentUtil.hasSessionCookie(response))
           cookie = documentUtil.extractCookie(response.headers);
-        return { messages, cookie, formToken, creationTime };
+        return { messages, bbtags, cookie, formToken, creationTime };
       } catch (err) {
         console.error(err);
         throw 'Could not fetch messages from server';
@@ -138,7 +139,7 @@
       return messages;
     }
 
-    return { fetchMessages, refresh, add, edit, del };
+    return { fetchMainPage, refresh, add, edit, del };
   }
 
   window.modules = window.modules || {};
