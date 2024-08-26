@@ -1,6 +1,13 @@
 (function () {
-  function BBCodesPanel({ bbtags, BBCode, documentUtil, hapticsUtil }) {
+  function BBCodesPanel({
+    bbtags,
+    BBCode,
+    documentUtil,
+    hapticsUtil,
+    androidUtil
+  }) {
     let html = '';
+    let keyboardOffListenerId;
 
     /* Some BBCodes have alternative versions created on specific forums
     by the forum administrators. In such cases, they prefer the custom BBcodes
@@ -99,6 +106,7 @@
 
     function registerListeners() {
       document.addEventListener('click', hideBBCodesOnBlur);
+      keyboardOffListenerId = androidUtil.addKeyboardOffListener(hideBBCodes);
       $('#bbcodes-panel-icon').addEventListener('click', toggleBBCodes);
       for (const bbcodeElement of $('.bbcode'))
         if (bbcodeElement.getAttribute('hasListener') !== 'true')
@@ -160,6 +168,7 @@
 
     function onDestroy() {
       document.removeEventListener('click', hideBBCodesOnBlur);
+      androidUtil.removeKeyboardOffListener(keyboardOffListenerId);
     }
 
     return { init, update, registerListeners, getHtml, onDestroy };
