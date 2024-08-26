@@ -70,6 +70,11 @@ body[page='chat'] .emoji-icon {
   z-index: 900 !important;
 }
 
+body[page='chat'] .bbcodes-panel-icon {
+  z-index: 900 !important;
+  margin-right: 32px;
+}
+
 body[page='chat'] .postlink {
   color: #368ad2;
   text-decoration: underline;
@@ -202,12 +207,21 @@ body[page='chat'] #scroll-to-bottom-circle[lifted='true'] {
   top: calc(100vh - 80px - 60px - 40px - 10px - 70px);
 }
 
+body[page='chat'] #scroll-to-bottom-circle[lifted-slightly='true'] {
+  top: calc(100vh - 80px - 60px - 40px - 10px - 46px);
+}
+
 body[page='chat'] #scroll-to-bottom-circle[expanded='true'] {
   top: calc(100vh - 60px - 40px - 10px);
 }
 
 body[page='chat'] #scroll-to-bottom-circle[expanded='true'][lifted='true'] {
   top: calc(100vh - 60px - 40px - 10px - 70px);
+}
+
+body[page='chat']
+  #scroll-to-bottom-circle[expanded='true'][lifted-slightly='true'] {
+  top: calc(100vh - 60px - 40px - 10px - 46px);
 }
 
 @keyframes shake {
@@ -290,6 +304,7 @@ body[page='chat'] #emoticon-panel {
   border-top-right-radius: 10px;
 
   padding-left: 10px !important;
+  padding-right: 10px !important;
 
   /* padding-left: 10px !important;
     padding-right: 10px !important;
@@ -299,6 +314,27 @@ body[page='chat'] #emoticon-panel {
 body[page='chat'] #emoticon-panel[expanded='true'] {
   top: calc(100vh - 60px - 70px);
   /* height: calc(100vh - 80px - 60px); */
+}
+
+body[page='chat'] #bbcodes-panel {
+  position: fixed;
+  top: calc(100vh - 80px - 60px - 46px);
+  height: 46px;
+  width: 100vw !important;
+  padding: 0 !important;
+  margin: 0;
+  z-index: 901 !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+body[page='chat'] #bbcodes-panel[expanded='true'] {
+  top: calc(100vh - 60px - 46px);
+}
+
+body[page='chat'] .bbcode {
+  background-color: var(--surface-variant) !important;
+  box-shadow: var(--elevate1);
 }
 
 body[page='chat'] iframe {
@@ -328,7 +364,7 @@ body[page='chat'] #input-box {
   -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
   -moz-box-sizing: border-box; /* Firefox, other Gecko */
   box-sizing: border-box;
-  padding-right: 48px;
+  padding-right: 76px;
 }
 
 body[page='chat'] .blink {

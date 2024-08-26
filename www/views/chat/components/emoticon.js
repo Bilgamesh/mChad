@@ -3,10 +3,9 @@
     el,
     pictureUrl,
     code,
-    onClick,
     documentUtil,
     hide,
-    hapticFeedback
+    hapticsUtil
   }) {
     const html = /* HTML */ `<img
       class="emoticon"
@@ -21,18 +20,32 @@
         className: 'emoticon',
         src: pictureUrl,
         value: code,
-        hapticFeedback
+        hapticFeedback: true,
+        hasListener: 'true'
       });
-      if (onClick) emoticonElement.addEventListener('click', onClick);
+      addListeners(emoticonElement);
       if (hide) emoticonElement.setAttribute('hide', `${hide}`);
       el.appendChild(emoticonElement);
+    }
+
+    function addListeners(el) {
+      el.addEventListener('click', addToText);
+      el.addEventListener('click', hapticsUtil.tapDefault);
     }
 
     function getHtml() {
       return html;
     }
 
-    return { getHtml, appendElement };
+    function addToText() {
+      let text = $('#input-box').value.trim();
+      text += ' ' + this.getAttribute('value');
+      text = text.trim();
+      $('#input-box').value = text + ' ';
+      $('#input-box').focus();
+    }
+
+    return { getHtml, appendElement, addListeners };
   }
   window.modules = window.modules || {};
   window.modules.Emoticon = Emoticon;
