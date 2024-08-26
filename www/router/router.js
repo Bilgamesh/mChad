@@ -36,7 +36,11 @@
     badges,
     popups,
     timeUtil,
-    Timer
+    Timer,
+    EmoticonPanel,
+    ToolsPanel,
+    BBCode,
+    BBCodesPanel
   }) {
     const PAGE_ID = 'main-page';
     const ROUTES = {
@@ -127,7 +131,11 @@
           badges,
           popups,
           timeUtil,
-          Timer
+          Timer,
+          EmoticonPanel,
+          ToolsPanel,
+          BBCode,
+          BBCodesPanel
         });
     }
 

@@ -58,14 +58,15 @@
         if (existingMessages.length === 0) {
           beforeRefresh();
           timer.pause();
-          const { messages, cookie, formToken, creationTime } =
-            await chatService.fetchMessages();
+          const { messages, bbtags, cookie, formToken, creationTime } =
+            await chatService.fetchMainPage();
           onRefresh();
           if (formToken) inMemoryStore.set('form-token', formToken);
           if (creationTime) inMemoryStore.set('creation-time', creationTime);
           if (cookie) await cookieStore.set(cookie); // Forum may return new cookies at any point
           for (const message of messages || []) message.read = true;
           if (messages) onAdd(messages);
+          if (bbtags) onBBtags(bbtags);
           afterRefresh();
         }
 
@@ -99,11 +100,12 @@
           (index % 100 === 0 && index !== 0)
         ) {
           timer.pause();
-          const { cookie, formToken, creationTime } =
-            await chatService.fetchMessages();
+          const { cookie, bbtags, formToken, creationTime } =
+            await chatService.fetchMainPage();
           if (formToken) inMemoryStore.set('form-token', formToken);
           if (creationTime) inMemoryStore.set('creation-time', creationTime);
           if (cookie) await cookieStore.set(cookie);
+          if (bbtags) onBBtags(bbtags);
         }
 
         /* Periodically fetch user profile
@@ -179,6 +181,12 @@
           forum.userId
         }] Timer stopped`
       );
+    }
+
+    function onBBtags(bbtags) {
+      if (stopped) return;
+      forumStorage.set('bbtags', bbtags);
+      emit({ event: 'bbtags', baseUrl: forum.address, bbtags, forumIndex });
     }
 
     function onDel(ids, silent) {
