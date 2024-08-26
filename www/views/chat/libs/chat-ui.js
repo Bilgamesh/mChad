@@ -44,13 +44,15 @@
         emoticons,
         Emoticon,
         documentUtil,
-        hapticsUtil
+        hapticsUtil,
+        androidUtil
       });
       bbcodesPanel = BBCodesPanel({
         bbtags,
         BBCode,
         documentUtil,
-        hapticsUtil
+        hapticsUtil,
+        androidUtil
       });
 
       emoticonPanel.init();
@@ -109,7 +111,10 @@
 
     function registerHaptics() {
       $('#emoji-icon').addEventListener('click', hapticsUtil.tapDefault);
-      $('#bbcodes-panel-icon').addEventListener('click', hapticsUtil.tapDefault);
+      $('#bbcodes-panel-icon').addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
       $('#scroll-to-bottom-circle').addEventListener(
         'click',
         hapticsUtil.tapDefault
