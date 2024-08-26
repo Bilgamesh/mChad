@@ -1,9 +1,22 @@
 (function () {
-  function EmoticonPanel({ emoticons, Emoticon, documentUtil, hapticsUtil }) {
+  function EmoticonPanel({
+    emoticons,
+    Emoticon,
+    documentUtil,
+    hapticsUtil,
+    androidUtil
+  }) {
     let html = '';
+    let keyboardOffListenerId;
 
     function init() {
-      html = /* HTML */`<div id="emoticon-panel" class="row scroll page bottom" hide="true">${getEmoticonsHtml()}</div>`;
+      html = /* HTML */ `<div
+        id="emoticon-panel"
+        class="row scroll page bottom"
+        hide="true"
+      >
+        ${getEmoticonsHtml()}
+      </div>`;
     }
 
     function getEmoticonsHtml() {
@@ -15,6 +28,7 @@
 
     function registerListeners() {
       document.addEventListener('click', hideEmoticonsOnBlur);
+      keyboardOffListenerId = androidUtil.addKeyboardOffListener(hideEmoticons);
       $('#emoji-icon').addEventListener('click', toggleEmoticons);
       for (const emoticonElement of $('.emoticon'))
         if (emoticonElement.getAttribute('hasListener') !== 'true')
@@ -80,6 +94,7 @@
 
     function onDestroy() {
       document.removeEventListener('click', hideEmoticonsOnBlur);
+      androidUtil.removeKeyboardOffListener(keyboardOffListenerId);
     }
 
     return { init, getHtml, update, registerListeners, onDestroy };
