@@ -98,10 +98,7 @@
       chatUi.hideNavbar();
       chatUi.scrollToBottom('smooth');
     });
-    const keyboardOffListenerId = androidUtil.addKeyboardOffListener(() => {
-      chatUi.showNavbar();
-      chatUi.hideEmoticons();
-    });
+    const keyboardOffListenerId = androidUtil.addKeyboardOffListener(chatUi.showNavbar);
 
     const newEmoticonsListenerId = globalSynchronizer.addSyncListener(
       'new-emoticons',
