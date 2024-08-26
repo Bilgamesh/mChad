@@ -18,7 +18,8 @@
     Message,
     Emoticon,
     badges,
-    EmoticonPanel
+    EmoticonPanel,
+    ToolsPanel
   }) {
     const DEFAULT_FORUM_INDEX = '0';
 
@@ -48,6 +49,7 @@
       Message,
       Emoticon,
       EmoticonPanel,
+      ToolsPanel,
       getLikeMessage: () => forumInMemoryStorage.get('likeMessage'),
     });
 

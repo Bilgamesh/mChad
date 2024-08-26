@@ -46,7 +46,8 @@
     LocalNotifications,
     TimeUtil,
     Timer,
-    EmoticonPanel
+    EmoticonPanel,
+    ToolsPanel
   } = window.modules;
 
   document.addEventListener(
@@ -152,7 +153,8 @@
         popups,
         timeUtil,
         Timer,
-        EmoticonPanel
+        EmoticonPanel,
+        ToolsPanel
       });
 
       const localNotifications = LocalNotifications({
