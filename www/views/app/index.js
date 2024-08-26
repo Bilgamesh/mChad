@@ -45,7 +45,11 @@
     NotificationsService,
     LocalNotifications,
     TimeUtil,
-    Timer
+    Timer,
+    EmoticonPanel,
+    ToolsPanel,
+    BBCode,
+    BBCodesPanel
   } = window.modules;
 
   document.addEventListener(
@@ -150,7 +154,11 @@
         badges,
         popups,
         timeUtil,
-        Timer
+        Timer,
+        EmoticonPanel,
+        ToolsPanel,
+        BBCode,
+        BBCodesPanel
       });
 
       const localNotifications = LocalNotifications({
