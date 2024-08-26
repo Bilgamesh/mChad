@@ -38,6 +38,7 @@ function $(selector) {
       value,
       hapticFeedback,
       translation,
+      hasListener
     }) {
       const el = document.createElement(element);
       if (id) el.setAttribute('id', id);
@@ -50,7 +51,8 @@ function $(selector) {
       if (children) for (const child of children) el.appendChild(child);
       if (hapticFeedback) el.addEventListener('click', hapticsUtil.tapDefault);
       if (translation) el.setAttribute('translation', translation);
-      return el;
+      if (hasListener) el.setAttribute('hasListener', hasListener);
+        return el;
     }
 
     function removeAllListeners(element) {
@@ -182,7 +184,7 @@ function $(selector) {
       findInputData,
       extractLikeMessage,
       extractLogId,
-      isJSON,
+      isJSON
     };
   }
 

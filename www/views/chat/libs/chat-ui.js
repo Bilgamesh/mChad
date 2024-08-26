@@ -14,11 +14,13 @@
     navbar,
     Message,
     Emoticon,
+    EmoticonPanel,
     getLikeMessage
   }) {
     let lastSelected;
     const messageSubmitListeners = [];
     const messageBubbles = [];
+    let emoticonPanel;
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
@@ -28,6 +30,15 @@
       makes BeerCSS transition animations much smoother */
       while (el.firstChild) el.removeChild(el.firstChild);
       await sleep(0);
+
+      emoticonPanel = EmoticonPanel({
+        emoticons,
+        Emoticon,
+        documentUtil,
+        hapticsUtil
+      });
+
+      emoticonPanel.init();
 
       el.innerHTML = /* HTML */ `
         <center
@@ -61,7 +72,7 @@
         </button>
 
         <div id="emoticon-panel" class="row scroll page bottom" hide="true">
-          ${buildEmoticonsHtml(emoticons)}
+          ${emoticonPanel.getHtml()}
         </div>
 
         <div id="text-panel" class="page bottom text-panel active">
@@ -82,6 +93,7 @@
     function init() {
       registerHaptics();
       registerButtons();
+      emoticonPanel.registerListeners();
     }
 
     function registerHaptics() {
@@ -90,16 +102,11 @@
         'click',
         hapticsUtil.tapDefault
       );
-      for (const emoticon of $('.emoticon'))
-        emoticon.addEventListener('click', hapticsUtil.tapDefault);
       for (const toolItem of $('.tool-item'))
         toolItem.addEventListener('click', hapticsUtil.tapDefault);
     }
 
     function registerButtons() {
-      document.addEventListener('click', hideEmoticonsOnBlur);
-      $('#emoji-icon').addEventListener('click', toggleEmoticons);
-
       $('#scroll-to-bottom-circle').addEventListener(
         'click',
         animationsUtil.getClickEffect($('#scroll-to-bottom-circle'))
@@ -109,9 +116,6 @@
       );
       $('#chat').addEventListener('scroll', toggleScrollButtonVisibility);
       $('#chat-form').addEventListener('submit', submitMessage);
-      for (const emoticon of $('.emoticon')) {
-        emoticon.addEventListener('click', addEmoticonToText);
-      }
       $('#reply-button').addEventListener('click', reply);
       $('#quote-button').addEventListener('click', quote);
       $('#like-button').addEventListener('click', like);
@@ -216,74 +220,9 @@
       return result;
     }
 
-    function buildEmoticonsHtml(emoticons) {
-      let result = '';
-      for (const { pictureUrl, code } of emoticons)
-        result += Emoticon({ pictureUrl, code }).getHtml();
-      return result;
-    }
-
     function addEmoticonsToUi({ emoticons, forumIndex }) {
       if (currentForumIndex != forumIndex) return;
-      // Don't modify emoticon panel if there are already some emoticons there
-      // and user is using them
-      if (
-        $('.emoticon').length &&
-        $('#emoticon-panel').classList.contains('active')
-      )
-        return;
-      if (emoticons.length > 0) $('#emoticon-panel').innerHTML = '';
-      for (const { pictureUrl, code } of emoticons)
-        Emoticon({
-          el: $('#emoticon-panel'),
-          pictureUrl,
-          code,
-          onClick: addEmoticonToText,
-          documentUtil,
-          hide: true,
-          hapticFeedback: true
-        }).appendElement();
-    }
-
-    function toggleEmoticons() {
-      if ($('#emoticon-panel').classList.contains('active')) hideEmoticons();
-      else showEmoticons();
-      $('#input-box').focus();
-    }
-
-    function showEmoticons() {
-      $('#emoticon-panel').classList.add('active');
-      $('#emoticon-panel').setAttribute('hide', 'false');
-      for (const emoticon of $('.emoticon'))
-        emoticon.setAttribute('hide', 'false');
-      $('#scroll-to-bottom-circle').setAttribute('lifted', 'true');
-    }
-
-    function hideEmoticons() {
-      $('#emoticon-panel').classList.remove('active');
-      $('#emoticon-panel').setAttribute('hide', 'true');
-      for (const emoticon of $('.emoticon'))
-        emoticon.setAttribute('hide', 'true');
-      $('#scroll-to-bottom-circle').setAttribute('lifted', 'false');
-    }
-
-    function hideEmoticonsOnBlur(event) {
-      try {
-        if (
-          event.target === $('#emoji-icon') ||
-          event.target === $('#input-box')
-        )
-          return;
-        hideEmoticons();
-      } catch (err) {}
-    }
-
-    function addEmoticonToText() {
-      let text = $('#input-box').value.trim();
-      text += ' ' + this.getAttribute('value');
-      text = text.trim();
-      $('#input-box').value = text + ' ';
-      $('#input-box').focus();
+      emoticonPanel.update({ emoticons });
     }
 
     function deleteMessage({ id, forumIndex, silent }) {
@@ -444,7 +383,7 @@
     }
 
     function onDestroy() {
-      document.removeEventListener('click', hideEmoticonsOnBlur);
+      emoticonPanel.onDestroy();
     }
 
     function addMessageSubmitListener(listen) {
@@ -457,7 +396,6 @@
       addMessages,
       buildMessagesHtml,
       addEmoticonsToUi,
-      buildEmoticonsHtml,
       deleteMessage,
       editMessage,
       submitMessage,
@@ -466,7 +404,6 @@
       scrollToBottom,
       showLoadingCircle,
       hideLoadingCircle,
-      hideEmoticons,
       findBubbleByChild,
       startShaking,
       stopShaking,
