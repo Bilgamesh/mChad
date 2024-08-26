@@ -402,8 +402,7 @@
       showToolbar,
       hideToolbar,
       onDestroy,
-      addMessageSubmitListener,
-      onKeyboardOff
+      addMessageSubmitListener
     };
   }
 
