@@ -289,7 +289,7 @@
     function deleteMessage({ id, forumIndex, silent }) {
       if (currentForumIndex != forumIndex) return;
       const index = messageBubbles.findIndex((bubble) => bubble.id == id);
-      if (index !== -1) return;
+      if (index === -1) return;
       messageBubbles[index].remove(silent);
       messageBubbles.splice(index, 1);
     }
