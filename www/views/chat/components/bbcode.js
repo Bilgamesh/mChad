@@ -51,7 +51,7 @@
     }
 
     async function onBBcodeTap() {
-      hapticsUtil.tapDefault;
+      hapticsUtil.tapDefault();
       if (
         isDoubleTap(this) &&
         isCursorInsideEmptyBBtag(this) &&
