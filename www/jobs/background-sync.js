@@ -117,18 +117,6 @@
         if (!inMemoryStore.contains('messages', (m) => m.id == message.id))
           inMemoryStore.add('messages', message);
       inMemoryStore.sort('messages', (a, b) => a.id - b.id);
-      if (inMemoryStore.get('messages').length > config.MAX_MESSAGE_AMOUNT)
-        deleteOldMessages(inMemoryStore);
-    }
-
-    function deleteOldMessages(inMemoryStore) {
-      const allMessages = inMemoryStore.get('messages');
-      onDel(
-        allMessages
-          .map((m) => m.id)
-          .slice(0, allMessages.length - config.MAX_MESSAGE_AMOUNT),
-        true
-      );
     }
 
     function startSync() {

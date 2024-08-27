@@ -228,18 +228,6 @@
           inMemoryStore.add('messages', message);
       inMemoryStore.sort('messages', (a, b) => a.id - b.id);
       emit({ event: 'add', baseUrl: forum.address, messages, forumIndex });
-      if (inMemoryStore.get('messages').length > config.MAX_MESSAGE_AMOUNT)
-        deleteOldMessages();
-    }
-
-    function deleteOldMessages() {
-      const allMessages = inMemoryStore.get('messages');
-      onDel(
-        allMessages
-          .map((m) => m.id)
-          .slice(0, allMessages.length - config.MAX_MESSAGE_AMOUNT),
-        true
-      );
     }
 
     function onNewEmoticons(emoticons) {

@@ -22,7 +22,9 @@
     ToolsPanel,
     BBCode,
     BBCodesPanel,
-    clipboardUtil
+    clipboardUtil,
+    ScrollUtil,
+    InfiniteScroll
   }) {
     const DEFAULT_FORUM_INDEX = '0';
 
@@ -56,6 +58,8 @@
       BBCode,
       BBCodesPanel,
       clipboardUtil,
+      ScrollUtil,
+      InfiniteScroll,
       getLikeMessage: () => forumInMemoryStorage.get('likeMessage')
     });
 
@@ -68,7 +72,8 @@
     markMessagesAsRead({ messages, forumIndex });
 
     await chatUi.displayPage(messages, emoticons, bbtags);
-    chatUi.init();
+    const scrollUtil = ScrollUtil($('#chat'));
+    chatUi.init(scrollUtil);
 
     const chatEvents = ChatEvents(chatUi, hapticsUtil);
 
@@ -100,7 +105,9 @@
       chatUi.hideNavbar();
       chatUi.scrollToBottom('smooth');
     });
-    const keyboardOffListenerId = androidUtil.addKeyboardOffListener(chatUi.showNavbar);
+    const keyboardOffListenerId = androidUtil.addKeyboardOffListener(
+      chatUi.showNavbar
+    );
 
     const newEmoticonsListenerId = globalSynchronizer.addSyncListener(
       'new-emoticons',
