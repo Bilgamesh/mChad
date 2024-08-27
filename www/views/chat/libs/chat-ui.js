@@ -19,7 +19,8 @@
     ToolsPanel,
     BBCode,
     BBCodesPanel,
-    clipboardUtil
+    clipboardUtil,
+    InfiniteScroll
   }) {
     const cache = { lastSelected: null };
     const messageSubmitListeners = [];
@@ -31,6 +32,8 @@
     });
     let emoticonPanel;
     let bbcodesPanel;
+    let scrollUtil;
+    let infiniteScroll = InfiniteScroll();
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
@@ -104,11 +107,13 @@
       scrollToBottom('instant');
     }
 
-    function init() {
+    function init(_scrollUtil) {
+      scrollUtil = _scrollUtil;
       registerHaptics();
       registerButtons();
       emoticonPanel.registerListeners();
       bbcodesPanel.registerListeners();
+      if ($('.bubble').length) infiniteScroll.init(scrollUtil);
     }
 
     function registerHaptics() {
@@ -141,7 +146,6 @@
     function addMessages({ messages, scrollType, forumIndex }) {
       messages = messages.filter((m) => !isAlreadyAdded(m));
       if (currentForumIndex != forumIndex) return;
-      // if (isFirstBatch()) return addMessagesFirstBatch(messages);
       for (const { id, time, user, message, avatar } of messages) {
         const messageBubble = Message({
           el: $('#chat'),
@@ -165,6 +169,7 @@
       }
       addBubbleContentListeners();
       hideLoadingCircle();
+      infiniteScroll.init(scrollUtil);
       if (messages.length > 0) scrollToBottom(scrollType || 'smooth');
     }
 
@@ -269,10 +274,8 @@
     }
 
     function toggleScrollButtonVisibility() {
-      if (
-        $('#chat').scrollHeight - $('#chat').scrollTop >
-        $('#chat').clientHeight * 2
-      )
+      // if (scrollUtil.isViewportNScreensAwayFromBottom(2))
+      if (scrollUtil.getScrollPercentage() < 0.8)
         $('#scroll-to-bottom-circle').setAttribute('hide', 'false');
       else $('#scroll-to-bottom-circle').setAttribute('hide', 'true');
     }
@@ -371,6 +374,7 @@
     function onDestroy() {
       emoticonPanel.onDestroy();
       bbcodesPanel.onDestroy();
+      infiniteScroll.onDestroy();
     }
 
     function addMessageSubmitListener(listen) {
