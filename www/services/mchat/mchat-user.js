@@ -38,7 +38,9 @@
         ).innerHTML;
         return { avatarUrl, username, cookie };
       } catch (err) {
-        console.error(err);
+        console.log(
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
+        );
         throw 'Could not fetch messages from server';
       }
     }

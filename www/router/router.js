@@ -40,7 +40,8 @@
     EmoticonPanel,
     ToolsPanel,
     BBCode,
-    BBCodesPanel
+    BBCodesPanel,
+    clipboardUtil
   }) {
     const PAGE_ID = 'main-page';
     const ROUTES = {
@@ -135,7 +136,8 @@
           EmoticonPanel,
           ToolsPanel,
           BBCode,
-          BBCodesPanel
+          BBCodesPanel,
+          clipboardUtil
         });
     }
 
