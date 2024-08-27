@@ -35,7 +35,7 @@
                 await broadcastToAllListeners(refreshData);
             }
           } catch (err) {
-            console.log(err);
+            console.log(`[${new Date().toLocaleString()}][BACKGROUND-SYNC] Error: ${err}`);
           } finally {
             window.BackgroundFetch.finish(taskId);
           }

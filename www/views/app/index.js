@@ -49,7 +49,8 @@
     EmoticonPanel,
     ToolsPanel,
     BBCode,
-    BBCodesPanel
+    BBCodesPanel,
+    ClipboardUtil
   } = window.modules;
 
   document.addEventListener(
@@ -63,6 +64,7 @@
       const documentUtil = DocumentUtil(hapticsUtil);
       const timeUtil = TimeUtil(languages);
       const urlUtil = UrlUtil();
+      const clipboardUtil = ClipboardUtil();
       const events = Events();
 
       const navbar = await Navbar({ languages, hapticsUtil, documentUtil });
@@ -158,7 +160,8 @@
         EmoticonPanel,
         ToolsPanel,
         BBCode,
-        BBCodesPanel
+        BBCodesPanel,
+        clipboardUtil
       });
 
       const localNotifications = LocalNotifications({
