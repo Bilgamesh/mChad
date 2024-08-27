@@ -135,7 +135,11 @@ function $(selector) {
             .querySelectorAll(`[name="${name}"]`)[0]
             .getAttribute(field);
       } catch (err) {
-        console.log(err);
+        console.log(
+          `[${new Date().toLocaleString()}][DOCUMENT] Could not find input data: ${JSON.stringify(
+            { name, field }
+          )}`
+        );
         return null;
       }
     }
@@ -170,12 +174,11 @@ function $(selector) {
                 end: bbTagsArr[i + 1],
                 name: bbTagsArr[i].slice(1, -1)
               });
-              console.log(bbTags);
             return bbTags;
           }
         }
       } catch (err) {
-        console.log(err);
+        console.log(`[${new Date().toLocaleString()}][DOCUMENT] Failed to extract BBtags`);
         return '';
       }
     }

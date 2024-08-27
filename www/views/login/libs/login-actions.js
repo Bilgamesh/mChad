@@ -193,7 +193,7 @@
           await mchatMchatLoginService.init();
           return url;
         } catch (err) {
-          console.log(err);
+          console.log(`[${new Date().toLocaleString()}][LOGIN] Failed to discover URL`);
         }
       }
     }

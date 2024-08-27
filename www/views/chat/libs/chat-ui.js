@@ -18,7 +18,8 @@
     getLikeMessage,
     ToolsPanel,
     BBCode,
-    BBCodesPanel
+    BBCodesPanel,
+    clipboardUtil
   }) {
     const cache = { lastSelected: null };
     const messageSubmitListeners = [];
@@ -52,7 +53,8 @@
         BBCode,
         documentUtil,
         hapticsUtil,
-        androidUtil
+        androidUtil,
+        clipboardUtil
       });
 
       emoticonPanel.init();

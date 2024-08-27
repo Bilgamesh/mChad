@@ -136,7 +136,11 @@
         // All previous steps were successful
         inMemoryStore.del('error');
       } catch (err) {
-        console.error(err);
+        console.log(
+          `[${new Date().toLocaleString()}][${forum.address}_${
+            forum.userId
+          }] Error: ${err}`
+        );
         onError(err);
       } finally {
         index++;
