@@ -29,7 +29,9 @@
           'value'
         );
         if (messages.length === 0) {
-          console.error(`No posts found in /* HTML */ `);
+          console.log(
+            `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] No posts found in HTML`
+          );
           throw 'Could not fetch messages from server';
         }
         let cookie = '';
@@ -37,7 +39,9 @@
           cookie = documentUtil.extractCookie(response.headers);
         return { messages, bbtags, cookie, formToken, creationTime };
       } catch (err) {
-        console.error(err);
+        console.log(
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
+        );
         throw 'Could not fetch messages from server';
       }
     }
@@ -91,7 +95,9 @@
           cookie = documentUtil.extractCookie(response.headers);
         return { ...json, cookie };
       } catch (err) {
-        console.error(err);
+        console.log(
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
+        );
         if (documentUtil.isJSON(err)) {
           const parsedError = JSON.parse(err);
           if (parsedError.message) throw parsedError.message;

@@ -1,5 +1,15 @@
 (function () {
-  function BBCode({ el, bbtag, documentUtil, hapticsUtil, hide }) {
+  function BBCode({
+    el,
+    bbtag,
+    documentUtil,
+    hapticsUtil,
+    hide,
+    clipboardUtil
+  }) {
+    const MAX_DOUBLE_TAP_TIME_DIFF_MS = 1000;
+    let lastTouchTime = new Date(0);
+    let lastBBtag = '';
     const html = /* HTML */ `<div
       class="chip fill bbcode"
       start="${bbtag.start}"
@@ -29,8 +39,7 @@
     }
 
     function addListeners(el) {
-      el.addEventListener('click', addToText);
-      el.addEventListener('click', hapticsUtil.tapDefault);
+      el.addEventListener('click', onBBcodeTap);
     }
 
     function silentTrimInputBox() {
@@ -41,10 +50,73 @@
       $('#input-box').selectionEnd = selectionEnd;
     }
 
-    function addToText() {
+    async function onBBcodeTap() {
+      hapticsUtil.tapDefault;
+      if (
+        isDoubleTap(this) &&
+        isCursorInsideEmptyBBtag(this) &&
+        (await hasClipboard())
+      )
+        await addClipboardToText();
+      else addBBCodeToText(this);
+    }
+
+    function isCursorInsideEmptyBBtag(scope) {
+      const selectionStart = $('#input-box').selectionStart;
+      const selectionEnd = $('#input-box').selectionEnd;
+      if (selectionStart !== selectionEnd) return false;
+      const bbCodeStart = scope.getAttribute('start');
+      const bbCodeEnd = scope.getAttribute('end');
+      const text = $('#input-box').value;
+      const part1 = text.slice(0, selectionStart);
+      const part2 = text.slice(selectionStart);
+      return part1.endsWith(bbCodeStart) && part2.startsWith(bbCodeEnd);
+    }
+
+    function isDoubleTap(scope) {
+      const bbCodeStart = scope.getAttribute('start');
+      if (
+        new Date() - lastTouchTime > MAX_DOUBLE_TAP_TIME_DIFF_MS ||
+        bbCodeStart !== lastBBtag
+      ) {
+        lastBBtag = bbCodeStart;
+        lastTouchTime = new Date();
+        return false;
+      } else {
+        lastBBtag = bbCodeStart;
+        lastTouchTime = new Date();
+        return true;
+      }
+    }
+
+    async function hasClipboard() {
+      const clipboard = await clipboardUtil.paste();
+      return !!clipboard;
+    }
+
+    async function addClipboardToText() {
+      try {
+        const clipboard = await clipboardUtil.paste();
+        const selectionStart = $('#input-box').selectionStart;
+        let text = $('#input-box').value;
+        text =
+          text.slice(0, selectionStart) +
+          clipboard +
+          text.slice(selectionStart);
+        $('#input-box').value = text;
+        $('#input-box').focus();
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][BBCODE] Failed to add clipboard to text`
+        );
+        return;
+      }
+    }
+
+    function addBBCodeToText(scope) {
       silentTrimInputBox();
-      const bbCodeStart = this.getAttribute('start');
-      const bbCodeEnd = this.getAttribute('end');
+      const bbCodeStart = scope.getAttribute('start');
+      const bbCodeEnd = scope.getAttribute('end');
       const selectionStart = $('#input-box').selectionStart;
       const selectionEnd = $('#input-box').selectionEnd;
       let text = $('#input-box').value;

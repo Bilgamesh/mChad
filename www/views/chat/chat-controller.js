@@ -21,7 +21,8 @@
     EmoticonPanel,
     ToolsPanel,
     BBCode,
-    BBCodesPanel
+    BBCodesPanel,
+    clipboardUtil
   }) {
     const DEFAULT_FORUM_INDEX = '0';
 
@@ -54,6 +55,7 @@
       ToolsPanel,
       BBCode,
       BBCodesPanel,
+      clipboardUtil,
       getLikeMessage: () => forumInMemoryStorage.get('likeMessage')
     });
 
