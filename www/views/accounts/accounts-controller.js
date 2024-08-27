@@ -135,7 +135,6 @@
         const error = inMemoryStore.get('error');
         const refreshTime = forumStorage.get('refresh-time') || +new Date();
         const fetching = !!inMemoryStore.get('fetching');
-        console.log({ fetching });
         profiles.push(profile);
         errors.push(error);
         refreshTimes.push(refreshTime);

@@ -4,7 +4,8 @@
     BBCode,
     documentUtil,
     hapticsUtil,
-    androidUtil
+    androidUtil,
+    clipboardUtil
   }) {
     let html = '';
     let keyboardOffListenerId;
@@ -99,7 +100,8 @@
           bbtag,
           documentUtil,
           hapticsUtil,
-          hide: false
+          hide: false,
+          clipboardUtil
         }).getHtml();
       return bbcodesHtml;
     }
@@ -110,7 +112,9 @@
       $('#bbcodes-panel-icon').addEventListener('click', toggleBBCodes);
       for (const bbcodeElement of $('.bbcode'))
         if (bbcodeElement.getAttribute('hasListener') !== 'true')
-          BBCode({ hapticsUtil, bbtag: {} }).addListeners(bbcodeElement);
+          BBCode({ hapticsUtil, clipboardUtil, bbtag: {} }).addListeners(
+            bbcodeElement
+          );
     }
 
     function toggleBBCodes() {
@@ -143,7 +147,9 @@
           return;
         hideBBCodes();
       } catch (err) {
-        console.log(err);
+        console.log(
+          `[${new Date().toLocaleString()}][BBCODES-PANEL] Failed to hide BBCodes on blur`
+        );
       }
     }
 
@@ -162,7 +168,8 @@
           bbtag,
           documentUtil,
           hapticsUtil,
-          hide: false
+          hide: false,
+          clipboardUtil
         }).appendElement();
     }
 
