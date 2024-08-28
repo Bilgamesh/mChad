@@ -39,6 +39,7 @@ Download the APK from [GitHub Releases](https://github.com/Bilgamesh/mChad/relea
 * Log into multiple accounts on multiple forums
 * Access mChat with mobile-friendly UI
 * Get notifications and don't miss any conversations
+* Scroll "infinitely" through archived messages
 
 This project is work in progress and does not currently let you use all the features of mChat that are normally available in a web browser. Current experience varies depending on custom bbcodes implemented by specific forum administrators. More features and improved support for phpBB extensions will be added in the near future.
 
