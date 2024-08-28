@@ -1,5 +1,5 @@
 (function () {
-  function ToolsPanel({ baseUrl, chatUiCache, getLikeMessage }) {
+  function ToolsPanel({ baseUrl, chatUiCache, inMemoryStore }) {
     const html = /* HTML */ `<nav
       id="tools-panel"
       class="right-align"
@@ -10,6 +10,10 @@
       <i id="like-button" class="tool-item unhoverable">thumb_up</i>
       <i id="copy-button" class="tool-item unhoverable">content_copy</i>
     </nav>`;
+
+    function getLikeMessage() {
+      return inMemoryStore.get('likeMessage');
+    }
 
     function registerListeners() {
       $('#reply-button').addEventListener('click', reply);
