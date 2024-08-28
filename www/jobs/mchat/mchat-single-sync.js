@@ -221,13 +221,22 @@
 
     function onAdd(messages) {
       if (stopped) return;
+      messages = messages.sort((a, b) => a.id - b.id);
       extractLikeMessage(messages);
       extractLogId(messages);
       for (const message of messages)
         if (!inMemoryStore.contains('messages', (m) => m.id == message.id))
           inMemoryStore.add('messages', message);
-      inMemoryStore.sort('messages', (a, b) => a.id - b.id);
       emit({ event: 'add', baseUrl: forum.address, messages, forumIndex });
+    }
+
+    function onAddOld(messages) {
+      messages = messages.sort((a, b) => b.id - a.id);
+      if (stopped) return;
+      for (const message of messages)
+        if (!inMemoryStore.contains('messages', (m) => m.id == message.id))
+          inMemoryStore.unshift('messages', message);
+      emit({ event: 'addOld', baseUrl: forum.address, messages, forumIndex });
     }
 
     function onNewEmoticons(emoticons) {
@@ -337,6 +346,18 @@
       }
     }
 
+    async function getArchiveMessages(startIndex = 0) {
+      console.log(
+        `[${new Date().toLocaleString()}][${forum.address}_${
+          forum.userId
+        }] Requesting archive at index: ${startIndex}`
+      );
+      const { messages, cookie } = await chatService.fetchArchive(startIndex);
+      if (cookie) await cookieStore.set(cookie);
+      if (messages) onAddOld(messages);
+      return messages || null;
+    }
+
     function extractLikeMessage(messages) {
       if (messages.length && messages[0].likeMessage) {
         const likeMessage = documentUtil.unicodeToString(
@@ -381,7 +402,8 @@
       stopSync,
       addSyncListener,
       removeSyncListener,
-      sendToServer
+      sendToServer,
+      getArchiveMessages
     };
   }
 

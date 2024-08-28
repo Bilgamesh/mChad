@@ -17,14 +17,14 @@
     navbar,
     Message,
     Emoticon,
-    badges,
     EmoticonPanel,
     ToolsPanel,
     BBCode,
     BBCodesPanel,
     clipboardUtil,
     ScrollUtil,
-    InfiniteScroll
+    InfiniteScroll,
+    config
   }) {
     const DEFAULT_FORUM_INDEX = '0';
 
@@ -37,6 +37,20 @@
     const { name, address, userId } = forums[+forumIndex];
     const forumStorage = PersistentStore(`${address}_${userId}`);
     const forumInMemoryStorage = InMemoryStore(`${address}_${userId}`);
+
+    const infiniteScroll = InfiniteScroll({
+      globalSynchronizer,
+      currentForumIndex: forumIndex,
+      inMemoryStore: forumInMemoryStorage,
+      Message,
+      baseUrl: address,
+      languages,
+      animationsUtil,
+      documentUtil,
+      sleep,
+      loggedInUserId: userId,
+      config
+    });
 
     const chatUi = ChatUi({
       el,
@@ -60,7 +74,10 @@
       clipboardUtil,
       ScrollUtil,
       InfiniteScroll,
-      getLikeMessage: () => forumInMemoryStorage.get('likeMessage')
+      config,
+      inMemoryStore: forumInMemoryStorage,
+      forumStorage,
+      infiniteScroll
     });
 
     $('#body').setAttribute('page', 'chat');
@@ -69,11 +86,10 @@
     const emoticons = forumStorage.get('emoticons') || [];
     const bbtags = forumStorage.get('bbtags') || [];
 
-    markMessagesAsRead({ messages, forumIndex });
+    markMessagesAsRead(messages);
 
     await chatUi.displayPage(messages, emoticons, bbtags);
-    const scrollUtil = ScrollUtil($('#chat'));
-    chatUi.init(scrollUtil);
+    chatUi.init();
 
     const chatEvents = ChatEvents(chatUi, hapticsUtil);
 
@@ -83,15 +99,13 @@
     document.addEventListener(events.LONGPRESS, chatEvents.onBubbleLongpress);
     document.addEventListener(events.TOUCHMOVE, chatEvents.onBubbleTouchmove);
 
-    $('#chat').addEventListener('touchstart', badges.refreshBadges);
-
     const addListenerId = globalSynchronizer.addSyncListener(
       'add',
       chatUi.addMessages
     );
-    const addListenerMessageMarkerId = globalSynchronizer.addSyncListener(
-      'add',
-      markMessagesAsRead
+    const addOldListenerId = globalSynchronizer.addSyncListener(
+      'addOld',
+      chatUi.addOldMessages
     );
     const deleteListenerId = globalSynchronizer.addSyncListener(
       'delete',
@@ -103,7 +117,8 @@
     );
     const keyboardOnListenerId = androidUtil.addKeyboardOnListener(() => {
       chatUi.hideNavbar();
-      chatUi.scrollToBottom('smooth');
+      if (chatUi.areNewMessagesVisible({ screenDistance: 4 }))
+        chatUi.scrollToBottom('smooth');
     });
     const keyboardOffListenerId = androidUtil.addKeyboardOffListener(
       chatUi.showNavbar
@@ -123,29 +138,25 @@
       globalSynchronizer.sendToServer(forumIndex, text)
     );
 
-    function markMessagesAsRead({ messages, forumIndex: i }) {
-      if (forumIndex != i) return;
+    function markMessagesAsRead(messages) {
       for (const message of messages) message.read = true;
     }
 
     async function attemptRerenderPage() {
+      if (!chatUi.areNewMessagesVisible()) return;
       const messages = forumInMemoryStorage.get('messages') || [];
-      markMessagesAsRead({ messages, forumIndex });
+      markMessagesAsRead(messages);
       const latestMessage = messages[messages.length - 1];
       const alreadyRenderedMessages = $('.bubble');
       const latestRenderedMessage =
         alreadyRenderedMessages[alreadyRenderedMessages.length - 1];
       if (latestMessage.id == latestRenderedMessage.id) return;
-      const emoticons = forumStorage.get('emoticons') || [];
-      const bbtags = forumStorage.get('bbtags') || [];
-      await chatUi.displayPage(messages, emoticons, bbtags);
-      chatUi.init();
+      chatUi.rerenderPage();
     }
 
     function onDestroy() {
-      $('#chat').removeEventListener('touchstart', badges.refreshBadges);
       globalSynchronizer.removeSyncListener(addListenerId);
-      globalSynchronizer.removeSyncListener(addListenerMessageMarkerId);
+      globalSynchronizer.removeSyncListener(addOldListenerId);
       globalSynchronizer.removeSyncListener(deleteListenerId);
       globalSynchronizer.removeSyncListener(editListenerId);
       globalSynchronizer.removeSyncListener(newEmoticonsListenerId);

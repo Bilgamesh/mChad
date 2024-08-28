@@ -71,6 +71,12 @@
       await sync.sendToServer(text);
     }
 
+    async function getArchiveMessages(forumIndex, startIndex) {
+      const syncs = InMemoryStore('*').get('syncs') || [];
+      const sync = syncs[forumIndex];
+      await sync.getArchiveMessages(startIndex);
+    }
+
     function addSyncListener(event, listen) {
       const id = crypto.randomUUID();
       if (event === '*') listeners.push({ listen, id });
@@ -95,7 +101,8 @@
       restartSync,
       addSyncListener,
       removeSyncListener,
-      sendToServer
+      sendToServer,
+      getArchiveMessages
     };
   }
 

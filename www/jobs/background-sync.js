@@ -35,7 +35,9 @@
                 await broadcastToAllListeners(refreshData);
             }
           } catch (err) {
-            console.log(`[${new Date().toLocaleString()}][BACKGROUND-SYNC] Error: ${err}`);
+            console.log(
+              `[${new Date().toLocaleString()}][BACKGROUND-SYNC] Error: ${err}`
+            );
           } finally {
             window.BackgroundFetch.finish(taskId);
           }
@@ -113,10 +115,10 @@
     }
 
     function onAdd(inMemoryStore, messages) {
+      messages = messages.sort((a, b) => a.id - b.id);
       for (const message of messages)
         if (!inMemoryStore.contains('messages', (m) => m.id == message.id))
           inMemoryStore.add('messages', message);
-      inMemoryStore.sort('messages', (a, b) => a.id - b.id);
     }
 
     function startSync() {
