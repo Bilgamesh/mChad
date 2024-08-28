@@ -143,7 +143,8 @@
     }
 
     async function attemptRerenderPage() {
-      if (!chatUi.areNewMessagesVisible()) return;
+      const scrollUtil = ScrollUtil($('#chat'));
+      if (scrollUtil.isViewportNScreensAwayFromBottom(2)) return;
       const messages = forumInMemoryStorage.get('messages') || [];
       markMessagesAsRead(messages);
       const latestMessage = messages[messages.length - 1];
