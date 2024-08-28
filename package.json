@@ -1,7 +1,7 @@
 {
   "name": "net.przegrywy.chat",
   "displayName": "mChad",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "main": "www/index.html",
   "scripts": {
     "build": "cordova build android",

@@ -30,9 +30,9 @@
         );
         if (messages.length === 0) {
           console.log(
-            `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] No posts found in HTML`
+            `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] No posts found in main page HTML`
           );
-          throw 'Could not fetch messages from server';
+          throw 'Could not fetch main page from server';
         }
         let cookie = '';
         if (documentUtil.hasSessionCookie(response))
@@ -42,7 +42,7 @@
         console.log(
           `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
         );
-        throw 'Could not fetch messages from server';
+        throw 'Could not fetch main page from server';
       }
     }
 
@@ -111,6 +111,40 @@
     // TODO
     async function del() {}
 
+    async function fetchArchive(startIndex = 0) {
+      let cookie = '';
+      try {
+        const options = {
+          method: 'GET',
+          headers: {
+            accept:
+              'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+            cookie: await cookieStore.get()
+          }
+        };
+        const response = await fetchTool.fetchCrossDomain(
+          `${baseUrl}/app.php/mchat/archive?start=${startIndex}`,
+          options
+        );
+        if (documentUtil.hasSessionCookie(response))
+          cookie = documentUtil.extractCookie(response.headers);
+        const html = await response.text();
+        const messages = parseMessages(html);
+        if (messages.length === 0) {
+          console.log(
+            `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] No posts found in archive HTML`
+          );
+          return { cookie };
+        }
+        return { messages, cookie };
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
+        );
+        return { cookie };
+      }
+    }
+
     function parseMessages(html) {
       const doc = new DOMParser().parseFromString(html, 'text/html');
       const messageElements = doc.getElementsByClassName('row mchat-message');
@@ -142,10 +176,10 @@
           likeMessage,
           logId
         });
-      return messages;
+      return messages.sort((a, b) => a.id - b.id);
     }
 
-    return { fetchMainPage, refresh, add, edit, del };
+    return { fetchMainPage, fetchArchive, refresh, add, edit, del };
   }
 
   window.modules = window.modules || {};
