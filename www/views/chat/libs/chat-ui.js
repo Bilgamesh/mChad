@@ -15,22 +15,27 @@
     Message,
     Emoticon,
     EmoticonPanel,
-    getLikeMessage,
     ToolsPanel,
     BBCode,
     BBCodesPanel,
-    clipboardUtil
+    clipboardUtil,
+    config,
+    infiniteScroll,
+    inMemoryStore,
+    forumStorage,
+    ScrollUtil
   }) {
     const cache = { lastSelected: null };
     const messageSubmitListeners = [];
-    const messageBubbles = [];
+    let messageBubbles = [];
     const toolsPanel = ToolsPanel({
       baseUrl,
       chatUiCache: cache,
-      getLikeMessage
+      inMemoryStore
     });
     let emoticonPanel;
     let bbcodesPanel;
+    let scrollUtil;
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
@@ -40,6 +45,8 @@
       makes BeerCSS transition animations much smoother */
       while (el.firstChild) el.removeChild(el.firstChild);
       await sleep(0);
+
+      messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
 
       emoticonPanel = EmoticonPanel({
         emoticons,
@@ -105,10 +112,13 @@
     }
 
     function init() {
+      scrollUtil = ScrollUtil($('#chat'));
       registerHaptics();
       registerButtons();
+      registerListeners();
       emoticonPanel.registerListeners();
       bbcodesPanel.registerListeners();
+      if ($('.bubble').length) infiniteScroll.init(scrollUtil, messageBubbles);
     }
 
     function registerHaptics() {
@@ -130,18 +140,61 @@
         'click',
         animationsUtil.getClickEffect($('#scroll-to-bottom-circle'))
       );
-      $('#scroll-to-bottom-circle').addEventListener('click', () =>
-        scrollToBottom('smooth')
+      $('#scroll-to-bottom-circle').addEventListener(
+        'click',
+        onScrollToBottomClicked
       );
       $('#chat').addEventListener('scroll', toggleScrollButtonVisibility);
       $('#chat-form').addEventListener('submit', submitMessage);
       toolsPanel.registerListeners();
     }
 
+    function onScrollToBottomClicked() {
+      if (isBottomVisible()) scrollToBottom('smooth');
+      else rerenderPage();
+    }
+
+    function registerListeners() {
+      $('#chat').addEventListener('scroll', () => {
+        const messages = inMemoryStore.get('messages');
+        if (areNewMessagesVisible()) markMessagesAsRead(messages);
+        updateBadge();
+      });
+    }
+
+    function updateBadge() {
+      if (areNewMessagesVisible())
+        navbar.displayBadge({
+          element: $('#chat-btn'),
+          id: 'chat-badge',
+          number: 0
+        });
+    }
+
+    function areNewMessagesVisible({ screenDistance } = {}) {
+      return (
+        isBottomVisible() &&
+        !scrollUtil.isViewportNScreensAwayFromBottom(screenDistance || 2)
+      );
+    }
+
+    async function rerenderPage() {
+      const messages = inMemoryStore.get('messages') || [];
+      const emoticons = forumStorage.get('emoticons') || [];
+      const bbtags = forumStorage.get('bbtags') || [];
+      messageBubbles = [];
+      await displayPage(messages, emoticons, bbtags);
+      init();
+    }
+
     function addMessages({ messages, scrollType, forumIndex }) {
-      messages = messages.filter((m) => !isAlreadyAdded(m));
       if (currentForumIndex != forumIndex) return;
-      // if (isFirstBatch()) return addMessagesFirstBatch(messages);
+      const isFirstBatch = !$('.bubble').length;
+      if (scrollUtil.isViewportNScreensAwayFromBottom(2) && !isFirstBatch)
+        return;
+      markMessagesAsRead(messages);
+      messages = messages.filter((m) => !isAlreadyAdded(m));
+      messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
       for (const { id, time, user, message, avatar } of messages) {
         const messageBubble = Message({
           el: $('#chat'),
@@ -165,7 +218,42 @@
       }
       addBubbleContentListeners();
       hideLoadingCircle();
-      if (messages.length > 0) scrollToBottom(scrollType || 'smooth');
+      if (isFirstBatch) infiniteScroll.init(scrollUtil, messageBubbles);
+      if (
+        messages.length > 0 &&
+        !scrollUtil.isViewportNScreensAwayFromBottom(2)
+      ) {
+        scrollToBottom(scrollType || 'smooth');
+      }
+    }
+
+    function addOldMessages({ messages, forumIndex }) {
+      messages = messages.filter((m) => !isAlreadyAdded(m));
+      messages = messages.slice(0, config.MAX_MESSAGE_AMOUNT);
+      if (currentForumIndex != forumIndex) return;
+      for (const { id, time, user, message, avatar } of messages) {
+        const messageBubble = Message({
+          el: $('#chat'),
+          side: user.id === loggedInUserId ? 'right' : 'left',
+          id,
+          time,
+          user,
+          message,
+          baseUrl,
+          avatar,
+          languages,
+          animationsUtil,
+          documentUtil,
+          sleep
+        });
+        messageBubble.insertElement({
+          before: $('.bubble')[0],
+          fadeIn: 200
+        });
+        messageBubbles.unshift(messageBubble);
+      }
+      for (const message of messages) message.read = true;
+      addBubbleContentListeners();
     }
 
     function isAlreadyAdded({ id }) {
@@ -212,7 +300,8 @@
       if (currentForumIndex != forumIndex) return;
       const index = messageBubbles.findIndex((bubble) => bubble.id == id);
       if (index === -1) return;
-      messageBubbles[index].remove(silent);
+      if ($(`#${messageBubbles[index].id}`))
+        messageBubbles[index].remove(silent);
       messageBubbles.splice(index, 1);
     }
 
@@ -222,6 +311,7 @@
         (bubble) => bubble.id == message.id
       );
       if (!messageBubbles) return;
+      if (!$(`#${messageBubbles[index].id}`)) return;
       await messageBubble.update(message);
       addBubbleContentListeners();
     }
@@ -268,11 +358,15 @@
       }
     }
 
+    function isBottomVisible() {
+      const messages = inMemoryStore.get('messages') || [];
+      if (!messages.length) return true;
+      const latestMessage = messages[messages.length - 1];
+      return !!$(`#${latestMessage.id}`);
+    }
+
     function toggleScrollButtonVisibility() {
-      if (
-        $('#chat').scrollHeight - $('#chat').scrollTop >
-        $('#chat').clientHeight * 2
-      )
+      if (!isBottomVisible() || scrollUtil.isViewportNScreensAwayFromBottom(2))
         $('#scroll-to-bottom-circle').setAttribute('hide', 'false');
       else $('#scroll-to-bottom-circle').setAttribute('hide', 'true');
     }
@@ -371,16 +465,22 @@
     function onDestroy() {
       emoticonPanel.onDestroy();
       bbcodesPanel.onDestroy();
+      infiniteScroll.onDestroy();
     }
 
     function addMessageSubmitListener(listen) {
       messageSubmitListeners.push({ listen });
     }
 
+    function markMessagesAsRead(messages) {
+      for (const message of messages) message.read = true;
+    }
+
     return {
       init,
       displayPage,
       addMessages,
+      addOldMessages,
       buildMessagesHtml,
       addEmoticonsToUi,
       addBBCodesToUi,
@@ -404,7 +504,10 @@
       showToolbar,
       hideToolbar,
       onDestroy,
-      addMessageSubmitListener
+      addMessageSubmitListener,
+      rerenderPage,
+      isBottomVisible,
+      areNewMessagesVisible
     };
   }
 
