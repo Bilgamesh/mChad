@@ -35,7 +35,6 @@
     }
 
     async function onApproachingTop() {
-      console.log('TOP');
       const oldestRenderedBubble = $('.bubble')[0];
       const index = inMemoryStore.findIndex(
         'messages',
@@ -65,7 +64,6 @@
     }
 
     function onApproachingBottom() {
-      console.log('BOTTOM');
       const latestRenderedBubble = $('.bubble')[$('.bubble').length - 1];
       const index = inMemoryStore.findIndex(
         'messages',
