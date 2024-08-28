@@ -22,10 +22,21 @@
       storage[dbName][key].push(value);
     }
 
+    function unshift(key, value) {
+      key = key.toLowerCase();
+      storage[dbName][key] = storage[dbName][key] || [];
+      storage[dbName][key].unshift(value);
+    }
+
     function get(key, index = null) {
       key = key.toLowerCase();
       if (typeof index === 'number') return storage[dbName][key][index];
       return storage[dbName][key];
+    }
+
+    function getLength(key) {
+      key = key.toLowerCase();
+      return storage[dbName][key].length;
     }
 
     function has(key) {
@@ -55,6 +66,19 @@
       set(key, values);
     }
 
+    function findIndex(key, findFunc) {
+      key = key.toLowerCase();
+      const values = get(key);
+      return values.findIndex(findFunc);
+    }
+
+    function splice(key, start, count) {
+      key = key.toLowerCase();
+      const values = [...get(key)];
+      if (count) return values.splice(start, count);
+      else return values.splice(start);
+    }
+
     function clear() {
       storage[dbName] = {};
     }
@@ -64,12 +88,16 @@
     return {
       set,
       add,
+      unshift,
       get,
+      getLength,
       has,
       del,
       contains,
       sort,
-      clear
+      clear,
+      findIndex,
+      splice
     };
   }
 
