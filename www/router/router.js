@@ -41,7 +41,9 @@
     ToolsPanel,
     BBCode,
     BBCodesPanel,
-    clipboardUtil
+    clipboardUtil,
+    ScrollUtil,
+    InfiniteScroll
   }) {
     const PAGE_ID = 'main-page';
     const ROUTES = {
@@ -137,7 +139,9 @@
           ToolsPanel,
           BBCode,
           BBCodesPanel,
-          clipboardUtil
+          clipboardUtil,
+          ScrollUtil,
+          InfiniteScroll
         });
     }
 
