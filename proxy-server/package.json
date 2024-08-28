@@ -1,6 +1,6 @@
 {
     "name": "mchad-proxy-server",
-    "version": "0.9.3",
+    "version": "0.9.4",
     "main": "index.js",
     "scripts": {
       "start": "node index.js"
