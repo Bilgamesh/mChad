@@ -50,7 +50,9 @@
     ToolsPanel,
     BBCode,
     BBCodesPanel,
-    ClipboardUtil
+    ClipboardUtil,
+    ScrollUtil,
+    InfiniteScroll
   } = window.modules;
 
   document.addEventListener(
@@ -161,7 +163,9 @@
         ToolsPanel,
         BBCode,
         BBCodesPanel,
-        clipboardUtil
+        clipboardUtil,
+        ScrollUtil,
+        InfiniteScroll
       });
 
       const localNotifications = LocalNotifications({
