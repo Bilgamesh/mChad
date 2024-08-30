@@ -85,7 +85,7 @@
 
     function addMessagesToTop(messages) {
       let added = 0;
-      for (const { id, time, user, message, avatar } of messages)
+      for (const { id, time, user, message, avatar } of messages.toReversed())
         if (id < messageBubbles[0].id) {
           const messageBubble = Message({
             el: $('#chat'),
