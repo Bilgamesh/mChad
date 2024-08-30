@@ -76,6 +76,12 @@ function $(selector) {
         .join(`src="${baseUrl}/`)
         .split('href="./')
         .join(`href="${baseUrl}/`);
+      message = fixImageLinks(message);
+      message = fixEmbeddedYoutube(message);
+      return message;
+    }
+
+    function fixImageLinks(message) {
       while (message.includes('<a href="')) {
         const url = message.split('<a href="')[1].split('"')[0];
         if (
@@ -95,6 +101,23 @@ function $(selector) {
             /\<a href=".+?"/i,
             `<a class="clickable-link" target-url="${url}"`
           );
+      }
+      return message;
+    }
+
+    function fixEmbeddedYoutube(message) {
+      while (message.includes('<iframe')) {
+        console.log(message);
+        const url = message
+          .split('src="')[1]
+          .split('"')[0]
+          .replace('embed/', 'watch?v=');
+        message = message
+          .replace(
+            /\<iframe /i,
+            `<a class="clickable-link" target-url="${url}" `
+          )
+          .replace(/\><\/iframe\>/i, `>${url}</a>`);
       }
       return message;
     }
@@ -178,7 +201,9 @@ function $(selector) {
           }
         }
       } catch (err) {
-        console.log(`[${new Date().toLocaleString()}][DOCUMENT] Failed to extract BBtags`);
+        console.log(
+          `[${new Date().toLocaleString()}][DOCUMENT] Failed to extract BBtags`
+        );
         return '';
       }
     }
