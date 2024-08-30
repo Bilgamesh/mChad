@@ -107,7 +107,6 @@ function $(selector) {
 
     function fixEmbeddedYoutube(message) {
       while (message.includes('<iframe')) {
-        console.log(message);
         const url = message
           .split('src="')[1]
           .split('"')[0]
