@@ -11,7 +11,7 @@
     languages,
     animationsUtil,
     documentUtil,
-    sleep,
+    sleep
   }) {
     const dateTime = moment(new Date(time * 1000)).format('LLL');
     const html = /* HTML */ `
@@ -115,18 +115,20 @@
     }
 
     function remove(silent) {
-      const message = $(`#${id}`);
-      const label = message.nextElementSibling;
-      const avatar = label.nextElementSibling;
-      if (silent) {
-        message.parentNode.removeChild(message);
-        label.parentNode.removeChild(label);
-        avatar.parentNode.removeChild(avatar);
-      } else {
-        animationsUtil.removeFadeOut(message, 200);
-        animationsUtil.removeFadeOut(label, 200);
-        animationsUtil.removeFadeOut(avatar, 200);
-      }
+      try {
+        const message = $(`#${id}`);
+        const label = message.nextElementSibling;
+        const avatar = label.nextElementSibling;
+        if (silent) {
+          message.parentNode.removeChild(message);
+          label.parentNode.removeChild(label);
+          avatar.parentNode.removeChild(avatar);
+        } else {
+          animationsUtil.removeFadeOut(message, 200);
+          animationsUtil.removeFadeOut(label, 200);
+          animationsUtil.removeFadeOut(avatar, 200);
+        }
+      } catch (err) {}
     }
 
     return { id, getHtml, insertElement, update, remove };
