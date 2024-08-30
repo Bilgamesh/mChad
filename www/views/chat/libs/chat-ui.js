@@ -182,7 +182,7 @@
       const messages = inMemoryStore.get('messages') || [];
       const emoticons = forumStorage.get('emoticons') || [];
       const bbtags = forumStorage.get('bbtags') || [];
-      messageBubbles = [];
+      messageBubbles.length = 0;
       await displayPage(messages, emoticons, bbtags);
       init();
     }
