@@ -115,20 +115,18 @@
     }
 
     function remove(silent) {
-      try {
-        const message = $(`#${id}`);
-        const label = message.nextElementSibling;
-        const avatar = label.nextElementSibling;
-        if (silent) {
-          message.parentNode.removeChild(message);
-          label.parentNode.removeChild(label);
-          avatar.parentNode.removeChild(avatar);
-        } else {
-          animationsUtil.removeFadeOut(message, 200);
-          animationsUtil.removeFadeOut(label, 200);
-          animationsUtil.removeFadeOut(avatar, 200);
-        }
-      } catch (err) {}
+      const message = $(`#${id}`);
+      const label = message.nextElementSibling;
+      const avatar = label.nextElementSibling;
+      if (silent) {
+        message.parentNode.removeChild(message);
+        label.parentNode.removeChild(label);
+        avatar.parentNode.removeChild(avatar);
+      } else {
+        animationsUtil.removeFadeOut(message, 200);
+        animationsUtil.removeFadeOut(label, 200);
+        animationsUtil.removeFadeOut(avatar, 200);
+      }
     }
 
     return { id, getHtml, insertElement, update, remove };
