@@ -11,7 +11,7 @@
     languages,
     animationsUtil,
     documentUtil,
-    sleep,
+    sleep
   }) {
     const dateTime = moment(new Date(time * 1000)).format('LLL');
     const html = /* HTML */ `
