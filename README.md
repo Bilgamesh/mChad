@@ -106,5 +106,35 @@ npm run start-android
 
 Otherwise it's up to you how you want to transfer the APK file.
 
+## Credits
+
+This project utilizes several open-source libraries:
+
+- **[Apache Cordova](https://cordova.apache.org/)**: A platform for building mobile applications using web technologies.
+
+- **[Beer CSS](https://github.com/beercss/beercss)**:  A lightweight CSS framework for building material design.
+
+- **[TinyColor](https://github.com/bgrins/TinyColor)**: Fast, small color manipulation and conversion for JavaScript.
+
+- **[Moment.js](https://momentjs.com/)**: A library for parsing and manipulating dates and times.
+
+- **[cordova-plugin-velda-devicefeedback](https://github.com/VVelda/device-feedback)**: Plugin which provides a way for haptic and acoustic feedback.
+
+- **[cordova-plugin-advanced-http](https://github.com/silkimen/cordova-plugin-advanced-http)**: Cordova / Phonegap plugin for communicating with HTTP servers.
+
+- **[cordova-plugin-navigationbar-color](https://github.com/fagundes/cordova-plugin-navigationbar)**: Cordova NavigationBar Plugin
+
+- **[cordova-plugin-secure-key-store](https://github.com/pradeep1991singh/cordova-plugin-secure-key-store)**: Cordova plugin for securely saving keys, passwords or strings on devices.
+
+- **[cordova-plugin-local-notification](https://github.com/katzer/cordova-plugin-local-notifications)**: Cordova Local-Notification Plugin.
+
+- **[cordova-plugin-background-fetch](https://github.com/transistorsoft/cordova-plugin-background-fetch)**: A plugin that implements background fetching of data.
+
+- **[cordova-plugin-timer](https://github.com/kitolog/cordova-plugin-timer)**: Cordova native timer plugin.
+
+- **[cordova-clipboard-api](https://github.com/wuori/cordova-clipboard-api)**: Clipboard copy and paste plugin for Cordova/PhoneGap that supports text, images and urls for iOS, Android.
+
+- **[cordova-clipboard](https://github.com/ihadeed/cordova-clipboard)**: Clipboard management plugin for Cordova/PhoneGap.
+
 ## License
 This project is licensed under the terms of [GPL v3.0 license](https://github.com/Bilgamesh/mChad/blob/main/LICENSE).
