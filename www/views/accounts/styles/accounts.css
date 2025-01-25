@@ -56,3 +56,21 @@ body[page='accounts'] .message-count {
 body[page='accounts'] .refresh-message {
   height: 30px;
 }
+
+body[page='accounts'] .avatar {
+  block-size: 3.5rem;
+  inline-size: 3.5rem;
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--speed3), border-radius var(--speed3), padding var(--speed3);
+  margin: 0;
+  white-space: normal;
+  flex: none;
+  border-radius: 50%;
+  box-sizing: border-box;
+  overflow-clip-margin: content-box;
+  overflow: clip;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}

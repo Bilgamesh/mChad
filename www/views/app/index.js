@@ -24,8 +24,7 @@
     AndroidUtil,
     AnimationsUtil,
     HapticsUtil,
-    ChatEvents,
-    Events,
+    TouchEvents,
     sleep,
     AccountsUi,
     LoginUi,
@@ -67,7 +66,6 @@
       const timeUtil = TimeUtil(languages);
       const urlUtil = UrlUtil();
       const clipboardUtil = ClipboardUtil();
-      const events = Events();
 
       const navbar = await Navbar({ languages, hapticsUtil, documentUtil });
 
@@ -91,7 +89,7 @@
       const config = await Config(PersistentStore, themeUtil);
       const fetchTool = FetchTool(config);
 
-      const popups = Popups(hapticsUtil, documentUtil);
+      const popups = Popups(hapticsUtil, documentUtil, themeUtil);
 
       const globalSynchronizer = MchatGlobalSynchronizer({
         PersistentStore,
@@ -135,9 +133,8 @@
         ChatUi,
         animationsUtil,
         hapticsUtil,
-        ChatEvents,
+        TouchEvents,
         InMemoryStore,
-        events,
         sleep,
         AccountsUi,
         LoginUi,

@@ -106,6 +106,9 @@ body[page='chat'] .avatar {
   border-radius: 50%;
   position: absolute;
   transform: translateY(-90%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 
 body[page='chat'] .av-left {
@@ -284,6 +287,9 @@ body[page='chat'] .emoticon {
   /* margin: 10px !important; */
   background-color: var(--surface-variant);
   box-shadow: var(--elevate1);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 
 body[page='chat'] #emoticon-panel {

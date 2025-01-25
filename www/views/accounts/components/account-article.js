@@ -38,7 +38,10 @@
     async function getHtml() {
       return /* HTML */ `<article>
         <div class="row">
-          <img class="circle large" src="${profile.avatarUrl}" />
+          <div
+            class="circle large avatar"
+            style="background-image: url(${profile.avatarUrl})"
+          ></div>
           <div class="max">
             <h5
               class="${error && !fetching

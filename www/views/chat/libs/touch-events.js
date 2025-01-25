@@ -1,5 +1,5 @@
 (function () {
-  function ChatEvents(chatUi, hapticsUtil) {
+  function TouchEvents(chatUi, hapticsUtil) {
     const storedTouch = {
       startX: null,
       startY: null,
@@ -9,7 +9,15 @@
       X_MAX_DIFF: 10,
       Y_MAX_DIFF: 10
     };
+    const longpressBlacklistedNodes = ['IMG'];
     let enlargeTimeout;
+
+    const eventTypes = {
+      TOUCHSTART: cordova.platformId === 'browser' ? 'mousedown' : 'touchstart',
+      TOUCHEND: cordova.platformId === 'browser' ? 'mouseup' : 'touchend',
+      TOUCHMOVE: cordova.platformId === 'browser' ? 'mousemove' : 'touchmove',
+      LONGPRESS: 'contextmenu'
+    };
 
     function updateStoredTouch({ startX, startY, currentX, currentY }) {
       storedTouch.startX = startX || storedTouch.startX;
@@ -67,9 +75,11 @@
       chatUi.stopShakingAllBubbles();
       chatUi.hideToolbar();
       const target = findTargetBubble(e.target) || e.target;
+      if (!target.classList.contains('bubble')) return;
       if (chatUi.isShaking(target)) return;
       chatUi.startShaking(target);
-      if (e.target.nodeName !== 'IMG') hapticsUtil.longPress();
+      if (!longpressBlacklistedNodes.includes(e.target.nodeName))
+        hapticsUtil.longPress();
       if (chatUi.isAnyBubbleShaking()) chatUi.showToolbar();
     }
 
@@ -78,6 +88,7 @@
     }
 
     return {
+      eventTypes,
       onBubbleTouchmove,
       onBubbleTouchdown,
       onBubbleTouchend,
@@ -86,5 +97,5 @@
   }
 
   window.modules = window.modules || {};
-  window.modules.ChatEvents = window.ChatEvents || ChatEvents;
+  window.modules.TouchEvents = window.TouchEvents || TouchEvents;
 })();

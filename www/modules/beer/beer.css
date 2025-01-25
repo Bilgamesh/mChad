@@ -3307,7 +3307,7 @@
     color: var(--on-surface);
     background-color: var(--overlay);
     z-index: 100;
-    transition: all var(--speed3), 0s background-color;
+    transition: all 0s, 0s background-color;
   }
   nav > .overlay {
     z-index: 0;
