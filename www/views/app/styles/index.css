@@ -163,3 +163,7 @@ i.error {
 .badge {
   pointer-events: none;
 }
+
+.emoji {
+  width: 18px !important;
+}
