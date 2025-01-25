@@ -35,6 +35,10 @@ body[page='settings'] .main {
   overscroll-behavior-y: contain;
 }
 
+body[page='settings'] .main::-webkit-scrollbar {
+  display: none;
+}
+
 body[page='settings'] .setting-label {
   position: absolute;
   left: 5vw;

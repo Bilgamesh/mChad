@@ -133,6 +133,14 @@
       'bbtags',
       chatUi.addBBCodesToUi
     );
+    const archiveStartListenerId = globalSynchronizer.addSyncListener(
+      'archiveStart',
+      chatUi.showProgressBar
+    );
+    const archiveEndListenerId = globalSynchronizer.addSyncListener(
+      'archiveEnd',
+      chatUi.hideProgressBar
+    );
 
     chatUi.addMessageSubmitListener((text) =>
       globalSynchronizer.sendToServer(forumIndex, text)
@@ -162,6 +170,8 @@
       globalSynchronizer.removeSyncListener(editListenerId);
       globalSynchronizer.removeSyncListener(newEmoticonsListenerId);
       globalSynchronizer.removeSyncListener(newBBCodesListenerId);
+      globalSynchronizer.removeSyncListener(archiveStartListenerId);
+      globalSynchronizer.removeSyncListener(archiveEndListenerId);
       androidUtil.removeKeyboardOnListener(keyboardOnListenerId);
       androidUtil.removeKeyboardOffListener(keyboardOffListenerId);
       document.removeEventListener('resume', attemptRerenderPage);

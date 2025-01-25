@@ -3,6 +3,9 @@ function $(selector) {
     return document.getElementById(selector.substring(1));
   if (selector.startsWith('.'))
     return document.getElementsByClassName(selector.substring(1));
+  const elements = document.querySelectorAll(selector);
+  if (elements.length > 1) return elements;
+  return elements[0];
 }
 
 (function () {

@@ -352,9 +352,11 @@
           forum.userId
         }] Requesting archive at index: ${startIndex}`
       );
+      emit({ event: 'archiveStart', baseUrl: forum.address, forumIndex });
       const { messages, cookie } = await chatService.fetchArchive(startIndex);
       if (cookie) await cookieStore.set(cookie);
       if (messages) onAddOld(messages);
+      emit({ event: 'archiveEnd', baseUrl: forum.address, forumIndex, messages });
       return messages || null;
     }
 

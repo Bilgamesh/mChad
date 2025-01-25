@@ -10,7 +10,7 @@
     <allow-intent href="https://*/*" />
     <preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/img/background.png" />
     <preference name="AndroidWindowSplashScreenBackground" value="#1c1b1e" />
-    <preference name="SplashScreenDelay" value="500" />
+    <preference name="SplashScreenDelay" value="700" />
     <preference name="ShowSplashScreen" value="true" />
     <preference name="FadeSplashScreen" value="false" />
     <icon background="www/img/icon/mipmap-mdpi/ic_launcher_background.png" density="mdpi" foreground="www/img/icon/mipmap-mdpi/ic_launcher_foreground.png" monochrome="www/img/icon/mipmap-mdpi/ic_launcher_monochrome.png" />

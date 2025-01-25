@@ -68,6 +68,7 @@
       bbcodesPanel.init();
 
       el.innerHTML = /* HTML */ `
+        <progress id="progress-bar" class="progress-bar" hide="true"></progress>
         <center
           id="loading-circle"
           class="loading-circle"
@@ -150,6 +151,7 @@
     }
 
     function onScrollToBottomClicked() {
+      hideToolbar();
       if (isBottomVisible()) scrollToBottom('smooth');
       else rerenderPage();
     }
@@ -159,6 +161,7 @@
         const messages = inMemoryStore.get('messages');
         if (areNewMessagesVisible()) markMessagesAsRead(messages);
         updateBadge();
+        if (!isAnyBubbleShaking()) hideToolbar();
       });
     }
 
@@ -227,11 +230,13 @@
       }
     }
 
-    function addOldMessages({ messages, forumIndex }) {
+    async function addOldMessages({ messages, forumIndex }) {
       messages = messages.filter((m) => !isAlreadyAdded(m));
       messages = messages.slice(0, config.MAX_MESSAGE_AMOUNT);
       if (currentForumIndex != forumIndex) return;
-      for (const { id, time, user, message, avatar } of messages) {
+      if (scrollUtil.isScrolledToTop()) scrollUtil.scrollDownBy(1); // Prevent scroll jump when scrollable area is expanded
+      for (let i = 0; i < messages.length; i++) {
+        const { id, time, user, message, avatar } = messages[i];
         const messageBubble = Message({
           el: $('#chat'),
           side: user.id === loggedInUserId ? 'right' : 'left',
@@ -248,7 +253,7 @@
         });
         messageBubble.insertElement({
           before: $('.bubble')[0],
-          fadeIn: 200
+          fadeIn: i === 0 ? 200 : 0
         });
         messageBubbles.unshift(messageBubble);
       }
@@ -378,6 +383,11 @@
       $('#bbcodes-panel').setAttribute('expanded', 'false');
       $('#main-page').setAttribute('expanded', 'false');
       $('#scroll-to-bottom-circle').setAttribute('expanded', 'false');
+      // Prevent scroll jump upon next hideNavbar call
+      if (scrollUtil.isScrolledToBottom()) {
+        scrollUtil.scrollUpBy(1);
+        scrollToBottom();
+      }
     }
 
     function hideNavbar() {
@@ -397,10 +407,7 @@
         } while ($('#chat').scrollTop === 0);
         return;
       }
-      $('#chat').scrollTo({
-        top: $('#chat').scrollHeight,
-        behavior: behavior || 'instant'
-      });
+      scrollUtil.scrollToBottom(behavior);
     }
 
     function showLoadingCircle() {
@@ -455,10 +462,12 @@
     }
 
     function showToolbar() {
+      $('header').setAttribute('hide', 'true');
       toolsPanel.show();
     }
 
     function hideToolbar() {
+      $('header').setAttribute('hide', 'false');
       toolsPanel.hide();
     }
 
@@ -474,6 +483,14 @@
 
     function markMessagesAsRead(messages) {
       for (const message of messages) message.read = true;
+    }
+
+    function showProgressBar() {
+      $('#progress-bar').setAttribute('hide', 'false');
+    }
+
+    function hideProgressBar() {
+      $('#progress-bar').setAttribute('hide', 'true');
     }
 
     return {
@@ -507,7 +524,9 @@
       addMessageSubmitListener,
       rerenderPage,
       isBottomVisible,
-      areNewMessagesVisible
+      areNewMessagesVisible,
+      showProgressBar,
+      hideProgressBar
     };
   }
 
