@@ -85,6 +85,7 @@ cordova platform add android
 I recommend using Docker to manage Android build tools and eliminate the need for Android Studio
 
 ```Powershell
+cd cordova-android-builder
 docker build -t cordova .
 ```
 
