@@ -23,11 +23,6 @@
     }
 
     function onScroll() {
-      if ($('#chat').scrollTop < 10)
-        $('#chat').scrollTo({
-          top: 50,
-          behavior: 'smooth'
-        });
       const scrollPercentage = scrollUtil.getScrollPercentage();
       if (scrollPercentage <= 0.2) return onApproachingTop();
       if (!scrollUtil.isViewportNScreensAwayFromBottom(2.5))
@@ -46,8 +41,7 @@
       removeExcessBottom();
       if (added) return; // don't call archive API if messages are added from memory
       if (archiveRequestBlocked) return;
-      /* Block access to the archive API when request is in progress
-      and few seconds after to prevent request spam. */
+      /* Block access to the archive API when request is in progress to prevent request spam. */
       archiveRequestBlocked = true;
       /* phpBB archived messages are indexed differently than in this app.
       In the archive the older the message is, the greater index it has.
@@ -58,9 +52,7 @@
         archiveIndex
       );
       onApproachingTop();
-      setTimeout(() => {
-        archiveRequestBlocked = false;
-      }, 2 * 1000);
+      archiveRequestBlocked = false;
     }
 
     function onApproachingBottom() {

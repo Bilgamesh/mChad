@@ -121,7 +121,6 @@ h1 {
 }
 
 *[hide='true'] {
-  height: 0 !important;
   visibility: hidden !important;
 }
 
