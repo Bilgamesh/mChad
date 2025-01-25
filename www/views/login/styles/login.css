@@ -34,3 +34,7 @@ body[page='login'] .bg {
 body[page='login'] #address-success-icon {
   color: green;
 }
+
+body[page='login'] *[hide='true'] {
+  height: 0px !important;
+}
