@@ -22,7 +22,6 @@
         user_name="${user.name}"
         user_id="${user.id}"
         message="${encodeQuotes(message.text)}"
-        data-long-press-delay="500"
         enlarged="false"
         style="opacity: 1;"
       >
@@ -31,11 +30,13 @@
       <div class="label label-${side}" style="opacity: 1;">
         ${user.name} • ${dateTime}
       </div>
-      <img
+      <div
         class="avatar av-${side}"
-        src="${avatar.src.replace('./', `${baseUrl}/`)}"
-        style="opacity: 1;"
-      />
+        style="opacity: 1; background-image: url(${avatar.src.replace(
+          './',
+          `${baseUrl}/`
+        )})"
+      ></div>
     `;
 
     function createBubble() {
@@ -47,16 +48,21 @@
       bubble.setAttribute('user_name', user.name);
       bubble.setAttribute('user_id', user.id);
       bubble.setAttribute('message', message.text);
-      bubble.setAttribute('data-long-press-delay', '500');
       bubble.innerHTML = documentUtil.fixMessageLinks(baseUrl, message.html);
       return bubble;
     }
 
     function createAvatar() {
-      const av = document.createElement('img');
+      const av = document.createElement('div');
       const avClassName = `avatar av-${side}`;
       av.setAttribute('class', avClassName);
-      av.setAttribute('src', avatar.src.replace('./', `${baseUrl}/`));
+      av.setAttribute(
+        'style',
+        `opacity: 1; background-image: url(${avatar.src.replace(
+          './',
+          `${baseUrl}/`
+        )})`
+      );
       return av;
     }
 

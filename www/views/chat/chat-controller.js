@@ -10,9 +10,8 @@
     ChatUi,
     animationsUtil,
     hapticsUtil,
-    ChatEvents,
+    TouchEvents,
     InMemoryStore,
-    events,
     sleep,
     navbar,
     Message,
@@ -91,13 +90,26 @@
     await chatUi.displayPage(messages, emoticons, bbtags);
     chatUi.init();
 
-    const chatEvents = ChatEvents(chatUi, hapticsUtil);
+    const touchEvents = TouchEvents(chatUi, hapticsUtil);
+    const { eventTypes } = touchEvents;
 
     document.addEventListener('resume', attemptRerenderPage);
-    document.addEventListener(events.TOUCHSTART, chatEvents.onBubbleTouchdown);
-    document.addEventListener(events.TOUCHEND, chatEvents.onBubbleTouchend);
-    document.addEventListener(events.LONGPRESS, chatEvents.onBubbleLongpress);
-    document.addEventListener(events.TOUCHMOVE, chatEvents.onBubbleTouchmove);
+    document.addEventListener(
+      eventTypes.TOUCHSTART,
+      touchEvents.onBubbleTouchdown
+    );
+    document.addEventListener(
+      eventTypes.TOUCHEND,
+      touchEvents.onBubbleTouchend
+    );
+    document.addEventListener(
+      eventTypes.LONGPRESS,
+      touchEvents.onBubbleLongpress
+    );
+    document.addEventListener(
+      eventTypes.TOUCHMOVE,
+      touchEvents.onBubbleTouchmove
+    );
 
     const addListenerId = globalSynchronizer.addSyncListener(
       'add',
@@ -176,20 +188,20 @@
       androidUtil.removeKeyboardOffListener(keyboardOffListenerId);
       document.removeEventListener('resume', attemptRerenderPage);
       document.removeEventListener(
-        events.TOUCHSTART,
-        chatEvents.onBubbleTouchdown
+        eventTypes.TOUCHSTART,
+        touchEvents.onBubbleTouchdown
       );
       document.removeEventListener(
-        events.TOUCHEND,
-        chatEvents.onBubbleTouchend
+        eventTypes.TOUCHEND,
+        touchEvents.onBubbleTouchend
       );
       document.removeEventListener(
-        events.LONGPRESS,
-        chatEvents.onBubbleLongpress
+        eventTypes.LONGPRESS,
+        touchEvents.onBubbleLongpress
       );
       document.removeEventListener(
-        events.TOUCHMOVE,
-        chatEvents.onBubbleTouchmove
+        eventTypes.TOUCHMOVE,
+        touchEvents.onBubbleTouchmove
       );
       chatUi.onDestroy();
     }

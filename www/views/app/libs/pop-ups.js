@@ -1,5 +1,5 @@
 (function () {
-  function Popups(hapticsUtil, documentUtil) {
+  function Popups(hapticsUtil, documentUtil, themeUtil) {
     $('#error-msg-0').addEventListener('click', hideError);
     $('#error-msg-1').addEventListener('click', hideError);
     $('#notification-msg-0').addEventListener('click', hideNotification);
@@ -72,6 +72,7 @@
       document.addEventListener('backbutton', hideConfirmationBox);
       $('#global-confirm').classList.add('active');
       $('#global-blur').classList.add('active');
+      darkenUi();
     }
 
     function hideConfirmationBox() {
@@ -79,6 +80,23 @@
       $('#global-blur').classList.remove('active');
       documentUtil.removeAllListeners($('#global-confirm'));
       document.removeEventListener('backbutton', hideConfirmationBox);
+      lightenUi();
+    }
+
+    function darkenUi() {
+      themeUtil.updateBarsByElementColor(
+        $('#navbar-top'),
+        '--surface-container',
+        true
+      );
+    }
+
+    function lightenUi() {
+      themeUtil.updateBarsByElementColor(
+        $('#navbar-top'),
+        '--surface-container',
+        false
+      );
     }
 
     return { showError, hideError, showConfirmationBox, showNotification };

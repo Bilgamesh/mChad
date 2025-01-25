@@ -34,6 +34,7 @@ function $(selector) {
       element,
       className,
       src,
+      style,
       innerHTML,
       innerText,
       disabled,
@@ -49,6 +50,7 @@ function $(selector) {
       if (id) el.setAttribute('id', id);
       if (className) el.setAttribute('class', className);
       if (src) el.setAttribute('src', src);
+      if (style) el.setAttribute('style', style);
       if (innerHTML) el.innerHTML = innerHTML;
       if (innerText) el.innerText = innerText;
       if (disabled) el.disabled = true;
