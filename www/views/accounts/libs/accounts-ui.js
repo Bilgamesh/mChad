@@ -8,7 +8,8 @@
     sleep,
     documentUtil,
     timeUtil,
-    Timer
+    Timer,
+    popups
   }) {
     let articles = [];
 
@@ -33,7 +34,8 @@
       errors,
       refreshTimes,
       fetchings,
-      unreadMessagesData
+      unreadMessagesData,
+      onlineUsersDatas
     }) {
       /* Emptying the page just before re-rendering
       and giving browser an overhead via dummy timeout
@@ -51,7 +53,8 @@
                 errors,
                 refreshTimes,
                 fetchings,
-                unreadMessagesData
+                unreadMessagesData,
+                onlineUsersDatas
               )}
             </center>
           </div>
@@ -67,6 +70,7 @@
         </div>
       `;
 
+      addListeners();
       startAllCounts();
     }
 
@@ -76,7 +80,8 @@
       errors,
       refreshTimes,
       fetchings,
-      unreadMessagesData
+      unreadMessagesData,
+      onlineUsersDatas
     ) {
       let articlesHtml = '';
       for (const [index, forum] of forums.entries()) {
@@ -86,6 +91,7 @@
         const refreshTime = refreshTimes[index];
         const fetching = fetchings[index];
         const unreadMessages = unreadMessagesData[index];
+        const onlineUsersData = onlineUsersDatas[index];
         const article = AccountArticle({
           languages,
           profile,
@@ -95,10 +101,13 @@
           refreshTime,
           fetching,
           unreadMessages,
+          onlineUsersData,
           index,
           timeUtil,
           documentUtil,
-          Timer
+          Timer,
+          hapticsUtil,
+          popups
         });
         await article.init();
         articlesHtml += await article.getHtml();
@@ -191,6 +200,14 @@
       for (const article of articles) article.stopRefreshingCount();
     }
 
+    function updateOnlineUsersInfo(data) {
+      for (const article of articles) article.updateOnlineUsersInfo(data);
+    }
+
+    function addListeners() {
+      for (const article of articles) article.addListeners();
+    }
+
     return {
       init,
       displayPage,
@@ -207,6 +224,7 @@
       clearForumTitles,
       updateTitleBar,
       appendLogoutProgressCircle,
+      updateOnlineUsersInfo,
       removeAccountArticle,
       updateUnreadMessagesParagraph,
       startAllCounts,

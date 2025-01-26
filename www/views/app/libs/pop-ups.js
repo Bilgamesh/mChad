@@ -5,6 +5,7 @@
     $('#notification-msg-0').addEventListener('click', hideNotification);
     $('#notification-msg-1').addEventListener('click', hideNotification);
     $('#global-blur').addEventListener('click', hideConfirmationBox);
+    $('#global-blur').addEventListener('click', hideInfoBox);
 
     let errorMsgIndex = 0;
     let notificationMsgIndex = 0;
@@ -75,11 +76,36 @@
       darkenUi();
     }
 
+    function showInfoBox({ title, content }) {
+      $('#global-info').children[0].children[0].innerText = title || 'Default';
+      $('#global-info').children[1].innerHTML = content;
+      $('#global-info').children[0].children[1].addEventListener(
+        'click',
+        hideInfoBox
+      );
+      $('#global-info').children[0].children[1].addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
+      document.addEventListener('backbutton', hideInfoBox);
+      $('#global-info').classList.add('active');
+      $('#global-blur').classList.add('active');
+      darkenUi();
+    }
+
     function hideConfirmationBox() {
       $('#global-confirm').classList.remove('active');
       $('#global-blur').classList.remove('active');
       documentUtil.removeAllListeners($('#global-confirm'));
       document.removeEventListener('backbutton', hideConfirmationBox);
+      lightenUi();
+    }
+
+    function hideInfoBox() {
+      $('#global-info').classList.remove('active');
+      $('#global-blur').classList.remove('active');
+      documentUtil.removeAllListeners($('#global-info'));
+      document.removeEventListener('backbutton', hideInfoBox);
       lightenUi();
     }
 
@@ -99,7 +125,14 @@
       );
     }
 
-    return { showError, hideError, showConfirmationBox, showNotification };
+    return {
+      showError,
+      showInfoBox,
+      hideError,
+      hideInfoBox,
+      showConfirmationBox,
+      showNotification
+    };
   }
   window.modules = window.modules || {};
   window.modules.Popups = Popups;

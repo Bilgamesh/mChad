@@ -156,6 +156,27 @@ i.error {
   z-index: 992;
 }
 
+#global-info {
+  z-index: 992;
+  max-height: 600px;
+  overflow-y: hidden;
+}
+
+.global-info-content {
+  overflow-y: scroll;
+  max-height: 510px;
+  margin-top: 20px;
+  border-radius: 0;
+}
+
+.global-info-content::-webkit-scrollbar {
+  display: none;
+}
+
+.close-icon {
+  float: right;
+}
+
 .nav-icon {
   transition: none !important;
 }
