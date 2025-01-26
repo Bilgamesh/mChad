@@ -32,6 +32,7 @@
               .getAttribute('src')
               .substring(1)
           : './img/no_avatar.gif';
+        await documentUtil.preloadImage(avatarUrl);
         const username = (
           doc.getElementsByClassName('username')[0] ||
           doc.getElementsByClassName('username-coloured')[0]

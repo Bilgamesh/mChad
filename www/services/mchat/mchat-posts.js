@@ -18,6 +18,7 @@
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const bbtags = documentUtil.extractBBtags(doc);
         const messages = parseMessages(html);
+        await preloadAvatars(messages);
         const formToken = documentUtil.findInputData(
           doc,
           'form_token',
@@ -59,7 +60,10 @@
       const url = `${baseUrl}/app.php/mchat/action/refresh`;
       const response = await fetchTool.fetchCrossDomain(url, options);
       const json = await response.json();
-      if (json.add) json.add = parseMessages(json.add);
+      if (json.add) {
+        json.add = parseMessages(json.add);
+        await preloadAvatars(json.add);
+      }
       if (json.edit) json.edit = parseMessages(json.edit);
       let cookie = '';
       if (documentUtil.hasSessionCookie(response))
@@ -88,7 +92,10 @@
           options
         );
         const json = await response.json();
-        if (json.add) json.add = parseMessages(json.add);
+        if (json.add) {
+          json.add = parseMessages(json.add);
+          await preloadAvatars(json.add);
+        }
         if (json.edit) json.edit = parseMessages(json.edit);
         let cookie = '';
         if (documentUtil.hasSessionCookie(response))
@@ -130,6 +137,7 @@
           cookie = documentUtil.extractCookie(response.headers);
         const html = await response.text();
         const messages = parseMessages(html);
+        await preloadAvatars(messages);
         if (messages.length === 0) {
           console.log(
             `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] No posts found in archive HTML`
@@ -177,6 +185,14 @@
           logId
         });
       return messages.sort((a, b) => a.id - b.id);
+    }
+
+    function preloadAvatars(messages) {
+      return Promise.all(
+        messages.map((message) =>
+          documentUtil.preloadImage(message.avatar.src, baseUrl)
+        )
+      );
     }
 
     return { fetchMainPage, fetchArchive, refresh, add, edit, del };

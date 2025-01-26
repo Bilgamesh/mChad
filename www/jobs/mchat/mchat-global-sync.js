@@ -19,6 +19,7 @@
 
     document.addEventListener('pause', stopSync);
     document.addEventListener('resume', restartSync);
+    document.addEventListener('resume', () => documentUtil.reloadImages());
 
     function startSync() {
       console.log(`[${new Date().toLocaleString()}][ALL] START SYNC`);
