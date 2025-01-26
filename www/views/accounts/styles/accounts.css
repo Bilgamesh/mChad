@@ -62,7 +62,8 @@ body[page='accounts'] .avatar {
   inline-size: 3.5rem;
   object-fit: cover;
   object-position: center;
-  transition: transform var(--speed3), border-radius var(--speed3), padding var(--speed3);
+  transition: transform var(--speed3), border-radius var(--speed3),
+    padding var(--speed3);
   margin: 0;
   white-space: normal;
   flex: none;
@@ -73,4 +74,13 @@ body[page='accounts'] .avatar {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
+}
+
+body[page='accounts'] .info {
+  padding-left: 5px;
+  margin-top: -5px;
+}
+
+body[page='accounts'] p {
+  margin: 0.5rem 0 !important;
 }

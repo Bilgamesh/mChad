@@ -16,6 +16,15 @@
           </nav>
         </dialog>
 
+        <dialog id="global-info" class="">
+          <h5>
+            <span>Default</span>
+            <i class="transparent link extra close-icon">close</i>
+          </h5>
+          <div class="global-info-content">Content here</div>
+          <nav class="right-align no-space"></nav>
+        </dialog>
+
         <header>
           <nav id="navbar-top">
             <h5 id="navbar-top-title" class="max left-align">mChad</h5>

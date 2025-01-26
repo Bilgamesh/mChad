@@ -8,11 +8,14 @@
     isOpened,
     refreshTime,
     fetching,
+    onlineUsersData,
     index,
     unreadMessages,
     timeUtil,
     documentUtil,
-    Timer
+    Timer,
+    hapticsUtil,
+    popups
   }) {
     let errorMessage;
     let successMessage;
@@ -22,7 +25,10 @@
     let logoutActionText;
     let refreshingText;
     let secondsAgoMessage;
-
+    let usersOnlineText;
+    let loggedInUsersText;
+    let hiddenUsersText;
+    AccountArticle;
     const timer = Timer({ onTick });
 
     async function init() {
@@ -33,6 +39,9 @@
       openText = await languages.getTranslation('OPEN');
       logoutActionText = await languages.getTranslation('LOGOUT_ACTION');
       refreshingText = await languages.getTranslation('REFRESHING_IN_PROGRESS');
+      usersOnlineText = await languages.getTranslation('USERS_ONLINE');
+      loggedInUsersText = await languages.getTranslation('USERS');
+      hiddenUsersText = await languages.getTranslation('HIDDEN_USERS');
     }
 
     async function getHtml() {
@@ -67,6 +76,12 @@
             >
               @${(forum.name || forum.address) +
               (isOpened ? ' - ' + currentlyOpenedText : '')}
+            </p>
+            <p>
+              <span id="user-count-info-${index}"
+                >${usersOnlineText} ${onlineUsersData.totalCount}</span
+              >
+              <i id="info-icon-${index}" class="info">info</i>
             </p>
             <p
               class="${error && !fetching
@@ -105,6 +120,17 @@
           </button>
         </nav>
       </article>`;
+    }
+
+    function addListeners() {
+      $(`#info-icon-${index}`).addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
+      $(`#info-icon-${index}`).addEventListener(
+        'click',
+        displayOnlineUsersModal
+      );
     }
 
     function startRefreshingCount() {
@@ -212,13 +238,45 @@
       }
     }
 
+    function updateOnlineUsersInfo({
+      forumIndex,
+      message,
+      users,
+      visibleCount,
+      hiddenCount,
+      totalCount
+    }) {
+      if (index != forumIndex) return;
+      onlineUsersData.message = message;
+      onlineUsersData.users = users;
+      onlineUsersData.visibleCount = visibleCount;
+      onlineUsersData.hiddenCount = hiddenCount;
+      onlineUsersData.totalCount = totalCount;
+      $(`#user-count-info-${index}`).innerHTML =
+        usersOnlineText + ' ' + totalCount;
+    }
+
+    function displayOnlineUsersModal() {
+      const { users, hiddenCount } = onlineUsersData;
+      let content = '';
+      for (const user of users) content += `<p>${user.username}</p>`;
+      if (hiddenCount > 0)
+        content += `<p>${hiddenUsersText} ${hiddenCount}</p>`;
+      popups.showInfoBox({
+        title: loggedInUsersText,
+        content
+      });
+    }
+
     return {
       init,
       getHtml,
+      addListeners,
       updateStatus,
       updateMessageCount,
       startRefreshingCount,
-      stopRefreshingCount
+      stopRefreshingCount,
+      updateOnlineUsersInfo
     };
   }
   window.modules = window.modules || {};

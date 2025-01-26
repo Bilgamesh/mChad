@@ -5,6 +5,7 @@
     forumIndex,
     PersistentStore,
     MchatChatService,
+    MchatOnlineUsersService,
     MchatUserService,
     MchatEmoticonsService,
     InMemoryStore,
@@ -18,6 +19,12 @@
     const forumStorage = PersistentStore(`${forum.address}_${forum.userId}`);
     const inMemoryStore = InMemoryStore(`${forum.address}_${forum.userId}`);
     const chatService = MchatChatService({
+      baseUrl: forum.address,
+      cookieStore,
+      fetchTool,
+      documentUtil
+    });
+    const onlineUsersService = MchatOnlineUsersService({
       baseUrl: forum.address,
       cookieStore,
       fetchTool,
@@ -114,6 +121,26 @@
           const profile = await userService.fetchProfile();
           if (profile.cookie) cookieStore.set(profile.cookie);
           onProfileUpdate(profile);
+        }
+
+        /* Periodically check who is online */
+        if (index % 10 === 0) {
+          const {
+            message,
+            users,
+            visibleCount,
+            hiddenCount,
+            totalCount,
+            cookie
+          } = await onlineUsersService.fetchUsers();
+          if (cookie) await cookieStore.set(cookie);
+          onOnlineUsersUpdate({
+            message,
+            users,
+            visibleCount,
+            hiddenCount,
+            totalCount
+          });
         }
 
         /* Periodically reload cached images */
@@ -294,6 +321,17 @@
         baseUrl: forum.address,
         profile,
         forumIndex
+      });
+    }
+
+    function onOnlineUsersUpdate(onlineUsersData) {
+      if (stopped) return;
+      forumStorage.set('online-users-data', onlineUsersData);
+      emit({
+        event: 'online-users-data-update',
+        baseUrl: forum.address,
+        forumIndex,
+        ...onlineUsersData
       });
     }
 

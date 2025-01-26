@@ -44,10 +44,12 @@
       sleep,
       documentUtil,
       timeUtil,
-      Timer
+      Timer,
+      popups
     });
 
-    const { profiles, errors, refreshTimes, fetchings } = await getAccountsData();
+    const { profiles, errors, refreshTimes, fetchings, onlineUsersDatas } =
+      await getAccountsData();
 
     const accountsActions = AccountsActions({
       accountsUi: ui,
@@ -76,7 +78,8 @@
       errors,
       refreshTimes,
       fetchings,
-      unreadMessagesData
+      unreadMessagesData,
+      onlineUsersDatas
     });
 
     ui.init();
@@ -105,6 +108,11 @@
       'syncError',
       ui.updateAccountArticleStatus
     );
+    const onlineUsersDataUpdateListenerIndex =
+      globalSynchronizer.addSyncListener(
+        'online-users-data-update',
+        ui.updateOnlineUsersInfo
+      );
     const postSyncListenerIndex = globalSynchronizer.addSyncListener(
       'refresh-end',
       accountsActions.updateArticlesMessageCount
@@ -124,6 +132,7 @@
       const errors = [];
       const refreshTimes = [];
       const fetchings = [];
+      const onlineUsersDatas = [];
 
       for (const forum of forums) {
         const forumStorage = PersistentStore(
@@ -135,12 +144,14 @@
         const error = inMemoryStore.get('error');
         const refreshTime = forumStorage.get('refresh-time') || +new Date();
         const fetching = !!inMemoryStore.get('fetching');
+        const onlineUsersData = forumStorage.get('online-users-data');
         profiles.push(profile);
         errors.push(error);
         refreshTimes.push(refreshTime);
         fetchings.push(fetching);
+        onlineUsersDatas.push(onlineUsersData);
       }
-      return { profiles, errors, refreshTimes, fetchings };
+      return { profiles, errors, refreshTimes, fetchings, onlineUsersDatas };
     }
 
     async function createDummyProfile() {
@@ -154,6 +165,7 @@
       globalSynchronizer.removeSyncListener(presyncListenerIndex);
       globalSynchronizer.removeSyncListener(syncListenerIndex);
       globalSynchronizer.removeSyncListener(errorListenerIndex);
+      globalSynchronizer.removeSyncListener(onlineUsersDataUpdateListenerIndex);
       globalSynchronizer.removeSyncListener(postSyncListenerIndex);
       document.removeEventListener('pause', ui.stopAllCounts);
       document.removeEventListener('resume', ui.startAllCounts);
