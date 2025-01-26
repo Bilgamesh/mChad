@@ -32,7 +32,9 @@
           users.push({ username });
         }
         const visibleCount = users.length;
-        const hiddenCount = +message.replace(visibleCount, '').match(/\d+/)[0];
+        const hiddenCount = +(message
+          .replace(visibleCount, '')
+          .match(/\d+/) || [0])[0];
         const totalCount = visibleCount + hiddenCount;
         return {
           message,
