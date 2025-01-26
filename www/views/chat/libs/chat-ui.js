@@ -312,11 +312,11 @@
 
     async function editMessage({ message, forumIndex }) {
       if (currentForumIndex != forumIndex) return;
+      if (!messageBubbles) return;
       const messageBubble = messageBubbles.find(
         (bubble) => bubble.id == message.id
       );
-      if (!messageBubbles) return;
-      if (!$(`#${messageBubbles[index].id}`)) return;
+      if (!messageBubble) return;
       await messageBubble.update(message);
       addBubbleContentListeners();
     }
