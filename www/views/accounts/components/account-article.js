@@ -151,6 +151,7 @@
       $('.forum-name')[index].classList.remove('refresh-error');
       $('.refresh-message')[index].classList.remove('refresh-error');
       $('.message-count')[index].classList.remove('refresh-error');
+      $('.user-count-info')[index].classList.remove('refresh-error');
       $('.refresh-message')[index].innerText = refreshingText;
       if ($(`#loading-animation-${index}`)) return;
       const progressCircle = documentUtil.createHtmlElement({
