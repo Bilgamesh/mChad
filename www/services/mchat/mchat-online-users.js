@@ -34,7 +34,7 @@
         const visibleCount = users.length;
         const counts = message.replace(visibleCount, '').match(/\d+/gi) || [0];
         const totalCount = counts.reduce((accumulator, currentValue) => {
-          return accumulator + currentValue;
+          return +accumulator + +currentValue;
         }, 0);
         const hiddenCount = totalCount - visibleCount;
         return {
