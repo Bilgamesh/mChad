@@ -36,10 +36,10 @@ Download the APK from [GitHub Releases](https://github.com/Bilgamesh/mChad/relea
 
 ## Features
 
-* Log into multiple accounts on multiple forums
-* Access mChat with mobile-friendly UI
-* Get notifications and don't miss any conversations
-* Scroll "infinitely" through archived messages
+- Log into multiple accounts on multiple forums
+- Access mChat with mobile-friendly UI
+- Get notifications and don't miss any conversations
+- Scroll "infinitely" through archived messages
 
 This project is work in progress and does not currently let you use all the features of mChat that are normally available in a web browser. Current experience varies depending on custom bbcodes implemented by specific forum administrators. More features and improved support for phpBB extensions will be added in the near future.
 
@@ -80,7 +80,7 @@ cordova run browser
 cordova platform add android
 ```
 
-### Docker 
+### Docker
 
 I recommend using Docker to manage Android build tools and eliminate the need for Android Studio
 
@@ -92,6 +92,7 @@ docker build -t cordova .
 ### Build .apk
 
 This will create a debug build
+
 ```Powershell
 npm run build-docker
 ```
@@ -112,7 +113,7 @@ This project utilizes several open-source libraries:
 
 - **[Apache Cordova](https://cordova.apache.org/)**: A platform for building mobile applications using web technologies.
 
-- **[Beer CSS](https://github.com/beercss/beercss)**:  A lightweight CSS framework for building material design.
+- **[Beer CSS](https://github.com/beercss/beercss)**: A lightweight CSS framework for building material design.
 
 - **[TinyColor](https://github.com/bgrins/TinyColor)**: Fast, small color manipulation and conversion for JavaScript.
 
@@ -136,5 +137,8 @@ This project utilizes several open-source libraries:
 
 - **[cordova-clipboard](https://github.com/ihadeed/cordova-clipboard)**: Clipboard management plugin for Cordova/PhoneGap.
 
+- **[cordova-plugin-theme-detection](https://github.com/mariusbackes/cordova-plugin-theme-detection)**: Cordova plugin to detect whether dark mode is enabled or not.
+
 ## License
+
 This project is licensed under the terms of [GPL v3.0 license](https://github.com/Bilgamesh/mChad/blob/main/LICENSE).

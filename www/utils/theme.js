@@ -14,7 +14,30 @@
       return color;
     }
 
-    return { updateBarsByElementColor };
+    function getSystemColorMode() {
+      return new Promise((resolve) => {
+        try {
+          cordova.plugins.ThemeDetection.isDarkModeEnabled(
+            function (success) {
+              resolve(success.value ? 'dark' : 'light');
+            },
+            function (error) {
+              console.log(
+                `[${new Date().toLocaleString()}][THEME] Error: ${error}`
+              );
+              resolve('light');
+            }
+          );
+        } catch (error) {
+          console.log(
+            `[${new Date().toLocaleString()}][THEME] Error: ${error}`
+          );
+          resolve('light');
+        }
+      });
+    }
+
+    return { updateBarsByElementColor, getSystemColorMode };
   }
   window.modules = window.modules || {};
   window.modules.ThemeUtil = ThemeUtil;

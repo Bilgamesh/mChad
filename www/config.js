@@ -23,7 +23,10 @@
       navigator.language ||
       DEFAULT_LANGUAGE;
     preferencesStore.set('language', language);
-    const mode = preferencesStore.get('mode') || DEFAULT_MODE;
+    const mode =
+      preferencesStore.get('mode') ||
+      (await themeUtil.getSystemColorMode()) ||
+      DEFAULT_MODE;
     preferencesStore.set('mode', mode);
     const theme = preferencesStore.get('theme') || DEFAULT_THEME;
     preferencesStore.set('theme', theme);
