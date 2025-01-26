@@ -1,5 +1,10 @@
 (function () {
-  function MchatEmoticonsService({ baseUrl, cookieStore, fetchTool, documentUtil }) {
+  function MchatEmoticonsService({
+    baseUrl,
+    cookieStore,
+    fetchTool,
+    documentUtil
+  }) {
     async function fetchEmoticons(start = 0) {
       try {
         const options = {
@@ -30,8 +35,17 @@
           const title = img.getAttribute('title');
           emoticons.push({ pictureUrl, width, height, code, title });
         }
+        await preloadEmoticons(emoticons);
         return { emoticons, hasHextPage, count: emoticons.length, cookie };
       } catch (err) {}
+    }
+
+    function preloadEmoticons(emoticons) {
+      return Promise.all(
+        emoticons.map((emoticon) =>
+          documentUtil.preloadImage(emoticon.pictureUrl)
+        )
+      );
     }
 
     return {

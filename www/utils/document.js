@@ -11,6 +11,7 @@ function $(selector) {
 (function () {
   function DocumentUtil(hapticsUtil) {
     const USERNAME_COOKIE_REGEX = /.+_u=\d+/gi;
+    const cachedImages = [];
 
     function getParam(param) {
       return new URLSearchParams(window.location.hash.split('?')[1]).get(param);
@@ -234,6 +235,29 @@ function $(selector) {
       }
     }
 
+    function preloadImage(src, baseUrl, force) {
+      if (baseUrl) src = src.replace('./', baseUrl + '/');
+      if (cachedImages.includes(src) && !force) return;
+      console.log(
+        `[${new Date().toLocaleString()}][Document] Preloading image: ${src}`
+      );
+      if (!cachedImages.includes(src)) cachedImages.push(src);
+      return new Promise((resolve) => {
+        const image = new Image();
+        image.onload = resolve;
+        image.onerror = resolve;
+        image.src = src;
+      });
+    }
+
+    function reloadImages(address = '') {
+      return Promise.all(
+        cachedImages
+          .filter((image) => image.includes(address))
+          .map((image) => preloadImage(image, null, true))
+      );
+    }
+
     return {
       getParam,
       removeAllListeners,
@@ -248,7 +272,9 @@ function $(selector) {
       extractLikeMessage,
       extractLogId,
       extractBBtags,
-      isJSON
+      isJSON,
+      preloadImage,
+      reloadImages
     };
   }
 

@@ -116,6 +116,9 @@
           onProfileUpdate(profile);
         }
 
+        /* Periodically reload cached images */
+        if (index % 10 === 0) documentUtil.reloadImages(forum.address);
+
         /* Periodically fetch emoticons
         in case forum admin has changed them */
         if (index % 15 === 0) {
@@ -356,7 +359,12 @@
       const { messages, cookie } = await chatService.fetchArchive(startIndex);
       if (cookie) await cookieStore.set(cookie);
       if (messages) onAddOld(messages);
-      emit({ event: 'archiveEnd', baseUrl: forum.address, forumIndex, messages });
+      emit({
+        event: 'archiveEnd',
+        baseUrl: forum.address,
+        forumIndex,
+        messages
+      });
       return messages || null;
     }
 
