@@ -77,7 +77,7 @@
               @${(forum.name || forum.address) +
               (isOpened ? ' - ' + currentlyOpenedText : '')}
             </p>
-            <p>
+            <p class="${error && !fetching ? 'refresh-error user-count-info' : 'user-count-info'}">
               <span id="user-count-info-${index}"
                 >${usersOnlineText} ${onlineUsersData.totalCount}</span
               >
@@ -201,6 +201,7 @@
       $('.forum-name')[index].classList.add('refresh-error');
       $('.refresh-message')[index].classList.add('refresh-error');
       $('.message-count')[index].classList.add('refresh-error');
+      $('.user-count-info')[index].classList.add('refresh-error');
       $('.refresh-icon')[index].innerHTML = 'error';
     }
 
@@ -211,6 +212,7 @@
       $('.forum-name')[index].classList.remove('refresh-error');
       $('.refresh-message')[index].classList.remove('refresh-error');
       $('.message-count')[index].classList.remove('refresh-error');
+      $('.user-count-info')[index].classList.remove('refresh-error');
       $('.refresh-icon')[index].innerHTML = 'check_circle';
     }
 
