@@ -1,15 +1,13 @@
 (function () {
   function ToolsPanel({ baseUrl, chatUiCache, inMemoryStore }) {
-    const html = /* HTML */ `<nav
-      id="tools-panel"
-      class="right-align"
-      hide="true"
-    >
-      <i id="reply-button" class="tool-item unhoverable">alternate_email</i>
-      <i id="quote-button" class="tool-item unhoverable">format_quote</i>
-      <i id="like-button" class="tool-item unhoverable">thumb_up</i>
-      <i id="copy-button" class="tool-item unhoverable">content_copy</i>
-    </nav>`;
+    const html =
+      /* HTML */
+      `<nav id="tools-panel" class="right-align" hide="true">
+        <i id="reply-button" class="tool-item unhoverable">alternate_email</i>
+        <i id="quote-button" class="tool-item unhoverable">format_quote</i>
+        <i id="like-button" class="tool-item unhoverable">thumb_up</i>
+        <i id="copy-button" class="tool-item unhoverable">content_copy</i>
+      </nav>`;
 
     function getLikeMessage() {
       return inMemoryStore.get('likeMessage');
