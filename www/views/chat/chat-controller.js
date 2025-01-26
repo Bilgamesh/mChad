@@ -72,7 +72,6 @@
       BBCodesPanel,
       clipboardUtil,
       ScrollUtil,
-      InfiniteScroll,
       config,
       inMemoryStore: forumInMemoryStorage,
       forumStorage,
@@ -166,6 +165,7 @@
       const scrollUtil = ScrollUtil($('#chat'));
       if (scrollUtil.isViewportNScreensAwayFromBottom(2)) return;
       const messages = forumInMemoryStorage.get('messages') || [];
+      if (!messages.length) return;
       markMessagesAsRead(messages);
       const latestMessage = messages[messages.length - 1];
       const alreadyRenderedMessages = $('.bubble');

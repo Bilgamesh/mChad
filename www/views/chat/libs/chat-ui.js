@@ -119,7 +119,12 @@
       registerListeners();
       emoticonPanel.registerListeners();
       bbcodesPanel.registerListeners();
-      if ($('.bubble').length) infiniteScroll.init(scrollUtil, messageBubbles);
+      if ($('.bubble').length)
+        infiniteScroll.init(
+          scrollUtil,
+          messageBubbles,
+          addBubbleContentListeners
+        );
     }
 
     function registerHaptics() {
@@ -221,7 +226,12 @@
       }
       addBubbleContentListeners();
       hideLoadingCircle();
-      if (isFirstBatch) infiniteScroll.init(scrollUtil, messageBubbles);
+      if (isFirstBatch)
+        infiniteScroll.init(
+          scrollUtil,
+          messageBubbles,
+          addBubbleContentListeners
+        );
       if (
         messages.length > 0 &&
         !scrollUtil.isViewportNScreensAwayFromBottom(2)
