@@ -15,10 +15,12 @@
     let scrollUtil;
     let messageBubbles;
     let archiveRequestBlocked = false;
+    let onMessages;
 
-    function init(_scrollUtil, _messageBubbles) {
+    function init(_scrollUtil, _messageBubbles, _onMessages) {
       scrollUtil = _scrollUtil;
       messageBubbles = _messageBubbles;
+      onMessages = _onMessages;
       $('#chat').addEventListener('scroll', onScroll);
     }
 
@@ -99,6 +101,7 @@
           messageBubbles.unshift(messageBubble);
           added += 1;
         }
+      if (onMessages) onMessages();
       return added;
     }
 
@@ -126,6 +129,7 @@
           messageBubbles.push(messageBubble);
           added += 1;
         }
+      if (onMessages) onMessages();
       return added;
     }
 
