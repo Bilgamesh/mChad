@@ -6,7 +6,7 @@
     hapticsUtil,
     themeUtil,
     languages,
-    forumIndex,
+    forumIndex
   }) {
     let addressFocusCount = 0;
 
@@ -40,6 +40,10 @@
         'click',
         animationsUtil.getClickEffect($('#submit-otp-btn'))
       );
+      $('#pw-visibility-icon').addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
     }
 
     function preventDefaultFormBehavior() {
@@ -62,6 +66,10 @@
       });
       $('#username').addEventListener('focus', () => clear('username'));
       $('#password').addEventListener('focus', () => clear('password'));
+      $('#pw-visibility-icon').addEventListener(
+        'click',
+        togglePasswordVisibility
+      );
     }
 
     async function displayPage() {
@@ -109,7 +117,10 @@
                 <div class="field label border round">
                   <input id="password" type="password" />
                   <label>${await languages.getTranslation('PASSWORD')}</label>
-                  <span id="password-error" class="error" hide="true"></span>
+                  <i id="pw-visibility-icon" class="visibility-icon"
+                    >visibility</i
+                  >
+                  <span id="password-error" class="error" hide="true"> </span>
                 </div>
                 <br />
                 <center>
@@ -303,6 +314,15 @@
       return addressFocusCount;
     }
 
+    function togglePasswordVisibility(event) {
+      const icon = event.target;
+      if (icon.innerHTML.includes('_off'))
+        icon.innerHTML = icon.innerHTML.replace('_off', '');
+      else icon.innerHTML += '_off';
+      const input = $('#password');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
     return {
       init,
       displayPage,
@@ -327,7 +347,7 @@
       showSuccess,
       clear,
       updateAddress,
-      getAddressFocusCount,
+      getAddressFocusCount
     };
   }
 

@@ -38,3 +38,14 @@ body[page='login'] #address-success-icon {
 body[page='login'] *[hide='true'] {
   height: 0px !important;
 }
+
+body[page='login'] .visibility-icon {
+  z-index: 900 !important;
+  width: 40px;
+  height: 60px;
+  margin-right: -7px;
+}
+
+body[page='login'] #password {
+  padding-right: 54px;
+}
