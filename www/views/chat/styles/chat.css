@@ -53,7 +53,7 @@ body[page='chat'] #chat-form {
   z-index: 902 !important;
 }
 
-body[page='chat'] .field {
+body[page='chat'] #text-field.field {
   width: calc(100vw - 20px);
   margin-top: 10px !important;
   margin-left: 10px !important;
@@ -406,4 +406,8 @@ body[page='chat'] .progress-bar {
   margin-top: -7px;
   z-index: 901;
   border-radius: 0rem !important;
+}
+
+body[page='chat'] .tool-item[hide='true'] {
+  display: none;
 }

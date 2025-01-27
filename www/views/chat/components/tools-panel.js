@@ -1,11 +1,19 @@
 (function () {
-  function ToolsPanel({ baseUrl, chatUiCache, inMemoryStore }) {
+  function ToolsPanel({
+    baseUrl,
+    chatUiCache,
+    inMemoryStore,
+    popups,
+    languages
+  }) {
     const html =
       /* HTML */
       `<nav id="tools-panel" class="right-align" hide="true">
         <i id="reply-button" class="tool-item unhoverable">alternate_email</i>
         <i id="quote-button" class="tool-item unhoverable">format_quote</i>
         <i id="like-button" class="tool-item unhoverable">thumb_up</i>
+        <i id="edit-button" class="tool-item unhoverable">edit</i>
+        <i id="delete-button" class="tool-item unhoverable">delete</i>
         <i id="copy-button" class="tool-item unhoverable">content_copy</i>
       </nav>`;
 
@@ -17,6 +25,8 @@
       $('#reply-button').addEventListener('click', reply);
       $('#quote-button').addEventListener('click', quote);
       $('#like-button').addEventListener('click', like);
+      $('#edit-button').addEventListener('click', edit);
+      $('#delete-button').addEventListener('click', deleteMessage);
       $('#copy-button').addEventListener('click', copy);
     }
 
@@ -53,12 +63,32 @@
       $('#input-box').focus();
     }
 
+    async function edit() {
+      popups.showInputBox({
+        title: await languages.getTranslation('EDIT_TITLE'),
+        placeholder: chatUiCache.lastSelected.getAttribute('message'),
+        callback: console.log
+      });
+    }
+
+    async function deleteMessage() {
+      popups.showConfirmationBox({
+        title: await languages.getTranslation('DELETE_TITLE'),
+        text: await languages.getTranslation('DELETE_DESC'),
+        onConfirm: async () => {}
+      });
+    }
+
     function copy() {
       const message = chatUiCache.lastSelected.getAttribute('message');
       navigator.clipboard.writeText(message);
     }
 
-    function show() {
+    function show(isSelf) {
+      $('#like-button')?.setAttribute('hide', `${isSelf}`);
+      $('#reply-button')?.setAttribute('hide', `${isSelf}`);
+      $('#edit-button')?.setAttribute('hide', `${!isSelf}`);
+      $('#delete-button')?.setAttribute('hide', `${!isSelf}`);
       $('#tools-panel')?.setAttribute('hide', 'false');
     }
 

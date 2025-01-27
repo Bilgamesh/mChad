@@ -162,6 +162,10 @@ i.error {
   overflow-y: hidden;
 }
 
+#global-input-prompt {
+  z-index: 992;
+}
+
 .global-info-content {
   overflow-y: scroll;
   max-height: 510px;
@@ -187,4 +191,23 @@ i.error {
 
 .emoji {
   width: 18px !important;
+}
+
+#global-input-prompt-textarea {
+  box-shadow: none !important;
+  word-wrap: break-word;
+  display: block;
+  overflow: auto;
+  height: auto;
+  min-width: calc(100vw - 160px);
+  min-height: 30px;
+  max-height: 40vh;
+  margin-bottom: -5px;
+  margin-inline: auto;
+  padding: 10px;
+  outline: none !important;
+}
+
+#global-input-prompt-textarea::-webkit-scrollbar {
+  display: none;
 }

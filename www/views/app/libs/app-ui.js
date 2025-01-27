@@ -7,10 +7,10 @@
           <h5>Default</h5>
           <div>Some text here</div>
           <nav class="right-align no-space">
-            <button class="transparent link">
+            <button class="transparent link" translation="CANCEL">
               ${await languages.getTranslation('CANCEL')}
             </button>
-            <button class="transparent link">
+            <button class="transparent link" translation="CONFIRM">
               ${await languages.getTranslation('CONFIRM')}
             </button>
           </nav>
@@ -23,6 +23,23 @@
           </h5>
           <div class="global-info-content">Content here</div>
           <nav class="right-align no-space"></nav>
+        </dialog>
+
+        <dialog id="global-input-prompt" class="">
+          <h5>Default</h5>
+          <div
+            contenteditable="true"
+            id="global-input-prompt-textarea"
+            class="field textarea round fill"
+          ></div>
+          <nav class="right-align no-space">
+            <button class="transparent link" translation="CANCEL">
+              ${await languages.getTranslation('CANCEL')}
+            </button>
+            <button class="transparent link" translation="CONFIRM">
+              ${await languages.getTranslation('CONFIRM')}
+            </button>
+          </nav>
         </dialog>
 
         <header>

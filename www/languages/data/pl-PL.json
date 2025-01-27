@@ -51,5 +51,8 @@
   "REFRESHING_IN_PROGRESS": "Odświeżanie trwa...",
   "USERS_ONLINE": "Liczba użytkowników online:",
   "USERS": "Użytkownicy:",
-  "HIDDEN_USERS": "Ukryci użytkownicy:"
+  "HIDDEN_USERS": "Ukryci użytkownicy:",
+  "DELETE_TITLE": "Usuń wiadomość",
+  "DELETE_DESC": "Na pewno chcesz usunąć tę wiadomość?",
+  "EDIT_TITLE": "Edycja wiadomości"
 }
