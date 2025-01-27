@@ -131,7 +131,7 @@ body[page='chat'] .bubble {
   /* the size of the tail */
 
   /* max-width: 280px; */
-  max-width: calc(100vw - 60px - var(--t));
+  max-width: calc(100vw - 110px - var(--t));
   min-width: 80px;
   padding: calc(2 * var(--r) / 3);
   -webkit-mask: radial-gradient(var(--t) at var(--_d) 0, #0000 98%, #000 102%)
