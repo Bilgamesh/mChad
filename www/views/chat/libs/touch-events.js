@@ -80,7 +80,8 @@
       chatUi.startShaking(target);
       if (!longpressBlacklistedNodes.includes(e.target.nodeName))
         hapticsUtil.longPress();
-      if (chatUi.isAnyBubbleShaking()) chatUi.showToolbar();
+      const isSelf = target.classList.contains('right');
+      if (chatUi.isAnyBubbleShaking()) chatUi.showToolbar(isSelf);
     }
 
     function findTargetBubble(target) {

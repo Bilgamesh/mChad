@@ -23,7 +23,8 @@
     infiniteScroll,
     inMemoryStore,
     forumStorage,
-    ScrollUtil
+    ScrollUtil,
+    popups
   }) {
     const cache = { lastSelected: null };
     const messageSubmitListeners = [];
@@ -31,7 +32,9 @@
     const toolsPanel = ToolsPanel({
       baseUrl,
       chatUiCache: cache,
-      inMemoryStore
+      inMemoryStore,
+      popups,
+      languages
     });
     let emoticonPanel;
     let bbcodesPanel;
@@ -471,9 +474,9 @@
       return !!document.querySelector('[shaking="true"]');
     }
 
-    function showToolbar() {
+    function showToolbar(isSelf) {
       $('header').setAttribute('hide', 'true');
-      toolsPanel.show();
+      toolsPanel.show(isSelf);
     }
 
     function hideToolbar() {

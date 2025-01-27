@@ -23,7 +23,8 @@
     clipboardUtil,
     ScrollUtil,
     InfiniteScroll,
-    config
+    config,
+    popups
   }) {
     const DEFAULT_FORUM_INDEX = '0';
 
@@ -75,7 +76,8 @@
       config,
       inMemoryStore: forumInMemoryStorage,
       forumStorage,
-      infiniteScroll
+      infiniteScroll,
+      popups
     });
 
     $('#body').setAttribute('page', 'chat');

@@ -51,5 +51,8 @@
   "REFRESHING_IN_PROGRESS": "Refreshing in progress...",
   "USERS_ONLINE": "Number of online users:",
   "USERS": "Users:",
-  "HIDDEN_USERS": "Hidden users:"
+  "HIDDEN_USERS": "Hidden users:",
+  "DELETE_TITLE": "Delete message",
+  "DELETE_DESC": "Are you sure you want to delete this message?",
+  "EDIT_TITLE": "Edit message"
 }

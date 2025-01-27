@@ -6,6 +6,7 @@
     $('#notification-msg-1').addEventListener('click', hideNotification);
     $('#global-blur').addEventListener('click', hideConfirmationBox);
     $('#global-blur').addEventListener('click', hideInfoBox);
+    $('#global-blur').addEventListener('click', hideInputBox);
 
     let errorMsgIndex = 0;
     let notificationMsgIndex = 0;
@@ -93,6 +94,35 @@
       darkenUi();
     }
 
+    function showInputBox({ title, placeholder, callback }) {
+      $('#global-input-prompt').children[0].innerText = title || 'Default';
+      $('#global-input-prompt').children[1].innerText = placeholder || '';
+      $('#global-input-prompt').children[2].children[0].addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
+      $('#global-input-prompt').children[2].children[1].addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
+      $('#global-input-prompt').children[2].children[0].addEventListener(
+        'click',
+        hideInputBox
+      );
+      $('#global-input-prompt').children[2].children[1].addEventListener(
+        'click',
+        () => {
+          const value = $('#global-input-prompt').children[1].innerText;
+          hideInputBox();
+          callback(value);
+        }
+      );
+      $('#global-input-prompt').classList.add('active');
+      $('#global-blur').classList.add('active');
+      document.addEventListener('backbutton', hideInputBox);
+      darkenUi();
+    }
+
     function hideConfirmationBox() {
       $('#global-confirm').classList.remove('active');
       $('#global-blur').classList.remove('active');
@@ -106,6 +136,14 @@
       $('#global-blur').classList.remove('active');
       documentUtil.removeAllListeners($('#global-info'));
       document.removeEventListener('backbutton', hideInfoBox);
+      lightenUi();
+    }
+
+    function hideInputBox() {
+      $('#global-input-prompt').classList.remove('active');
+      $('#global-blur').classList.remove('active');
+      documentUtil.removeAllListeners($('#global-input-prompt'));
+      document.removeEventListener('backbutton', hideInputBox);
       lightenUi();
     }
 
@@ -131,7 +169,9 @@
       hideError,
       hideInfoBox,
       showConfirmationBox,
-      showNotification
+      showNotification,
+      showInputBox,
+      hideInputBox
     };
   }
   window.modules = window.modules || {};
