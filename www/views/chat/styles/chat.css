@@ -17,6 +17,10 @@ body[page='chat'] .main-page[expanded='true'] {
   height: calc(100vh - 60px - 64px);
 }
 
+body[page='chat'] .main-page[expanded-extra='true'] {
+  height: calc(100vh - 64px);
+}
+
 body[page='chat'] .chat {
   overflow-y: scroll;
   overscroll-behavior-y: contain;
@@ -410,4 +414,13 @@ body[page='chat'] .progress-bar {
 
 body[page='chat'] .tool-item[hide='true'] {
   display: none;
+}
+
+body[page='chat'] #text-panel[hide='true'] {
+  display: none;
+}
+
+body[page='chat'] #global-input-prompt {
+  position: fixed;
+  top: 100px;
 }

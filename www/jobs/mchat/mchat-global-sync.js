@@ -20,7 +20,6 @@
 
     document.addEventListener('pause', stopSync);
     document.addEventListener('resume', restartSync);
-    document.addEventListener('resume', () => documentUtil.reloadImages());
 
     function startSync() {
       console.log(`[${new Date().toLocaleString()}][ALL] START SYNC`);
@@ -74,6 +73,18 @@
       await sync.sendToServer(text);
     }
 
+    async function deleteFromServer(index, id) {
+      const syncs = InMemoryStore('*').get('syncs') || [];
+      const sync = syncs[index];
+      sync.deleteFromServer(id);
+    }
+
+    async function editOnServer(index, id, message) {
+      const syncs = InMemoryStore('*').get('syncs') || [];
+      const sync = syncs[index];
+      sync.editOnServer(id, message);
+    }
+
     async function getArchiveMessages(forumIndex, startIndex) {
       const syncs = InMemoryStore('*').get('syncs') || [];
       const sync = syncs[forumIndex];
@@ -105,6 +116,8 @@
       addSyncListener,
       removeSyncListener,
       sendToServer,
+      deleteFromServer,
+      editOnServer,
       getArchiveMessages
     };
   }

@@ -17,6 +17,7 @@
         const html = await response.text();
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const bbtags = documentUtil.extractBBtags(doc);
+        const editDeleteLimit = documentUtil.extractEditDeleteLimit(doc);
         const messages = parseMessages(html);
         await preloadAvatars(messages);
         const formToken = documentUtil.findInputData(
@@ -38,7 +39,14 @@
         let cookie = '';
         if (documentUtil.hasSessionCookie(response))
           cookie = documentUtil.extractCookie(response.headers);
-        return { messages, bbtags, cookie, formToken, creationTime };
+        return {
+          messages,
+          bbtags,
+          editDeleteLimit,
+          cookie,
+          formToken,
+          creationTime
+        };
       } catch (err) {
         console.log(
           `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
@@ -103,20 +111,97 @@
         return { ...json, cookie };
       } catch (err) {
         console.log(
-          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error: ${err}`
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error during add: ${err}`
         );
         if (documentUtil.isJSON(err)) {
           const parsedError = JSON.parse(err);
           if (parsedError.message) throw parsedError.message;
         }
-        throw 'Could send message to server';
+        throw 'Could not send message to server';
       }
     }
 
-    // TODO
-    async function edit() {}
-    // TODO
-    async function del() {}
+    async function edit({ id, message, creationTime, formToken }) {
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'x-requested-with': 'XMLHttpRequest',
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            cookie: await cookieStore.get()
+          },
+          body: {
+            message_id: id,
+            message,
+            page: 'index',
+            creation_time: creationTime,
+            form_token: formToken,
+            _referer: `${baseUrl}/index.php`
+          }
+        };
+        const url = `${baseUrl}/app.php/mchat/action/edit`;
+        const response = await fetchTool.fetchCrossDomain(url, options);
+        const json = await response.json();
+        if (json.add) {
+          json.add = parseMessages(json.add);
+          await preloadAvatars(json.add);
+        }
+        if (json.edit) json.edit = parseMessages(json.edit);
+        let cookie = '';
+        if (documentUtil.hasSessionCookie(response))
+          cookie = documentUtil.extractCookie(response.headers);
+        return { ...json, cookie };
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error during edit: ${err}`
+        );
+        if (documentUtil.isJSON(err)) {
+          const parsedError = JSON.parse(err);
+          if (parsedError.message) throw parsedError.message;
+        }
+        throw 'Could not send edit request to server';
+      }
+    }
+
+    async function del({ id, formToken, creationTime }) {
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'x-requested-with': 'XMLHttpRequest',
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            cookie: await cookieStore.get()
+          },
+          body: {
+            message_id: id,
+            creation_time: creationTime,
+            form_token: formToken,
+            _referer: `${baseUrl}/index.php`
+          }
+        };
+        const url = `${baseUrl}/app.php/mchat/action/del`;
+        const response = await fetchTool.fetchCrossDomain(url, options);
+        const json = await response.json();
+        if (json.add) {
+          json.add = parseMessages(json.add);
+          await preloadAvatars(json.add);
+        }
+        if (json.edit) json.edit = parseMessages(json.edit);
+        let cookie = '';
+        if (documentUtil.hasSessionCookie(response))
+          cookie = documentUtil.extractCookie(response.headers);
+        return { ...json, cookie };
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] Error during del: ${err}`
+        );
+        if (documentUtil.isJSON(err)) {
+          const parsedError = JSON.parse(err);
+          if (parsedError.message) throw parsedError.message;
+        }
+        throw 'Could not send delete request to server';
+      }
+    }
 
     async function fetchArchive(startIndex = 0) {
       let cookie = '';

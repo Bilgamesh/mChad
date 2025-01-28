@@ -39,6 +39,8 @@
   "LOGOUT_ERROR": "Wylogowanie zakończone niepowodzeniem. Ciasteczka zostały usunięte z aplikacji.",
   "LOGIN_ERROR_REASON": "Próba logowania nie powiodła się z powodu błędu",
   "MESSAGE_SUBMIT_ERROR_REASON": "Próba wysłania wiadomości nie powiodła się z powodu błędu",
+  "MESSAGE_DELETE_ERROR_REASON": "Próba usunięcia wiadomości nie powiodła się z powodu błędu",
+  "MESSAGE_EDIT_ERROR_REASON": "Próba edytowania wiadomości nie powiodła się z powodu błędu",
   "ALREADY_LOGGED_IN": "To konto jest już dodane",
   "FORUM_NOT_RECOGNIZED": "Nie udało się rozpoznać forum phpBB z mChatem",
   "ADDRESS_CANNOT_BE_EMPTY": "Pole adresu nie może być puste",

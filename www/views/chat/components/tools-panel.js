@@ -3,6 +3,7 @@
     baseUrl,
     chatUiCache,
     inMemoryStore,
+    forumStorage,
     popups,
     languages
   }) {
@@ -16,6 +17,33 @@
         <i id="delete-button" class="tool-item unhoverable">delete</i>
         <i id="copy-button" class="tool-item unhoverable">content_copy</i>
       </nav>`;
+
+    let messageDeleteListeners = [];
+    let messageEditListeners = [];
+
+    function addMessageDeleteListener(listen) {
+      const id = crypto.randomUUID();
+      messageDeleteListeners.push({ id, listen });
+      return id;
+    }
+
+    function removeMessageDeleteListener(id) {
+      messageDeleteListeners = messageDeleteListeners.filter(
+        (listener) => listener.id !== id
+      );
+    }
+
+    function addMessageEditListener(listen) {
+      const id = crypto.randomUUID();
+      messageEditListeners.push({ id, listen });
+      return id;
+    }
+
+    function removeMessageEditListener(id) {
+      messageEditListeners = messageEditListeners.filter(
+        (listener) => listener.id !== id
+      );
+    }
 
     function getLikeMessage() {
       return inMemoryStore.get('likeMessage');
@@ -64,18 +92,29 @@
     }
 
     async function edit() {
+      const postId = chatUiCache.lastSelected.getAttribute('id');
+      const oldText = chatUiCache.lastSelected.getAttribute('message');
       popups.showInputBox({
         title: await languages.getTranslation('EDIT_TITLE'),
         placeholder: chatUiCache.lastSelected.getAttribute('message'),
-        callback: console.log
+        callback: (text) => {
+          text = text.trim();
+          if (oldText === text || text === '') return;
+          for (const listener of messageEditListeners)
+            listener.listen(postId, text);
+        }
       });
     }
 
     async function deleteMessage() {
+      const postId = chatUiCache.lastSelected.getAttribute('id');
       popups.showConfirmationBox({
         title: await languages.getTranslation('DELETE_TITLE'),
         text: await languages.getTranslation('DELETE_DESC'),
-        onConfirm: async () => {}
+        onConfirm: () => {
+          for (const listener of messageDeleteListeners)
+            listener.listen(postId);
+        }
       });
     }
 
@@ -84,11 +123,13 @@
       navigator.clipboard.writeText(message);
     }
 
-    function show(isSelf) {
+    function show(bubble) {
+      const isSelf = bubble.classList.contains('right');
+      const isEditable = isMessageEditable(bubble);
       $('#like-button')?.setAttribute('hide', `${isSelf}`);
       $('#reply-button')?.setAttribute('hide', `${isSelf}`);
-      $('#edit-button')?.setAttribute('hide', `${!isSelf}`);
-      $('#delete-button')?.setAttribute('hide', `${!isSelf}`);
+      $('#edit-button')?.setAttribute('hide', `${!isSelf || !isEditable}`);
+      $('#delete-button')?.setAttribute('hide', `${!isSelf || !isEditable}`);
       $('#tools-panel')?.setAttribute('hide', 'false');
     }
 
@@ -100,7 +141,26 @@
       return html;
     }
 
-    return { getHtml, registerListeners, show, hide };
+    function isMessageEditable(bubble) {
+      const editDeleteLimitSeconds =
+        (forumStorage.get('editDeleteLimit') || 0) / 1000;
+      const messageTimeSeconds = bubble.getAttribute('time');
+      const nowSeconds = Math.floor(new Date().getTime() / 1000);
+      const editDeleteTimeExpired =
+        nowSeconds - messageTimeSeconds > editDeleteLimitSeconds;
+      return !editDeleteTimeExpired;
+    }
+
+    return {
+      getHtml,
+      registerListeners,
+      show,
+      hide,
+      addMessageDeleteListener,
+      addMessageEditListener,
+      removeMessageDeleteListener,
+      removeMessageEditListener
+    };
   }
   window.modules = window.modules || {};
   window.modules.ToolsPanel = ToolsPanel;

@@ -27,12 +27,13 @@
     popups
   }) {
     const cache = { lastSelected: null };
-    const messageSubmitListeners = [];
+    let messageSubmitListeners = [];
     let messageBubbles = [];
     const toolsPanel = ToolsPanel({
       baseUrl,
       chatUiCache: cache,
       inMemoryStore,
+      forumStorage,
       popups,
       languages
     });
@@ -412,6 +413,18 @@
       $('#scroll-to-bottom-circle').setAttribute('expanded', 'true');
     }
 
+    function hideInput() {
+      $('#main-page').setAttribute('expanded-extra', 'true');
+      $('#scroll-to-bottom-circle').setAttribute('hide', 'true');
+      $('#text-panel').setAttribute('hide', 'true');
+    }
+
+    function showInput() {
+      $('#main-page').setAttribute('expanded-extra', 'false');
+      $('#scroll-to-bottom-circle').setAttribute('hide', 'false');
+      $('#text-panel').setAttribute('hide', 'false');
+    }
+
     async function scrollToBottom(behavior) {
       if (behavior === 'instant') {
         do {
@@ -474,9 +487,9 @@
       return !!document.querySelector('[shaking="true"]');
     }
 
-    function showToolbar(isSelf) {
+    function showToolbar(bubble) {
       $('header').setAttribute('hide', 'true');
-      toolsPanel.show(isSelf);
+      toolsPanel.show(bubble);
     }
 
     function hideToolbar() {
@@ -491,7 +504,15 @@
     }
 
     function addMessageSubmitListener(listen) {
-      messageSubmitListeners.push({ listen });
+      const id = crypto.randomUUID();
+      messageSubmitListeners.push({ id, listen });
+      return id;
+    }
+
+    function removeMessageSubmitListener(id) {
+      messageSubmitListeners = messageSubmitListeners.filter(
+        (listener) => listener.id !== id
+      );
     }
 
     function markMessagesAsRead(messages) {
@@ -535,11 +556,15 @@
       hideToolbar,
       onDestroy,
       addMessageSubmitListener,
+      removeMessageSubmitListener,
       rerenderPage,
       isBottomVisible,
       areNewMessagesVisible,
       showProgressBar,
-      hideProgressBar
+      hideProgressBar,
+      showInput,
+      hideInput,
+      toolsPanel
     };
   }
 
