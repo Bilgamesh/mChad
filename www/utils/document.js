@@ -207,9 +207,29 @@ function $(selector) {
         }
       } catch (err) {
         console.log(
-          `[${new Date().toLocaleString()}][DOCUMENT] Failed to extract BBtags`
+          `[${new Date().toLocaleString()}][DOCUMENT] Failed to extract BBtags due to error: ${err}`
         );
         return '';
+      }
+    }
+
+    function extractEditDeleteLimit(doc) {
+      try {
+        for (const script of doc.scripts) {
+          if (script.innerText.includes('editDeleteLimit')) {
+            const limit = script.innerText
+              .split('editDeleteLimit')[1]
+              .split(',')[0]
+              .replace(':', '')
+              .trim();
+            return +(limit || 0);
+          }
+        }
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][DOCUMENT] Failed to extract editDeleteLimit due to error: ${err}`
+        );
+        return 0;
       }
     }
 
@@ -272,6 +292,7 @@ function $(selector) {
       extractLikeMessage,
       extractLogId,
       extractBBtags,
+      extractEditDeleteLimit,
       isJSON,
       preloadImage,
       reloadImages

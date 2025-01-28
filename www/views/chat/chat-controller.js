@@ -129,13 +129,21 @@
       chatUi.editMessage
     );
     const keyboardOnListenerId = androidUtil.addKeyboardOnListener(() => {
+      const inputPromptPresent = $('#global-input-prompt').classList.contains(
+        'active'
+      );
       chatUi.hideNavbar();
-      if (chatUi.areNewMessagesVisible({ screenDistance: 4 }))
+      if (inputPromptPresent) chatUi.hideInput();
+      if (
+        chatUi.areNewMessagesVisible({ screenDistance: 4 }) &&
+        !inputPromptPresent
+      )
         chatUi.scrollToBottom('smooth');
     });
-    const keyboardOffListenerId = androidUtil.addKeyboardOffListener(
-      chatUi.showNavbar
-    );
+    const keyboardOffListenerId = androidUtil.addKeyboardOffListener(() => {
+      chatUi.showNavbar();
+      chatUi.showInput();
+    });
 
     const newEmoticonsListenerId = globalSynchronizer.addSyncListener(
       'new-emoticons',
@@ -155,8 +163,20 @@
       chatUi.hideProgressBar
     );
 
-    chatUi.addMessageSubmitListener((text) =>
+    const messageSubmitListenerId = chatUi.addMessageSubmitListener((text) =>
       globalSynchronizer.sendToServer(forumIndex, text)
+    );
+
+    const messageDeleteListenerId = chatUi.toolsPanel.addMessageDeleteListener(
+      (id) => {
+        globalSynchronizer.deleteFromServer(forumIndex, id);
+      }
+    );
+
+    const messageEditListenerId = chatUi.toolsPanel.addMessageEditListener(
+      (id, text) => {
+        globalSynchronizer.editOnServer(forumIndex, id, text);
+      }
     );
 
     function markMessagesAsRead(messages) {
@@ -186,6 +206,9 @@
       globalSynchronizer.removeSyncListener(newBBCodesListenerId);
       globalSynchronizer.removeSyncListener(archiveStartListenerId);
       globalSynchronizer.removeSyncListener(archiveEndListenerId);
+      chatUi.removeMessageSubmitListener(messageSubmitListenerId);
+      chatUi.toolsPanel.removeMessageDeleteListener(messageDeleteListenerId);
+      chatUi.toolsPanel.removeMessageEditListener(messageEditListenerId);
       androidUtil.removeKeyboardOnListener(keyboardOnListenerId);
       androidUtil.removeKeyboardOffListener(keyboardOffListenerId);
       document.removeEventListener('resume', attemptRerenderPage);

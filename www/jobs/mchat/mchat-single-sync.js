@@ -65,8 +65,14 @@
         if (existingMessages.length === 0) {
           beforeRefresh();
           timer.pause();
-          const { messages, bbtags, cookie, formToken, creationTime } =
-            await chatService.fetchMainPage();
+          const {
+            messages,
+            bbtags,
+            editDeleteLimit,
+            cookie,
+            formToken,
+            creationTime
+          } = await chatService.fetchMainPage();
           onRefresh();
           if (formToken) inMemoryStore.set('form-token', formToken);
           if (creationTime) inMemoryStore.set('creation-time', creationTime);
@@ -74,6 +80,7 @@
           for (const message of messages || []) message.read = true;
           if (messages) onAdd(messages);
           if (bbtags) onBBtags(bbtags);
+          onEditDeleteLimit(editDeleteLimit || 0);
           afterRefresh();
         }
 
@@ -107,12 +114,13 @@
           (index % 100 === 0 && index !== 0)
         ) {
           timer.pause();
-          const { cookie, bbtags, formToken, creationTime } =
+          const { cookie, bbtags, editDeleteLimit, formToken, creationTime } =
             await chatService.fetchMainPage();
           if (formToken) inMemoryStore.set('form-token', formToken);
           if (creationTime) inMemoryStore.set('creation-time', creationTime);
           if (cookie) await cookieStore.set(cookie);
           if (bbtags) onBBtags(bbtags);
+          onEditDeleteLimit(editDeleteLimit || 0);
         }
 
         /* Periodically fetch user profile
@@ -223,8 +231,19 @@
       emit({ event: 'bbtags', baseUrl: forum.address, bbtags, forumIndex });
     }
 
+    function onEditDeleteLimit(editDeleteLimit) {
+      if (stopped) return;
+      forumStorage.set('editDeleteLimit', editDeleteLimit);
+      emit({
+        event: 'editDeleteLimitUpdate',
+        baseUrl: forum.address,
+        forumIndex
+      });
+    }
+
     function onDel(ids, silent) {
       if (stopped) return;
+      if (!Array.isArray(ids)) ids = [ids];
       const messages = inMemoryStore.get('messages');
       for (const id of ids) {
         const index = messages.findIndex((m) => m.id == id);
@@ -239,11 +258,13 @@
       }
     }
 
-    function onEdit(messages) {
+    function onEdit(messages, self = false) {
       if (stopped) return;
       const existingMessages = inMemoryStore.get('messages') || [];
+      if (!Array.isArray(messages)) messages = [messages];
       for (const message of messages) {
         const index = existingMessages.findIndex((m) => m.id == message.id);
+        if (self && message.user.id === forum.userId) message.read = true;
         if (index !== -1) inMemoryStore.set('messages', message, index);
         emit({ event: 'edit', baseUrl: forum.address, message, forumIndex });
       }
@@ -251,6 +272,7 @@
 
     function onAdd(messages) {
       if (stopped) return;
+      if (!Array.isArray(messages)) messages = [messages];
       messages = messages.sort((a, b) => a.id - b.id);
       extractLikeMessage(messages);
       extractLogId(messages);
@@ -261,6 +283,7 @@
     }
 
     function onAddOld(messages) {
+      if (!Array.isArray(messages)) messages = [messages];
       messages = messages.sort((a, b) => b.id - a.id);
       if (stopped) return;
       for (const message of messages)
@@ -358,7 +381,7 @@
         console.log(
           `[${new Date().toLocaleString()}][${forum.address}_${
             forum.userId
-          }] Sending to server: ${text}`
+          }] Sending add request to server: ${text}`
         );
         const existingMessages = inMemoryStore.get('messages') || [];
         const latestMessage = existingMessages[existingMessages.length - 1];
@@ -382,6 +405,67 @@
         popups.showError(
           `${await languages.getTranslation(
             'MESSAGE_SUBMIT_ERROR_REASON'
+          )}:\n${err}`
+        );
+      }
+    }
+
+    async function deleteFromServer(id) {
+      try {
+        console.log(
+          `[${new Date().toLocaleString()}][${forum.address}_${
+            forum.userId
+          }] Sending del request to server: ${id}`
+        );
+        const formToken = inMemoryStore.get('form-token');
+        const creationTime = inMemoryStore.get('creation-time');
+        beforeRefresh();
+        const { cookie, add, edit, del } = await chatService.del({
+          id,
+          formToken,
+          creationTime
+        });
+        onRefresh();
+        if (cookie) await cookieStore.set(cookie);
+        if (add) onAdd(add);
+        if (edit) onEdit(edit);
+        if (del) onDel(del);
+        afterRefresh();
+      } catch (err) {
+        popups.showError(
+          `${await languages.getTranslation(
+            'MESSAGE_DELETE_ERROR_REASON'
+          )}:\n${err}`
+        );
+      }
+    }
+
+    async function editOnServer(id, message) {
+      try {
+        console.log(
+          `[${new Date().toLocaleString()}][${forum.address}_${
+            forum.userId
+          }] Sending edit request to server: ${id} ${message}`
+        );
+        const formToken = inMemoryStore.get('form-token');
+        const creationTime = inMemoryStore.get('creation-time');
+        beforeRefresh();
+        const { cookie, add, edit, del } = await chatService.edit({
+          id,
+          message,
+          creationTime,
+          formToken
+        });
+        onRefresh();
+        if (cookie) await cookieStore.set(cookie);
+        if (add) onAdd(add);
+        if (edit) onEdit(edit, true);
+        if (del) onDel(del);
+        afterRefresh();
+      } catch (err) {
+        popups.showError(
+          `${await languages.getTranslation(
+            'MESSAGE_EDIT_ERROR_REASON'
           )}:\n${err}`
         );
       }
@@ -451,6 +535,8 @@
       addSyncListener,
       removeSyncListener,
       sendToServer,
+      deleteFromServer,
+      editOnServer,
       getArchiveMessages
     };
   }

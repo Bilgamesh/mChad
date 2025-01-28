@@ -117,7 +117,10 @@
         baseUrl,
         newMessage.message.html
       );
-      oldMessage.message = newMessage.message.text;
+      oldMessage.setAttribute('id', newMessage.id);
+      oldMessage.setAttribute('time', newMessage.time);
+      oldMessage.setAttribute('message', newMessage.message.text);
+      oldMessage.classList.remove('blink');
     }
 
     function remove(silent) {

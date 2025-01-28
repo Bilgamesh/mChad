@@ -39,6 +39,8 @@
   "LOGOUT_ERROR": "Logout attempt failed. Cookies have been deleted from the app.",
   "LOGIN_ERROR_REASON": "Login attempt failed due to error",
   "MESSAGE_SUBMIT_ERROR_REASON": "Message submit attempt failed due to error",
+  "MESSAGE_DELETE_ERROR_REASON": "Message delete attempt failed due to error",
+  "MESSAGE_EDIT_ERROR_REASON": "Message edit attempt failed due to error",
   "ALREADY_LOGGED_IN": "You are already logged into this account",
   "FORUM_NOT_RECOGNIZED": "Could not recognize phpBB forum with mChat",
   "ADDRESS_CANNOT_BE_EMPTY": "Address field cannot be empty",
