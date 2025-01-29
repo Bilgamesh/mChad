@@ -90,7 +90,7 @@
       const config = await Config(PersistentStore, themeUtil);
       const fetchTool = FetchTool(config);
 
-      const popups = Popups(hapticsUtil, documentUtil, themeUtil);
+      const popups = Popups(hapticsUtil, documentUtil, themeUtil, sleep);
 
       const globalSynchronizer = MchatGlobalSynchronizer({
         PersistentStore,
