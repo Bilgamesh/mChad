@@ -1,5 +1,5 @@
 (function () {
-  function Popups(hapticsUtil, documentUtil, themeUtil) {
+  function Popups(hapticsUtil, documentUtil, themeUtil, sleep) {
     $('#error-msg-0').addEventListener('click', hideError);
     $('#error-msg-1').addEventListener('click', hideError);
     $('#notification-msg-0').addEventListener('click', hideNotification);
@@ -94,7 +94,7 @@
       darkenUi();
     }
 
-    function showInputBox({ title, placeholder, callback }) {
+    async function showInputBox({ title, placeholder, callback, focus }) {
       $('#global-input-prompt').children[0].innerText = title || 'Default';
       $('#global-input-prompt').children[1].innerText = placeholder || '';
       $('#global-input-prompt').children[2].children[0].addEventListener(
@@ -121,6 +121,19 @@
       $('#global-blur').classList.add('active');
       document.addEventListener('backbutton', hideInputBox);
       darkenUi();
+      if (focus) {
+        await sleep(100);
+        const inputArea = $('#global-input-prompt-textarea');
+        inputArea.focus();
+        const range = document.createRange();
+        const selection = document.getSelection();
+        range.setStart(
+          inputArea.childNodes[inputArea.childNodes.length - 1],
+          inputArea.childNodes[inputArea.childNodes.length - 1].length
+        );
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
 
     function hideConfirmationBox() {

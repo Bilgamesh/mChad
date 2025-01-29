@@ -199,7 +199,7 @@ i.error {
   display: block;
   overflow: auto;
   height: auto;
-  min-width: calc(100vw - 160px);
+  width: calc(100vw - 160px);
   min-height: 30px;
   max-height: 40vh;
   margin-bottom: -5px;

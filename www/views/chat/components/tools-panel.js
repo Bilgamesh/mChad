@@ -97,6 +97,7 @@
       popups.showInputBox({
         title: await languages.getTranslation('EDIT_TITLE'),
         placeholder: chatUiCache.lastSelected.getAttribute('message'),
+        focus: true,
         callback: (text) => {
           text = text.trim();
           if (oldText === text || text === '') return;
