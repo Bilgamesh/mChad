@@ -222,6 +222,7 @@
           cookie = documentUtil.extractCookie(response.headers);
         const html = await response.text();
         const messages = parseMessages(html);
+        for (const message of messages) message.read = true;
         await preloadAvatars(messages);
         if (messages.length === 0) {
           console.log(

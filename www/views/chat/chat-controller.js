@@ -86,8 +86,6 @@
     const emoticons = forumStorage.get('emoticons') || [];
     const bbtags = forumStorage.get('bbtags') || [];
 
-    markMessagesAsRead(messages);
-
     await chatUi.displayPage(messages, emoticons, bbtags);
     chatUi.init();
 
@@ -184,16 +182,11 @@
     }
 
     async function attemptRerenderPage() {
-      const scrollUtil = ScrollUtil($('#chat'));
-      if (scrollUtil.isViewportNScreensAwayFromBottom(2)) return;
       const messages = forumInMemoryStorage.get('messages') || [];
       if (!messages.length) return;
-      markMessagesAsRead(messages);
-      const latestMessage = messages[messages.length - 1];
-      const alreadyRenderedMessages = $('.bubble');
-      const latestRenderedMessage =
-        alreadyRenderedMessages[alreadyRenderedMessages.length - 1];
-      if (latestMessage.id == latestRenderedMessage.id) return;
+      const scrollUtil = ScrollUtil($('#chat'));
+      if (!scrollUtil.isViewportNScreensAwayFromBottom(2))
+        markMessagesAsRead(messages);
       chatUi.rerenderPage();
     }
 

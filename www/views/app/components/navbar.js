@@ -5,7 +5,6 @@
     documentUtil,
   }) {
     let router;
-    const allUnreadMessagesCategories = [];
 
     const html = /* HTML */ `<nav class="bottom" id="navbar-bottom">
       <a class="active inactive" href="/#chat" id="chat-btn" draggable="false">
