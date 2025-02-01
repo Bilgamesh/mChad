@@ -45,7 +45,7 @@
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
-    async function displayPage(messages, emoticons, bbtags) {
+    async function displayPage(messages, emoticons, bbtags, skipFadeAnimation) {
       /* Emptying the page just before re-rendering
       and giving browser an overhead via dummy timeout
       makes BeerCSS transition animations much smoother */
@@ -90,7 +90,7 @@
 
         ${toolsPanel.getHtml()}
 
-        <div id="chat" class="chat page active">
+        <div id="chat" class="chat active ${skipFadeAnimation ? '' : 'page'}">
           <br /><br />
           ${buildMessagesHtml(messages)}
           <div id="chat-beginning"></div>
@@ -198,12 +198,12 @@
       );
     }
 
-    async function rerenderPage() {
+    async function rerenderPage(skipFadeAnimation) {
       const messages = inMemoryStore.get('messages') || [];
       const emoticons = forumStorage.get('emoticons') || [];
       const bbtags = forumStorage.get('bbtags') || [];
       messageBubbles.length = 0;
-      await displayPage(messages, emoticons, bbtags);
+      await displayPage(messages, emoticons, bbtags, skipFadeAnimation);
       init();
     }
 
@@ -436,8 +436,8 @@
     async function scrollToBottom(behavior) {
       if (behavior === 'instant') {
         do {
-          await sleep(0); // gives browser overhead for rendering when height of the chat is not rendered yet
           $('#chat').scrollTop = $('#chat').scrollHeight;
+          await sleep(0); // gives browser overhead for rendering when height of the chat is not rendered yet
         } while ($('#chat').scrollTop === 0);
         return;
       }
@@ -446,7 +446,6 @@
 
     async function scrollToInstant(height) {
       do {
-        await sleep(0); // gives browser overhead for rendering when height of the chat is not rendered yet
         $('#chat').scrollTop = height;
       } while ($('#chat').scrollTop === 0);
     }

@@ -187,7 +187,7 @@
       const scrollUtil = ScrollUtil($('#chat'));
       if (!scrollUtil.isViewportNScreensAwayFromBottom(2))
         markMessagesAsRead(messages);
-      chatUi.rerenderPage();
+      chatUi.rerenderPage(true);
     }
 
     function onDestroy() {
