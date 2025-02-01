@@ -41,6 +41,8 @@
     let bbcodesPanel;
     let scrollUtil;
 
+    document.addEventListener('pause', rememberPosition);
+
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
     async function displayPage(messages, emoticons, bbtags) {
@@ -50,6 +52,11 @@
       while (el.firstChild) el.removeChild(el.firstChild);
       await sleep(0);
 
+      const { latestMessageId, scrollHeight } =
+        inMemoryStore.get('last-view-data') || {};
+      inMemoryStore.del('last-view-data');
+      if (latestMessageId)
+        messages = messages.filter((message) => message.id <= latestMessageId);
       messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
 
       emoticonPanel = EmoticonPanel({
@@ -113,7 +120,8 @@
       `;
 
       addBubbleContentListeners();
-      scrollToBottom('instant');
+      if (scrollHeight) scrollToInstant(scrollHeight);
+      else scrollToBottom('instant');
     }
 
     function init() {
@@ -436,6 +444,13 @@
       scrollUtil.scrollToBottom(behavior);
     }
 
+    async function scrollToInstant(height) {
+      do {
+        await sleep(0); // gives browser overhead for rendering when height of the chat is not rendered yet
+        $('#chat').scrollTop = height;
+      } while ($('#chat').scrollTop === 0);
+    }
+
     function showLoadingCircle() {
       $('#loading-circle').setAttribute('hide', 'false');
     }
@@ -497,7 +512,23 @@
       toolsPanel.hide();
     }
 
+    function rememberPosition() {
+      if (!scrollUtil.isViewportNScreensAwayFromBottom(2))
+        return inMemoryStore.del('last-view-data');
+      const bubbles = $('.bubble');
+      const oldestMessageId = bubbles[0].id;
+      const latestMessageId = bubbles[bubbles.length - 1].id;
+      const scrollHeight = $('#chat').scrollTop;
+      inMemoryStore.set('last-view-data', {
+        oldestMessageId,
+        latestMessageId,
+        scrollHeight
+      });
+    }
+
     function onDestroy() {
+      document.removeEventListener('pause', rememberPosition);
+      rememberPosition();
       emoticonPanel.onDestroy();
       bbcodesPanel.onDestroy();
       infiniteScroll.onDestroy();
