@@ -52,7 +52,7 @@
       while (el.firstChild) el.removeChild(el.firstChild);
       await sleep(0);
 
-      const { latestMessageId, scrollHeight } =
+      const { latestMessageId, scrollHeight, inputText } =
         inMemoryStore.get('last-view-data') || {};
       inMemoryStore.del('last-view-data');
       if (latestMessageId)
@@ -107,11 +107,18 @@
 
         ${emoticonPanel.getHtml()} ${bbcodesPanel.getHtml()}
 
-        <div id="text-panel" class="page bottom text-panel active">
+        <div
+          id="text-panel"
+          class="${skipFadeAnimation ? '' : 'page'} bottom text-panel active"
+        >
           <form id="chat-form">
             <div id="text-field" class="field label fill small round">
               <input id="input-box" type="text" class="text-field" />
-              <label>${await languages.getTranslation('TYPE_SOMETHING')}</label>
+              <label
+                id="input-label"
+                class="${inputText ? 'no-transition-label' : ''}"
+                >${await languages.getTranslation('TYPE_SOMETHING')}</label
+              >
               <i id="bbcodes-panel-icon" class="bbcodes-panel-icon">code</i>
               <i id="emoji-icon" class="emoji-icon">emoticon</i>
             </div>
@@ -119,6 +126,7 @@
         </div>
       `;
 
+      $('#input-box').value = inputText || '';
       addBubbleContentListeners();
       if (scrollHeight) scrollToInstant(scrollHeight);
       else scrollToBottom('instant');
@@ -168,6 +176,7 @@
     }
 
     function onScrollToBottomClicked() {
+      rememberInputText();
       hideToolbar();
       if (isBottomVisible()) scrollToBottom('smooth');
       else rerenderPage();
@@ -179,6 +188,9 @@
         if (areNewMessagesVisible()) markMessagesAsRead(messages);
         updateBadge();
         if (!isAnyBubbleShaking()) hideToolbar();
+      });
+      $('#text-field').addEventListener('click', () => {
+        $('#input-label').classList.remove('no-transition-label');
       });
     }
 
@@ -422,13 +434,13 @@
     }
 
     function hideInput() {
-      $('#main-page').setAttribute('expanded-extra', 'true');
+      $('#main-page').setAttribute('expanded', 'true');
       $('#scroll-to-bottom-circle').setAttribute('hide', 'true');
       $('#text-panel').setAttribute('hide', 'true');
     }
 
     function showInput() {
-      $('#main-page').setAttribute('expanded-extra', 'false');
+      $('#main-page').setAttribute('expanded', 'false');
       $('#scroll-to-bottom-circle').setAttribute('hide', 'false');
       $('#text-panel').setAttribute('hide', 'false');
     }
@@ -512,16 +524,23 @@
     }
 
     function rememberPosition() {
-      if (!scrollUtil.isViewportNScreensAwayFromBottom(2))
-        return inMemoryStore.del('last-view-data');
       const bubbles = $('.bubble');
       const oldestMessageId = bubbles[0].id;
       const latestMessageId = bubbles[bubbles.length - 1].id;
       const scrollHeight = $('#chat').scrollTop;
+      const inputText = ($('#input-box').value || '').trim();
       inMemoryStore.set('last-view-data', {
         oldestMessageId,
         latestMessageId,
-        scrollHeight
+        scrollHeight,
+        inputText
+      });
+    }
+
+    function rememberInputText() {
+      const inputText = ($('#input-box').value || '').trim();
+      inMemoryStore.set('last-view-data', {
+        inputText
       });
     }
 
