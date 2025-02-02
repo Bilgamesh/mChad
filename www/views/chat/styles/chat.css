@@ -7,17 +7,13 @@ body[page='chat'] img {
 }
 
 body[page='chat'] .main-page {
-  height: calc(100vh - 80px - 60px - 64px);
+  height: calc(100vh - 80px - 64px);
   top: 64px;
   overflow-y: hidden;
   position: fixed;
 }
 
 body[page='chat'] .main-page[expanded='true'] {
-  height: calc(100vh - 60px - 64px);
-}
-
-body[page='chat'] .main-page[expanded-extra='true'] {
   height: calc(100vh - 64px);
 }
 
@@ -423,4 +419,10 @@ body[page='chat'] #text-panel[hide='true'] {
 body[page='chat'] #global-input-prompt {
   position: fixed;
   top: 100px;
+}
+
+body[page='chat'] .no-transition-label {
+  transition: none !important;
+  line-height: 2.5rem !important;
+  font-size: 0.75rem !important;
 }
