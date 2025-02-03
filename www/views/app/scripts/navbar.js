@@ -1,9 +1,5 @@
 (function () {
-  async function Navbar({
-    languages,
-    hapticsUtil,
-    documentUtil,
-  }) {
+  async function Navbar({ languages, hapticsUtil, documentUtil }) {
     let router;
 
     const html = /* HTML */ `<nav class="bottom" id="navbar-bottom">
@@ -109,7 +105,6 @@
       });
       element.appendChild(badge);
     }
-
 
     function init(_router) {
       router = _router;

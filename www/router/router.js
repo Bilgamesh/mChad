@@ -42,7 +42,8 @@
     BBCodesPanel,
     clipboardUtil,
     ScrollUtil,
-    InfiniteScroll
+    InfiniteScroll,
+    Queue
   }) {
     const PAGE_ID = 'main-page';
     const ROUTES = {
@@ -68,6 +69,8 @@
     const locationChangeListeners = [];
     const onDestroys = {};
 
+    const queue = new Queue(1);
+
     const router = {
       init,
       ROUTES,
@@ -91,9 +94,12 @@
       if (hash.split('?')[0] === window.history.state?.prevHash.split('?')[0])
         return;
       const route = ROUTES[hash] || ROUTES[404];
-      await loadView(route, PAGE_ID);
-      for (const listener of locationChangeListeners)
-        listener.listen({ hash, route });
+      queue.enqueue(() =>
+        loadView(route, PAGE_ID).then(() => {
+          for (const listener of locationChangeListeners)
+            listener.listen({ hash, route });
+        })
+      );
     }
 
     async function loadView(route, id = PAGE_ID) {

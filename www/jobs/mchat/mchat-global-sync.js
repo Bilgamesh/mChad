@@ -106,7 +106,8 @@
     }
 
     function removeSyncListener(id) {
-      listeners = listeners.filter((listener) => listener.id !== id);
+      const index = listeners.findIndex((listener) => listener.id === id);
+      if (index !== -1) listeners.splice(index, 1);
     }
 
     return {
