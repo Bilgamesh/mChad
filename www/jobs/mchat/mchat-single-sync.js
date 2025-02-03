@@ -511,7 +511,18 @@
           forum.userId
         }] Emitting: ${event.event}`
       );
-      for (const listener of listeners) listener.listen(event);
+      for (const listener of listeners)
+        try {
+          listener.listen(event);
+        } catch (err) {
+          console.log(
+            `[${new Date().toLocaleString()}][${forum.address}_${
+              forum.userId
+            }] Error in one of event (${JSON.stringify({
+              event
+            })}) listeners: ${err}`
+          );
+        }
     }
 
     function addSyncListener(event, listen) {

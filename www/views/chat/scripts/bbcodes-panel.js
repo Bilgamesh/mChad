@@ -107,7 +107,10 @@
     }
 
     function registerListeners() {
-      document.addEventListener('click', hideBBCodesOnBlur);
+      if (!document.hideBBCodesOnBlurListenerAdded) {
+        document.addEventListener('click', hideBBCodesOnBlur);
+        document.hideBBCodesOnBlurListenerAdded = true;
+      }
       keyboardOffListenerId = androidUtil.addKeyboardOffListener(hideBBCodes);
       $('#bbcodes-panel-icon').addEventListener('click', toggleBBCodes);
       for (const bbcodeElement of $('.bbcode'))
@@ -175,6 +178,7 @@
 
     function onDestroy() {
       document.removeEventListener('click', hideBBCodesOnBlur);
+      document.hideBBCodesOnBlurListenerAdded = false;
       androidUtil.removeKeyboardOffListener(keyboardOffListenerId);
     }
 
