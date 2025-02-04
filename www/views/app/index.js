@@ -120,7 +120,10 @@
         documentUtil
       });
 
-      globalSynchronizer.addSyncListener('refresh-end', badges.refreshBadges);
+      globalSynchronizer.addSyncListener('refresh-end', async () => {
+        await sleep(500);
+        badges.refreshBadges();
+      });
 
       const router = Router({
         Errors,
