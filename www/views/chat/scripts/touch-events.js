@@ -68,7 +68,7 @@
         if (!storedTouch.moved && targetBubble !== element)
           chatUi.stopShaking(element);
       if (
-        (!targetBubble || !chatUi.isShaking(targetBubble)) &&
+        (!targetBubble || !targetBubble.getAttribute('shaking') === 'true') &&
         !storedTouch.moved
       )
         setTimeout(chatUi.hideToolbar, 50);
@@ -79,15 +79,17 @@
       chatUi.hideToolbar();
       const target = findTargetBubble(e.target) || e.target;
       if (!target.classList.contains('bubble')) return;
-      if (chatUi.isShaking(target)) return;
+      if (target.getAttribute('shaking') === 'true') return;
       chatUi.startShaking(target);
       if (!longpressBlacklistedNodes.includes(e.target.nodeName))
         hapticsUtil.longPress();
-      if (chatUi.isAnyBubbleShaking()) chatUi.showToolbar(target);
+      if (!!$('[shaking="true"]')) chatUi.showToolbar(target);
     }
 
     function findTargetBubble(target) {
-      return chatUi.findBubbleByChild(target);
+      for (const bubble of $('.bubble'))
+        if (bubble.contains(target)) return bubble;
+      return null;
     }
 
     return {
