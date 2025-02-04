@@ -47,7 +47,13 @@
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
-    async function displayPage(messages, emoticons, bbtags, skipFadeAnimation) {
+    async function displayPage(
+      messages,
+      emoticons,
+      bbtags,
+      skipFadeAnimation,
+      goToMessageId
+    ) {
       if (!skipFadeAnimation) {
         /* Emptying the page just before re-rendering
         and giving browser an overhead via dummy timeout
@@ -58,7 +64,10 @@
 
       const { latestMessageId, messageCount, scrollHeight, inputText } =
         inMemoryStore.del('last-view-data') || {};
-      if (latestMessageId) {
+      if (goToMessageId) {
+        messages = messages.filter(({ id }) => id <= goToMessageId);
+        messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
+      } else if (latestMessageId) {
         messages = messages.filter(({ id }) => id <= latestMessageId);
         messages = messages.slice(messages.length - messageCount);
       } else {
@@ -134,7 +143,7 @@
 
       $('#input-box').value = inputText || '';
       addBubbleContentListeners();
-      if (scrollHeight) scrollToInstant(scrollHeight);
+      if (scrollHeight && !goToMessageId) scrollToInstant(scrollHeight);
       else scrollToBottom('instant');
     }
 

@@ -34,14 +34,21 @@
             vibrate: true,
             icon: 'res://notif.png',
             smallIcon: 'res://notif.png',
-            data: { forumIndex }
+            data: {
+              forumIndex,
+              lastMessageId: lastMessages[lastMessages.length - 1].id
+            }
           }
         ]);
     }
 
-    async function openNotificationRelatedChat({ data: { forumIndex } }) {
+    async function openNotificationRelatedChat({
+      data: { forumIndex, lastMessageId }
+    }) {
       await router.redirect('#accounts');
-      await router.redirect(`#chat?forumIndex=${forumIndex}`);
+      await router.redirect(
+        `#chat?forumIndex=${forumIndex}&goTo=${lastMessageId}`
+      );
     }
 
     return { notify };
