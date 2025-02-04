@@ -33,6 +33,7 @@
       documentUtil.getParam('forumIndex') ||
       PersistentStore('*').get('currentForumIndex') ||
       DEFAULT_FORUM_INDEX;
+    const goToMessageId = documentUtil.getParam('goTo');
     PersistentStore('*').set('currentForumIndex', forumIndex);
     const forums = PersistentStore('*').get('forums');
     const { name, address, userId } = forums[+forumIndex];
@@ -88,7 +89,7 @@
     const emoticons = forumStorage.get('emoticons') || [];
     const bbtags = forumStorage.get('bbtags') || [];
 
-    await chatUi.displayPage(messages, emoticons, bbtags);
+    await chatUi.displayPage(messages, emoticons, bbtags, false, goToMessageId);
     chatUi.init();
 
     const touchEvents = TouchEvents(chatUi, hapticsUtil);
