@@ -452,6 +452,7 @@
     }
 
     async function scrollToBottom(behavior) {
+      if (!$('#chat')) return;
       if (behavior === 'instant') {
         do {
           $('#chat').scrollTop = $('#chat').scrollHeight;
