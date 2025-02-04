@@ -34,7 +34,6 @@
           console.log(
             `[${new Date().toLocaleString()}][MCHAT-CHAT-SERVICE] No posts found in main page HTML`
           );
-          throw 'Could not fetch main page from server';
         }
         let cookie = '';
         if (documentUtil.hasSessionCookie(response))
