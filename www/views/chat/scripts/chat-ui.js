@@ -61,6 +61,8 @@
       if (latestMessageId) {
         messages = messages.filter(({ id }) => id <= latestMessageId);
         messages = messages.slice(messages.length - messageCount);
+      } else {
+        messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
       }
 
       emoticonPanel = EmoticonPanel({
@@ -499,6 +501,7 @@
 
     function rememberPosition() {
       const bubbles = $('.bubble');
+      if (!bubbles.length) return;
       const oldestMessageId = bubbles[0].id;
       const latestMessageId = bubbles[bubbles.length - 1].id;
       const scrollHeight = $('#chat').scrollTop;
