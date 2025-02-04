@@ -56,12 +56,12 @@
         await sleep(0);
       }
 
-      const { latestMessageId, oldestMessageId, scrollHeight, inputText } =
+      const { latestMessageId, messageCount, scrollHeight, inputText } =
         inMemoryStore.del('last-view-data') || {};
-      if (latestMessageId && oldestMessageId)
-        messages = messages.filter(
-          ({ id }) => id <= latestMessageId && id >= oldestMessageId
-        );
+      if (latestMessageId) {
+        messages = messages.filter(({ id }) => id <= latestMessageId);
+        messages = messages.slice(messages.length - messageCount);
+      }
 
       emoticonPanel = EmoticonPanel({
         emoticons,
@@ -506,6 +506,7 @@
       inMemoryStore.set('last-view-data', {
         oldestMessageId,
         latestMessageId,
+        messageCount: bubbles.length,
         scrollHeight,
         inputText
       });
