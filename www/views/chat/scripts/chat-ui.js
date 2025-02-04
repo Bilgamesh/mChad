@@ -60,8 +60,7 @@
         inMemoryStore.del('last-view-data') || {};
       if (latestMessageId && oldestMessageId)
         messages = messages.filter(
-          (message) =>
-            message.id <= latestMessageId && message.id >= oldestMessageId
+          ({ id }) => id <= latestMessageId && id >= oldestMessageId
         );
 
       emoticonPanel = EmoticonPanel({
@@ -194,7 +193,7 @@
     }
 
     function attemptHideToolbar() {
-      if (!isAnyBubbleShaking()) hideToolbar();
+      if (!$('[shaking="true"]')) hideToolbar();
     }
 
     function refreshBadges() {
@@ -352,9 +351,7 @@
     async function editMessage({ message, forumIndex }) {
       if (currentForumIndex != forumIndex) return;
       if (!messageBubbles) return;
-      const messageBubble = messageBubbles.find(
-        (bubble) => bubble.id == message.id
-      );
+      const messageBubble = messageBubbles.find(({ id }) => id == message.id);
       if (!messageBubble) return;
       await messageBubble.update(message);
       addBubbleContentListeners();
@@ -469,12 +466,6 @@
       } while ($('#chat').scrollTop === 0);
     }
 
-    function findBubbleByChild(child) {
-      for (const bubble of document.getElementsByClassName('bubble'))
-        if (bubble.contains(child)) return bubble;
-      return null;
-    }
-
     function startShaking(target) {
       if (target.classList.contains('bubble'))
         target.setAttribute('shaking', 'true');
@@ -494,14 +485,6 @@
     function shrinkAllBubbles() {
       for (const element of document.getElementsByClassName('bubble'))
         element.setAttribute('enlarged', 'false');
-    }
-
-    function isShaking(target) {
-      return target.getAttribute('shaking') === 'true';
-    }
-
-    function isAnyBubbleShaking() {
-      return !!document.querySelector('[shaking="true"]');
     }
 
     function showToolbar(bubble) {
@@ -591,13 +574,10 @@
       showNavbar,
       hideNavbar,
       scrollToBottom,
-      findBubbleByChild,
       startShaking,
       stopShaking,
       stopShakingAllBubbles,
       shrinkAllBubbles,
-      isShaking,
-      isAnyBubbleShaking,
       showToolbar,
       hideToolbar,
       onDestroy,
