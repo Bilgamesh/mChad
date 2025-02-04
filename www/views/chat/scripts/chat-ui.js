@@ -24,7 +24,8 @@
     inMemoryStore,
     forumStorage,
     ScrollUtil,
-    popups
+    popups,
+    badges
   }) {
     const cache = { lastSelected: null };
     let messageSubmitListeners = [];
@@ -40,24 +41,28 @@
     let emoticonPanel;
     let bbcodesPanel;
     let scrollUtil;
+    let badgeLock = false;
 
     document.addEventListener('pause', rememberPosition);
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
     async function displayPage(messages, emoticons, bbtags, skipFadeAnimation) {
-      /* Emptying the page just before re-rendering
-      and giving browser an overhead via dummy timeout
-      makes BeerCSS transition animations much smoother */
-      while (el.firstChild) el.removeChild(el.firstChild);
-      await sleep(0);
+      if (!skipFadeAnimation) {
+        /* Emptying the page just before re-rendering
+        and giving browser an overhead via dummy timeout
+        makes BeerCSS transition animations much smoother */
+        el.innerHTML = '';
+        await sleep(0);
+      }
 
-      const { latestMessageId, scrollHeight, inputText } =
-        inMemoryStore.get('last-view-data') || {};
-      inMemoryStore.del('last-view-data');
-      if (latestMessageId)
-        messages = messages.filter((message) => message.id <= latestMessageId);
-      messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
+      const { latestMessageId, oldestMessageId, scrollHeight, inputText } =
+        inMemoryStore.del('last-view-data') || {};
+      if (latestMessageId && oldestMessageId)
+        messages = messages.filter(
+          (message) =>
+            message.id <= latestMessageId && message.id >= oldestMessageId
+        );
 
       emoticonPanel = EmoticonPanel({
         emoticons,
@@ -183,31 +188,29 @@
     }
 
     function registerListeners() {
-      $('#chat').addEventListener('scroll', () => {
+      $('#chat').addEventListener('scroll', refreshBadges);
+      $('#chat').addEventListener('scroll', attemptHideToolbar);
+      $('#text-field').addEventListener('click', enableInputLabelAnimation);
+    }
+
+    function attemptHideToolbar() {
+      if (!isAnyBubbleShaking()) hideToolbar();
+    }
+
+    function refreshBadges() {
+      if (!badgeLock) {
         const messages = inMemoryStore.get('messages');
-        if (areNewMessagesVisible()) markMessagesAsRead(messages);
-        updateBadge();
-        if (!isAnyBubbleShaking()) hideToolbar();
-      });
-      $('#text-field').addEventListener('click', () => {
-        $('#input-label').classList.remove('no-transition-label');
-      });
+        markSeenMessagesAsRead(messages);
+        badges.refreshBadges();
+        badgeLock = true;
+        setTimeout(() => {
+          badgeLock = false;
+        }, 500);
+      }
     }
 
-    function updateBadge() {
-      if (areNewMessagesVisible())
-        navbar.displayBadge({
-          element: $('#chat-btn'),
-          id: 'chat-badge',
-          number: 0
-        });
-    }
-
-    function areNewMessagesVisible({ screenDistance } = {}) {
-      return (
-        isBottomVisible() &&
-        !scrollUtil.isViewportNScreensAwayFromBottom(screenDistance || 2)
-      );
+    function enableInputLabelAnimation() {
+      $('#input-label').classList.remove('no-transition-label');
     }
 
     async function rerenderPage(skipFadeAnimation) {
@@ -215,6 +218,9 @@
       const emoticons = forumStorage.get('emoticons') || [];
       const bbtags = forumStorage.get('bbtags') || [];
       messageBubbles.length = 0;
+      emoticonPanel.onDestroy();
+      bbcodesPanel.onDestroy();
+      infiniteScroll.onDestroy();
       await displayPage(messages, emoticons, bbtags, skipFadeAnimation);
       init();
     }
@@ -224,7 +230,6 @@
       const isFirstBatch = !$('.bubble').length;
       if (scrollUtil.isViewportNScreensAwayFromBottom(2) && !isFirstBatch)
         return;
-      markMessagesAsRead(messages);
       messages = messages.filter((m) => !isAlreadyAdded(m));
       messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
       for (const { id, time, user, message, avatar } of messages) {
@@ -249,7 +254,7 @@
         messageBubbles.push(messageBubble);
       }
       addBubbleContentListeners();
-      hideLoadingCircle();
+      $('#loading-circle').setAttribute('hide', 'true');
       if (isFirstBatch)
         infiniteScroll.init(
           scrollUtil,
@@ -361,14 +366,16 @@
     }
 
     function addImageListeners() {
-      const images = document.querySelectorAll('a.clickable-image');
+      const images = $$('a.clickable-image');
       for (const image of images)
         if (image.getAttribute('listener') != 1) {
-          image.addEventListener('click', () =>
-            androidUtil.openInFullScreenBrowser(image.getAttribute('image-url'))
-          );
+          image.addEventListener('click', openImageInFullScreenBrowser);
           image.setAttribute('listener', 1);
         }
+    }
+
+    function openImageInFullScreenBrowser(event) {
+      androidUtil.openInFullScreenBrowser(event.srcElement.currentSrc);
     }
 
     function addLinkListeners() {
@@ -462,14 +469,6 @@
       } while ($('#chat').scrollTop === 0);
     }
 
-    function showLoadingCircle() {
-      $('#loading-circle').setAttribute('hide', 'false');
-    }
-
-    function hideLoadingCircle() {
-      $('#loading-circle').setAttribute('hide', 'true');
-    }
-
     function findBubbleByChild(child) {
       for (const bubble of document.getElementsByClassName('bubble'))
         if (bubble.contains(child)) return bubble;
@@ -492,17 +491,9 @@
         stopShaking(element);
     }
 
-    function enlarge(target) {
-      target.setAttribute('enlarged', 'true');
-    }
-
-    function shrink(target) {
-      target.setAttribute('enlarged', 'false');
-    }
-
     function shrinkAllBubbles() {
       for (const element of document.getElementsByClassName('bubble'))
-        shrink(element);
+        element.setAttribute('enlarged', 'false');
     }
 
     function isShaking(target) {
@@ -564,8 +555,20 @@
       );
     }
 
-    function markMessagesAsRead(messages) {
-      for (const message of messages) message.read = true;
+    function markSeenMessagesAsRead(messages) {
+      let topmostUnreadMessageId;
+      for (const bubble of $('.bubble')) {
+        const isAboveBottomEdge =
+          $('#chat').clientHeight > bubble.getBoundingClientRect().y;
+        if (!isAboveBottomEdge) {
+          topmostUnreadMessageId = +bubble.id;
+          break;
+        }
+      }
+      for (const message of messages) {
+        if (!topmostUnreadMessageId || message.id < topmostUnreadMessageId)
+          message.read = true;
+      }
     }
 
     function showProgressBar() {
@@ -581,23 +584,17 @@
       displayPage,
       addMessages,
       addOldMessages,
-      buildMessagesHtml,
       addEmoticonsToUi,
       addBBCodesToUi,
       deleteMessage,
       editMessage,
-      submitMessage,
       showNavbar,
       hideNavbar,
       scrollToBottom,
-      showLoadingCircle,
-      hideLoadingCircle,
       findBubbleByChild,
       startShaking,
       stopShaking,
       stopShakingAllBubbles,
-      enlarge,
-      shrink,
       shrinkAllBubbles,
       isShaking,
       isAnyBubbleShaking,
@@ -608,7 +605,6 @@
       removeMessageSubmitListener,
       rerenderPage,
       isBottomVisible,
-      areNewMessagesVisible,
       showProgressBar,
       hideProgressBar,
       showInput,

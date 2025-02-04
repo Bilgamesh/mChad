@@ -54,7 +54,10 @@
       const { X, Y } = extractTouchCoordinates(e);
       updateStoredTouch({ startX: X, startY: Y, currentX: X, currentY: Y });
       const target = findTargetBubble(e.target) || e.target;
-      enlargeTimeout = setTimeout(() => chatUi.enlarge(target), 50);
+      enlargeTimeout = setTimeout(
+        () => target.setAttribute('enlarged', 'true'),
+        50
+      );
     }
 
     function onBubbleTouchend(e) {

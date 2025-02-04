@@ -30,21 +30,29 @@
 
     function addKeyboardOnListener(listen) {
       refreshKeyboardDetection();
-      keyboardOnListeners.push({ listen });
-      return keyboardOnListeners.length - 1;
+      const id = crypto.randomUUID();
+      keyboardOnListeners.push({ listen, id });
+      return id;
     }
 
-    function removeKeyboardOnListener(index) {
-      keyboardOnListeners.splice(index, 1);
+    function removeKeyboardOnListener(id) {
+      const index = keyboardOnListeners.findIndex(
+        (listener) => listener.id === id
+      );
+      if (index !== -1) keyboardOnListeners.splice(index, 1);
     }
 
     function addKeyboardOffListener(listen) {
-      keyboardOffListeners.push({ listen });
-      return keyboardOffListeners.length - 1;
+      const id = crypto.randomUUID();
+      keyboardOffListeners.push({ listen, id });
+      return id;
     }
 
-    function removeKeyboardOffListener(index) {
-      keyboardOffListeners.splice(index, 1);
+    function removeKeyboardOffListener(id) {
+      const index = keyboardOffListeners.findIndex(
+        (listener) => listener.id === id
+      );
+      if (index !== -1) keyboardOffListeners.splice(index, 1);
     }
 
     function openInFullScreenBrowser(url) {

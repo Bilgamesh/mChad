@@ -24,7 +24,8 @@
     ScrollUtil,
     InfiniteScroll,
     config,
-    popups
+    popups,
+    badges
   }) {
     const DEFAULT_FORUM_INDEX = '0';
 
@@ -77,7 +78,8 @@
       inMemoryStore: forumInMemoryStorage,
       forumStorage,
       infiniteScroll,
-      popups
+      popups,
+      badges
     });
 
     $('#body').setAttribute('page', 'chat');
@@ -133,7 +135,8 @@
       chatUi.hideNavbar();
       if (inputPromptPresent) chatUi.hideInput();
       if (
-        chatUi.areNewMessagesVisible({ screenDistance: 4 }) &&
+        chatUi.isBottomVisible() &&
+        !ScrollUtil($('#chat')).isViewportNScreensAwayFromBottom(4) &&
         !inputPromptPresent
       )
         chatUi.scrollToBottom('smooth');
@@ -177,16 +180,9 @@
       }
     );
 
-    function markMessagesAsRead(messages) {
-      for (const message of messages) message.read = true;
-    }
-
     async function attemptRerenderPage() {
       const messages = forumInMemoryStorage.get('messages') || [];
       if (!messages.length) return;
-      const scrollUtil = ScrollUtil($('#chat'));
-      if (!scrollUtil.isViewportNScreensAwayFromBottom(2))
-        markMessagesAsRead(messages);
       chatUi.rerenderPage(true);
     }
 

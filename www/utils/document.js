@@ -8,6 +8,10 @@ function $(selector) {
   return elements[0];
 }
 
+function $$(selector) {
+  return document.querySelectorAll(selector);
+}
+
 (function () {
   function DocumentUtil(hapticsUtil) {
     const USERNAME_COOKIE_REGEX = /.+_u=\d+/gi;

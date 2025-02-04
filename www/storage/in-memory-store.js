@@ -48,8 +48,10 @@
 
     function del(key, index = null) {
       key = key.toLowerCase();
+      const data = get(key, index);
       if (typeof index === 'number') storage[dbName][key].splice(index, 1);
       else delete storage[dbName][key];
+      return data;
     }
 
     function contains(key, checkFunc) {
