@@ -280,7 +280,8 @@
       }
     }
 
-    async function addOldMessages({ messages, forumIndex }) {
+    async function addOldMessages({ messages, forumIndex, oldestMessageId }) {
+      if ($('.bubble')[0].id !== oldestMessageId) return; // Do not render message from the archive if user has scrolled down too far
       messages = messages.filter((m) => !isAlreadyAdded(m));
       messages = messages.slice(0, config.MAX_MESSAGE_AMOUNT);
       if (currentForumIndex != forumIndex) return;
