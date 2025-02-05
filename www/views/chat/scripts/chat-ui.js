@@ -41,9 +41,10 @@
     let emoticonPanel;
     let bbcodesPanel;
     let scrollUtil;
-    let badgeLock = false;
+    let chatHeight;
 
     document.addEventListener('pause', rememberPosition);
+    window.addEventListener('resize', updateChatHeight);
 
     $('#navbar-top-title').innerText = forumName || baseUrl;
 
@@ -141,6 +142,7 @@
         </div>
       `;
 
+      chatHeight = $('#chat').clientHeight;
       $('#input-box').value = inputText || '';
       addBubbleContentListeners();
       if (scrollHeight && !goToMessageId) scrollToInstant(scrollHeight);
@@ -193,7 +195,7 @@
     function onScrollToBottomClicked() {
       rememberInputText();
       hideToolbar();
-      if (isBottomVisible()) scrollToBottom('smooth');
+      if (isBottomRendered()) scrollToBottom('smooth');
       else rerenderPage();
     }
 
@@ -203,20 +205,18 @@
       $('#text-field').addEventListener('click', enableInputLabelAnimation);
     }
 
+    function updateChatHeight() {
+      chatHeight = $('#chat')?.clientHeight;
+    }
+
     function attemptHideToolbar() {
       if (!$('[shaking="true"]')) hideToolbar();
     }
 
     function refreshBadges() {
-      if (!badgeLock) {
-        const messages = inMemoryStore.get('messages');
-        markSeenMessagesAsRead(messages);
-        badges.refreshBadges();
-        badgeLock = true;
-        setTimeout(() => {
-          badgeLock = false;
-        }, 500);
-      }
+      const messages = inMemoryStore.get('messages');
+      markSeenMessagesAsRead(messages);
+      badges.refreshBadges();
     }
 
     function enableInputLabelAnimation() {
@@ -242,16 +242,17 @@
         return;
       messages = messages.filter((m) => !isAlreadyAdded(m));
       messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
-      for (const { id, time, user, message, avatar } of messages) {
+      for (const message of messages) {
+        if (isBottomVisible()) message.read = true;
         const messageBubble = Message({
           el: $('#chat'),
-          side: user.id === loggedInUserId ? 'right' : 'left',
-          id,
-          time,
-          user,
-          message,
+          side: message.user.id === loggedInUserId ? 'right' : 'left',
+          id: message.id,
+          time: message.time,
+          user: message.user,
+          message: message.message,
           baseUrl,
-          avatar,
+          avatar: message.avatar,
           languages,
           animationsUtil,
           documentUtil,
@@ -412,15 +413,22 @@
       }
     }
 
-    function isBottomVisible() {
+    function isBottomRendered() {
       const messages = inMemoryStore.get('messages') || [];
       if (!messages.length) return true;
       const latestMessage = messages[messages.length - 1];
       return !!$(`#${latestMessage.id}`);
     }
 
+    function isBottomVisible() {
+      const messageBubbles = $('.bubble');
+      if (!messageBubbles.length) return true;
+      const latestMessageBubble = messageBubbles[messageBubbles.length - 1];
+      return chatHeight > latestMessageBubble.getBoundingClientRect().y;
+    }
+
     function toggleScrollButtonVisibility() {
-      if (!isBottomVisible() || scrollUtil.isViewportNScreensAwayFromBottom(2))
+      if (!isBottomRendered() || scrollUtil.isViewportNScreensAwayFromBottom(2))
         $('#scroll-to-bottom-circle').setAttribute('hide', 'false');
       else $('#scroll-to-bottom-circle').setAttribute('hide', 'true');
     }
@@ -538,6 +546,7 @@
       emoticonPanel.onDestroy();
       bbcodesPanel.onDestroy();
       infiniteScroll.onDestroy();
+      window.removeEventListener('resize', updateChatHeight);
     }
 
     function addMessageSubmitListener(listen) {
@@ -555,8 +564,7 @@
     function markSeenMessagesAsRead(messages) {
       let topmostUnreadMessageId;
       for (const bubble of $('.bubble')) {
-        const isAboveBottomEdge =
-          $('#chat').clientHeight > bubble.getBoundingClientRect().y;
+        const isAboveBottomEdge = chatHeight > bubble.getBoundingClientRect().y;
         if (!isAboveBottomEdge) {
           topmostUnreadMessageId = +bubble.id;
           break;
@@ -598,7 +606,7 @@
       addMessageSubmitListener,
       removeMessageSubmitListener,
       rerenderPage,
-      isBottomVisible,
+      isBottomRendered,
       showProgressBar,
       hideProgressBar,
       showInput,

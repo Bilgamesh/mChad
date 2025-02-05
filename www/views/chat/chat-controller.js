@@ -136,7 +136,7 @@
       chatUi.hideNavbar();
       if (inputPromptPresent) chatUi.hideInput();
       if (
-        chatUi.isBottomVisible() &&
+        chatUi.isBottomRendered() &&
         !ScrollUtil($('#chat')).isViewportNScreensAwayFromBottom(4) &&
         !inputPromptPresent
       )
