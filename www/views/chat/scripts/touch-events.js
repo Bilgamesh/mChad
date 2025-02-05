@@ -68,7 +68,7 @@
         if (!storedTouch.moved && targetBubble !== element)
           chatUi.stopShaking(element);
       if (
-        (!targetBubble || !targetBubble.getAttribute('shaking') === 'true') &&
+        (!targetBubble || targetBubble.getAttribute('shaking') !== 'true') &&
         !storedTouch.moved
       )
         setTimeout(chatUi.hideToolbar, 50);
