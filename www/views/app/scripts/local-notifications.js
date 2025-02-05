@@ -49,7 +49,10 @@
       await router.redirect(
         `#chat?forumIndex=${forumIndex}&goTo=${lastMessageId}`
       );
-      window.history.replaceState(window.history.state, '', '#chat');
+      setTimeout(
+        () => window.history.replaceState(window.history.state, '', '#chat'),
+        500
+      );
     }
 
     return { notify };
