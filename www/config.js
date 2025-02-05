@@ -13,7 +13,7 @@
       { name: 'ENGLISH', code: 'en-US' },
       { name: 'POLISH', code: 'pl-PL' }
     ];
-    const MAX_MESSAGE_AMOUNT = 100;
+    const MAX_MESSAGE_AMOUNT = 50;
     const MAX_NOTIFICATION_MESSAGES = 4;
     screen.orientation.lock('portrait');
 

@@ -125,7 +125,9 @@
 
         <div
           id="text-panel"
-          class="${skipFadeAnimation ? '' : 'page'} bottom text-panel active"
+          class="${skipFadeAnimation
+            ? ''
+            : 'page'} bottom text-panel ${messages.length ? 'active' : ''}"
         >
           <form id="chat-form">
             <div id="text-field" class="field label fill small round">
@@ -238,8 +240,8 @@
     function addMessages({ messages, scrollType, forumIndex }) {
       if (currentForumIndex != forumIndex) return;
       const isFirstBatch = !$('.bubble').length;
-      if (scrollUtil.isViewportNScreensAwayFromBottom(2) && !isFirstBatch)
-        return;
+      if (isFirstBatch) return rerenderPage(false);
+      if (scrollUtil.isViewportNScreensAwayFromBottom(2)) return;
       messages = messages.filter((m) => !isAlreadyAdded(m));
       messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
       for (const message of messages) {
@@ -265,13 +267,6 @@
         messageBubbles.push(messageBubble);
       }
       addBubbleContentListeners();
-      $('#loading-circle').setAttribute('hide', 'true');
-      if (isFirstBatch)
-        infiniteScroll.init(
-          scrollUtil,
-          messageBubbles,
-          addBubbleContentListeners
-        );
       if (
         messages.length > 0 &&
         !scrollUtil.isViewportNScreensAwayFromBottom(2)
@@ -389,7 +384,7 @@
     }
 
     function addLinkListeners() {
-      const links = document.querySelectorAll('a.clickable-link');
+      const links = $$('a.clickable-link');
       for (const link of links)
         if (link.getAttribute('listener') != 1) {
           link.addEventListener('click', () =>
