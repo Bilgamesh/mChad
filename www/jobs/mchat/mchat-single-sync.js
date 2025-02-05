@@ -282,14 +282,20 @@
       emit({ event: 'add', baseUrl: forum.address, messages, forumIndex });
     }
 
-    function onAddOld(messages) {
+    function onAddOld(messages, oldestMessageId) {
       if (!Array.isArray(messages)) messages = [messages];
       messages = messages.sort((a, b) => b.id - a.id);
       if (stopped) return;
       for (const message of messages)
         if (!inMemoryStore.contains('messages', (m) => m.id == message.id))
           inMemoryStore.unshift('messages', message);
-      emit({ event: 'addOld', baseUrl: forum.address, messages, forumIndex });
+      emit({
+        event: 'addOld',
+        baseUrl: forum.address,
+        messages,
+        forumIndex,
+        oldestMessageId
+      });
     }
 
     function onNewEmoticons(emoticons) {
@@ -471,16 +477,20 @@
       }
     }
 
-    async function getArchiveMessages(startIndex = 0) {
+    async function getArchiveMessages(startIndex = 0, oldestMessageId) {
       console.log(
         `[${new Date().toLocaleString()}][${forum.address}_${
           forum.userId
         }] Requesting archive at index: ${startIndex}`
       );
-      emit({ event: 'archiveStart', baseUrl: forum.address, forumIndex });
+      emit({
+        event: 'archiveStart',
+        baseUrl: forum.address,
+        forumIndex
+      });
       const { messages, cookie } = await chatService.fetchArchive(startIndex);
       if (cookie) await cookieStore.set(cookie);
-      if (messages) onAddOld(messages);
+      if (messages) onAddOld(messages, oldestMessageId);
       emit({
         event: 'archiveEnd',
         baseUrl: forum.address,

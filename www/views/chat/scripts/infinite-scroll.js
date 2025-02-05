@@ -51,9 +51,9 @@
       const archiveIndex = inMemoryStore.getLength('messages');
       await globalSynchronizer.getArchiveMessages(
         currentForumIndex,
-        archiveIndex
+        archiveIndex,
+        oldestRenderedBubble.id
       );
-      onApproachingTop();
       archiveRequestBlocked = false;
     }
 

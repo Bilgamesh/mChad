@@ -85,10 +85,10 @@
       sync.editOnServer(id, message);
     }
 
-    async function getArchiveMessages(forumIndex, startIndex) {
+    async function getArchiveMessages(forumIndex, startIndex, oldestMessageId) {
       const syncs = InMemoryStore('*').get('syncs') || [];
       const sync = syncs[forumIndex];
-      await sync.getArchiveMessages(startIndex);
+      await sync.getArchiveMessages(startIndex, oldestMessageId);
     }
 
     function addSyncListener(event, listen) {
