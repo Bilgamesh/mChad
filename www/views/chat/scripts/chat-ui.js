@@ -63,6 +63,11 @@
         await sleep(0);
       }
 
+      /* Decide which state (messages) the chat should be rendered with.
+      If chat view was entered by pressing a notification (hence goToMessageId was assigned),
+      render chat position with that specific message visible at the bottom.
+      If there was a state saved when user exited the chat last time, restore that.
+      Else render the latest stored message, as the app must have been just opened from scratch */
       const { latestMessageId, messageCount, scrollHeight, inputText } =
         inMemoryStore.del('last-view-data') || {};
       if (goToMessageId) {
@@ -513,6 +518,9 @@
       toolsPanel.hide();
     }
 
+    /* Called when exiting the chat view or minimizing the app.
+    Store last UI state before exiting so it can be restored
+    when user re-enters the chat view */
     function rememberPosition() {
       const bubbles = $('.bubble');
       if (!bubbles.length) return;
@@ -557,15 +565,21 @@
       );
     }
 
+    /* Iterate over all messages that are rendered on screen and mark as "read" those,
+    which are located above the bottom edge of the screen.
+    If no message is below the bottom edge of the screen, mark all of them as read. */
     function markSeenMessagesAsRead(messages) {
       let topmostUnreadMessageId;
+      let lastRenderedMessageId;
       for (const bubble of $('.bubble')) {
+        lastRenderedMessageId = bubble.id;
         const isAboveBottomEdge = chatHeight > bubble.getBoundingClientRect().y;
         if (!isAboveBottomEdge) {
           topmostUnreadMessageId = +bubble.id;
           break;
         }
       }
+      messages = messages.filter(({ id }) => id <= lastRenderedMessageId);
       for (const message of messages) {
         if (!topmostUnreadMessageId || message.id < topmostUnreadMessageId)
           message.read = true;
