@@ -164,6 +164,10 @@
       'archiveEnd',
       chatUi.hideProgressBar
     );
+    const archiveEndListener2Id = globalSynchronizer.addSyncListener(
+      'archiveEnd',
+      disableArchive
+    );
 
     const messageSubmitListenerId = chatUi.addMessageSubmitListener((text) =>
       globalSynchronizer.sendToServer(forumIndex, text)
@@ -181,6 +185,12 @@
       }
     );
 
+    function disableArchive(event) {
+      if (!event.error && event.forumIndex == forumIndex && !event.messages) {
+        forumInMemoryStorage.set('archiveDisabled', true);
+      }
+    }
+
     async function attemptRerenderPage() {
       const messages = forumInMemoryStorage.get('messages') || [];
       if (!messages.length) return;
@@ -196,6 +206,7 @@
       globalSynchronizer.removeSyncListener(newBBCodesListenerId);
       globalSynchronizer.removeSyncListener(archiveStartListenerId);
       globalSynchronizer.removeSyncListener(archiveEndListenerId);
+      globalSynchronizer.removeSyncListener(archiveEndListener2Id);
       chatUi.removeMessageSubmitListener(messageSubmitListenerId);
       chatUi.toolsPanel.removeMessageDeleteListener(messageDeleteListenerId);
       chatUi.toolsPanel.removeMessageEditListener(messageEditListenerId);

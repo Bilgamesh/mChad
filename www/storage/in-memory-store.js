@@ -1,56 +1,56 @@
 (function () {
-  const storage = {};
-
   function InMemoryStore(dbName) {
+    window.storage = window.storage || {};
     dbName = dbName.toLowerCase();
 
     function init() {
-      storage[dbName] = storage[dbName] || {};
+      window.storage[dbName] = window.storage[dbName] || {};
     }
 
     function set(key, value, index) {
       key = key.toLowerCase();
       if (typeof index === 'number') {
-        storage[dbName][key] = storage[dbName][key] || [];
-        storage[dbName][key][index] = value;
-      } else storage[dbName][key] = value;
+        window.storage[dbName][key] = window.storage[dbName][key] || [];
+        window.storage[dbName][key][index] = value;
+      } else window.storage[dbName][key] = value;
     }
 
     function add(key, value) {
       key = key.toLowerCase();
-      storage[dbName][key] = storage[dbName][key] || [];
-      storage[dbName][key].push(value);
+      window.storage[dbName][key] = window.storage[dbName][key] || [];
+      window.storage[dbName][key].push(value);
     }
 
     function unshift(key, value) {
       key = key.toLowerCase();
-      storage[dbName][key] = storage[dbName][key] || [];
-      storage[dbName][key].unshift(value);
+      window.storage[dbName][key] = window.storage[dbName][key] || [];
+      window.storage[dbName][key].unshift(value);
     }
 
     function get(key, index = null) {
       key = key.toLowerCase();
-      if (typeof index === 'number') return storage[dbName][key][index];
-      return storage[dbName][key];
+      if (typeof index === 'number') return window.storage[dbName][key][index];
+      return window.storage[dbName][key];
     }
 
     function getLength(key) {
       key = key.toLowerCase();
-      return storage[dbName][key].length;
+      return window.storage[dbName][key].length;
     }
 
     function has(key) {
       key = key.toLowerCase();
-      if (Array.isArray(storage[dbName][key]))
-        return !!storage[dbName][key].length;
-      return storage[dbName][key] !== undefined;
+      if (Array.isArray(window.storage[dbName][key]))
+        return !!window.storage[dbName][key].length;
+      return window.storage[dbName][key] !== undefined;
     }
 
     function del(key, index = null) {
       key = key.toLowerCase();
       const data = get(key, index);
-      if (typeof index === 'number') storage[dbName][key].splice(index, 1);
-      else delete storage[dbName][key];
+      if (typeof index === 'number')
+        window.storage[dbName][key].splice(index, 1);
+      else delete window.storage[dbName][key];
       return data;
     }
 
@@ -82,7 +82,7 @@
     }
 
     function clear() {
-      storage[dbName] = {};
+      window.storage[dbName] = {};
     }
 
     init();
