@@ -129,6 +129,10 @@
       'edit',
       chatUi.editMessage
     );
+    const errorListenerId = globalSynchronizer.addSyncListener(
+      'syncError',
+      chatUi.restoreSubmitMessage
+    );
     const keyboardOnListenerId = androidUtil.addKeyboardOnListener(() => {
       const inputPromptPresent = $('#global-input-prompt').classList.contains(
         'active'
@@ -207,6 +211,7 @@
       globalSynchronizer.removeSyncListener(archiveStartListenerId);
       globalSynchronizer.removeSyncListener(archiveEndListenerId);
       globalSynchronizer.removeSyncListener(archiveEndListener2Id);
+      globalSynchronizer.removeSyncListener(errorListenerId);
       chatUi.removeMessageSubmitListener(messageSubmitListenerId);
       chatUi.toolsPanel.removeMessageDeleteListener(messageDeleteListenerId);
       chatUi.toolsPanel.removeMessageEditListener(messageEditListenerId);

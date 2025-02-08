@@ -179,7 +179,7 @@
             forum.userId
           }] Error: ${err}`
         );
-        onError(err);
+        onRefreshError(err);
       } finally {
         index++;
         timer.resume();
@@ -364,7 +364,7 @@
       });
     }
 
-    function onError(err) {
+    function onRefreshError(err) {
       if (stopped) return;
       inMemoryStore.del('fetching');
       inMemoryStore.set('error', err.toString());
@@ -375,10 +375,81 @@
       })();
       emit({
         event: 'syncError',
+        type: 'refresh',
         baseUrl: forum.address,
         userId: forum.userId,
         error: err,
         forumIndex
+      });
+    }
+
+    function onSubmitError(err, text) {
+      if (stopped) return;
+      inMemoryStore.del('fetching');
+      inMemoryStore.set('error', err.toString());
+      forumStorage.set('refresh-time', +new Date());
+      (async () => {
+        popups.showError(
+          `${await languages.getTranslation(
+            'MESSAGE_SUBMIT_ERROR_REASON'
+          )}:\n${err}`
+        );
+      })();
+      emit({
+        event: 'syncError',
+        type: 'submit',
+        baseUrl: forum.address,
+        userId: forum.userId,
+        error: err,
+        forumIndex,
+        text
+      });
+    }
+
+    function onDeleteError(err, id) {
+      if (stopped) return;
+      inMemoryStore.del('fetching');
+      inMemoryStore.set('error', err.toString());
+      forumStorage.set('refresh-time', +new Date());
+      (async () => {
+        popups.showError(
+          `${await languages.getTranslation(
+            'MESSAGE_DELETE_ERROR_REASON'
+          )}:\n${err}`
+        );
+      })();
+      emit({
+        event: 'syncError',
+        type: 'delete',
+        baseUrl: forum.address,
+        userId: forum.userId,
+        error: err,
+        forumIndex,
+        id
+      });
+    }
+
+    function onEditError(err, id, message) {
+      if (stopped) return;
+      inMemoryStore.del('fetching');
+      inMemoryStore.set('error', err.toString());
+      forumStorage.set('refresh-time', +new Date());
+      (async () => {
+        popups.showError(
+          `${await languages.getTranslation(
+            'MESSAGE_EDIT_ERROR_REASON'
+          )}:\n${err}`
+        );
+      })();
+      emit({
+        event: 'syncError',
+        type: 'edit',
+        baseUrl: forum.address,
+        userId: forum.userId,
+        error: err,
+        forumIndex,
+        id,
+        message
       });
     }
 
@@ -408,11 +479,7 @@
         if (del) onDel(del);
         afterRefresh();
       } catch (err) {
-        popups.showError(
-          `${await languages.getTranslation(
-            'MESSAGE_SUBMIT_ERROR_REASON'
-          )}:\n${err}`
-        );
+        onSubmitError(err, text);
       }
     }
 
@@ -438,11 +505,7 @@
         if (del) onDel(del);
         afterRefresh();
       } catch (err) {
-        popups.showError(
-          `${await languages.getTranslation(
-            'MESSAGE_DELETE_ERROR_REASON'
-          )}:\n${err}`
-        );
+        onDeleteError(err, id);
       }
     }
 
@@ -469,11 +532,7 @@
         if (del) onDel(del);
         afterRefresh();
       } catch (err) {
-        popups.showError(
-          `${await languages.getTranslation(
-            'MESSAGE_EDIT_ERROR_REASON'
-          )}:\n${err}`
-        );
+        onEditError(err, id, message);
       }
     }
 
