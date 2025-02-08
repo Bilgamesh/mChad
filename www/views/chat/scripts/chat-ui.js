@@ -153,7 +153,7 @@
       $('#input-box').value = inputText || '';
       addBubbleContentListeners();
       if (scrollHeight && !goToMessageId) scrollToInstant(scrollHeight);
-      else scrollToBottom('instant');
+      else if (scrollHeight !== 0) scrollToBottom('instant');
     }
 
     function init() {
