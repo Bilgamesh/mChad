@@ -42,7 +42,7 @@
       const added = addMessagesToTop(olderMessages);
       removeExcessBottom();
       if (added) return; // don't call archive API if messages are added from memory
-      if (archiveRequestBlocked) return;
+      if (archiveRequestBlocked || inMemoryStore.get('archiveDisabled')) return;
       /* Block access to the archive API when request is in progress to prevent request spam. */
       archiveRequestBlocked = true;
       /* phpBB archived messages are indexed differently than in this app.

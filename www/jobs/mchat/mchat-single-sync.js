@@ -478,26 +478,38 @@
     }
 
     async function getArchiveMessages(startIndex = 0, oldestMessageId) {
-      console.log(
-        `[${new Date().toLocaleString()}][${forum.address}_${
-          forum.userId
-        }] Requesting archive at index: ${startIndex}`
-      );
-      emit({
-        event: 'archiveStart',
-        baseUrl: forum.address,
-        forumIndex
-      });
-      const { messages, cookie } = await chatService.fetchArchive(startIndex);
-      if (cookie) await cookieStore.set(cookie);
-      if (messages) onAddOld(messages, oldestMessageId);
-      emit({
-        event: 'archiveEnd',
-        baseUrl: forum.address,
-        forumIndex,
-        messages
-      });
-      return messages || null;
+      try {
+        console.log(
+          `[${new Date().toLocaleString()}][${forum.address}_${
+            forum.userId
+          }] Requesting archive at index: ${startIndex}`
+        );
+        emit({
+          event: 'archiveStart',
+          baseUrl: forum.address,
+          forumIndex
+        });
+        const { messages, cookie } = await chatService.fetchArchive(startIndex);
+        if (cookie) await cookieStore.set(cookie);
+        if (messages) onAddOld(messages, oldestMessageId);
+        emit({
+          event: 'archiveEnd',
+          baseUrl: forum.address,
+          forumIndex,
+          messages
+        });
+        return messages || null;
+      } catch (err) {
+        popups.showError(
+          `${await languages.getTranslation('ARCHIVE_LOAD_ERROR')}:\n${err}`
+        );
+        emit({
+          event: 'archiveEnd',
+          baseUrl: forum.address,
+          forumIndex,
+          error: err
+        });
+      }
     }
 
     function extractLikeMessage(messages) {
