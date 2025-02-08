@@ -586,6 +586,12 @@
       }
     }
 
+    function restoreSubmitMessage({ forumIndex, text }) {
+      if (!text || currentForumIndex != forumIndex || $('#input-box').value)
+        return;
+      $('#input-box').value = text;
+    }
+
     function showProgressBar() {
       $('#progress-bar').setAttribute('hide', 'false');
     }
@@ -617,6 +623,7 @@
       removeMessageSubmitListener,
       rerenderPage,
       isBottomRendered,
+      restoreSubmitMessage,
       showProgressBar,
       hideProgressBar,
       showInput,
