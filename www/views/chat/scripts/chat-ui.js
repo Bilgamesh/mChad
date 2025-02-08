@@ -569,6 +569,7 @@
     which are located above the bottom edge of the screen.
     If no message is below the bottom edge of the screen, mark all of them as read. */
     function markSeenMessagesAsRead(messages) {
+      if (inMemoryStore.get('chat-badge') === 0) return;
       let topmostUnreadMessageId;
       let lastRenderedMessageId;
       for (const bubble of $('.bubble')) {

@@ -10,6 +10,11 @@
     function updateChatBadgeInfo(currentForumIndex) {
       const pageHash = location.hash.split('?')[0];
       const unreadMessages = getForumSpecificUnreadMessages(currentForumIndex);
+      const forum = PersistentStore('*').get('forums')[currentForumIndex];
+      InMemoryStore(`${forum.address}_${forum.userId}`).set(
+        'chat-badge',
+        unreadMessages.length
+      );
       if (pageHash === '#chat' && unreadMessages > 0) return;
       navbar.displayBadge({
         element: $('#chat-btn'),
