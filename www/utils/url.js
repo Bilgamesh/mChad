@@ -11,7 +11,9 @@
     }
 
     function getAllUrlPermutations(userProvidedUrl) {
-      userProvidedUrl = userProvidedUrl.toLowerCase();
+      userProvidedUrl = userProvidedUrl.toLowerCase().replace('index.php', '');
+      while (userProvidedUrl.endsWith('/'))
+        userProvidedUrl = userProvidedUrl.slice(0, -1);
       let core = userProvidedUrl.replace('https://', '').replace('http://', '');
       if (core.startsWith('www.')) core = core.replace('www.', '');
       const permutations = [
