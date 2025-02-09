@@ -321,6 +321,7 @@
       else icon.innerHTML += '_off';
       const input = $('#password');
       input.type = input.type === 'password' ? 'text' : 'password';
+      $('#password').focus();
     }
 
     return {
