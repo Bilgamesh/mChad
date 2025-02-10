@@ -62,7 +62,7 @@
 
           <button
             id="new-account-button"
-            class="extend circle left-round top-round extra fill active page"
+            class="extend circle left-round top-round extra fill active page ripple"
           >
             <i>login</i>
             <span>${await languages.getTranslation('LOGIN')}</span>

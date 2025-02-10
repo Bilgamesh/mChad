@@ -51,6 +51,35 @@ function removeClass(element, name) {
   var _a;
   (_a = element == null ? void 0 : element.classList) == null ? void 0 : _a.remove(name);
 }
+function focusOnDialogOrElement(dialog) {
+  const element = query("[autofocus]", dialog) || dialog;
+  element.focus();
+}
+function onPointerDownRipple(e) {
+  updateRipple(e);
+}
+function updateRipple(e) {
+  const element = e.currentTarget;
+  const rect = element.getBoundingClientRect();
+  const diameter = Math.max(rect.width, rect.height);
+  const radius = diameter / 2;
+  const x = e.clientX - rect.left - radius;
+  const y = e.clientY - rect.top - radius;
+  const rippleContainer = document.createElement("div");
+  rippleContainer.className = "ripple-js";
+  const ripple = document.createElement("div");
+  ripple.style.inlineSize = ripple.style.blockSize = `${diameter}px`;
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+  ripple.addEventListener("animationend", () => rippleContainer.remove());
+  rippleContainer.appendChild(ripple);
+  element.appendChild(rippleContainer);
+}
+function updateAllRipples() {
+  const ripples = queryAll(".slow-ripple, .ripple, .fast-ripple");
+  for (let i = 0; i < ripples.length; i++)
+    on(ripples[i], "pointerdown", onPointerDownRipple);
+}
 function on(element, name, callback, useCapture = true) {
   element == null ? void 0 : element.addEventListener(name, callback, useCapture);
 }
@@ -145,6 +174,7 @@ function onMutation() {
   _timeoutMutation = setTimeout(() => {
     void ui();
   }, 180);
+  updateAllRipples();
 }
 function updateFile(target, e) {
   if (e && e.key === "Enter") {

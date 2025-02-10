@@ -7,10 +7,10 @@
           <h5>Default</h5>
           <div>Some text here</div>
           <nav class="right-align no-space">
-            <button class="transparent link" translation="CANCEL">
+            <button class="transparent link ripple" translation="CANCEL">
               ${await languages.getTranslation('CANCEL')}
             </button>
-            <button class="transparent link" translation="CONFIRM">
+            <button class="transparent link ripple" translation="CONFIRM">
               ${await languages.getTranslation('CONFIRM')}
             </button>
           </nav>
@@ -33,10 +33,10 @@
             class="field textarea round fill"
           ></div>
           <nav class="right-align no-space">
-            <button class="transparent link" translation="CANCEL">
+            <button class="transparent link ripple" translation="CANCEL">
               ${await languages.getTranslation('CANCEL')}
             </button>
-            <button class="transparent link" translation="CONFIRM">
+            <button class="transparent link ripple" translation="CONFIRM">
               ${await languages.getTranslation('CONFIRM')}
             </button>
           </nav>

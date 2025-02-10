@@ -1550,10 +1550,7 @@
   .scroll > code {
     white-space: pre;
   }
-  .wave::after,
-  .chip::after,
-  :is(.button, button)::after,
-  :is(nav.tabbed, .tabs) > a::after {
+  :is(.wave, .chip, .button, button, nav.tabbed > a, .tabs > a):not(.slow-ripple, .ripple, .fast-ripple)::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -1566,7 +1563,7 @@
     opacity: 0;
     transition: none;
   }
-  :is(.wave, .chip, .button, button, nav.tabbed > a, .tabs > a):is(:focus-visible, :hover):not(.unhoverable)::after {
+  :is(.wave, .chip, .button, button, nav.tabbed > a, .tabs > a):not(.slow-ripple, .ripple, .fast-ripple):is(:focus-visible, :hover):not(.unhoverable)::after {
     background-size: 15000%;
     opacity: 1;
     transition: background-size var(--speed2) linear;
@@ -4208,4 +4205,33 @@
   }
   .top-shadow {
     background-image: linear-gradient(to bottom, black, transparent);
+  }
+  .ripple {
+    ---duration: 600ms;
+  }
+  .fast-ripple {
+    ---duration: 200ms;
+  }
+  .slow-ripple {
+    ---duration: 1800ms;
+  }
+  .ripple-js {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .ripple-js > div {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.3;
+    transform: scale(0);
+    animation: to-ripple var(---duration) linear;
+  }
+  @keyframes to-ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
   }

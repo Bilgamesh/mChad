@@ -120,7 +120,7 @@
 
         <button
           id="scroll-to-bottom-circle"
-          class="circle medium fill"
+          class="circle medium fill ripple"
           hide="true"
         >
           <i>south</i>
@@ -186,10 +186,6 @@
     }
 
     function registerButtons() {
-      $('#scroll-to-bottom-circle').addEventListener(
-        'click',
-        animationsUtil.getClickEffect($('#scroll-to-bottom-circle'))
-      );
       $('#scroll-to-bottom-circle').addEventListener(
         'click',
         onScrollToBottomClicked

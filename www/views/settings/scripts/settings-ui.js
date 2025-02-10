@@ -55,87 +55,87 @@
           <div id="colors" class="color-area">
             <button
               value="#F44336"
-              class="circle small red unhoverable"
+              class="circle small red ripple"
             ></button>
             <button
               value="#E91E63"
-              class="circle small pink unhoverable"
+              class="circle small pink ripple"
             ></button>
             <button
               value="#9C27B0"
-              class="circle small purple unhoverable"
+              class="circle small purple ripple"
             ></button>
             <button
               value="#673AB7"
-              class="circle small deep-purple unhoverable"
+              class="circle small deep-purple ripple"
             ></button>
             <button
               value="#3F51B5"
-              class="circle small indigo unhoverable"
+              class="circle small indigo ripple"
             ></button>
             <button
               value="#2196F3"
-              class="circle small blue unhoverable"
+              class="circle small blue ripple"
             ></button>
             <button
               value="#03A9F4"
-              class="circle small light-blue unhoverable"
+              class="circle small light-blue ripple"
             ></button>
             <button
               value="#00BCD4"
-              class="circle small cyan unhoverable"
+              class="circle small cyan ripple"
             ></button>
             <button
               value="#009688"
-              class="circle small teal unhoverable"
+              class="circle small teal ripple"
             ></button>
             <button
               value="#4CAF50"
-              class="circle small green unhoverable"
+              class="circle small green ripple"
             ></button>
             <button
               value="#8BC34A"
-              class="circle small light-green unhoverable"
+              class="circle small light-green ripple"
             ></button>
             <button
               value="#CDDC39"
-              class="circle small lime unhoverable"
+              class="circle small lime ripple"
             ></button>
             <button
               value="#FFEB3B"
-              class="circle small yellow unhoverable"
+              class="circle small yellow ripple"
             ></button>
             <button
               value="#FFC107"
-              class="circle small amber unhoverable"
+              class="circle small amber ripple"
             ></button>
             <button
               value="#FF9800"
-              class="circle small orange unhoverable"
+              class="circle small orange ripple"
             ></button>
             <button
               value="#FF5722"
-              class="circle small deep-orange unhoverable"
+              class="circle small deep-orange ripple"
             ></button>
             <button
               value="#795548"
-              class="circle small brown unhoverable"
+              class="circle small brown ripple"
             ></button>
             <button
               value="#9E9E9E"
-              class="circle small grey unhoverable"
+              class="circle small grey ripple"
             ></button>
             <button
               value="#607D8B"
-              class="circle small blue-grey unhoverable"
+              class="circle small blue-grey ripple"
             ></button>
             <button
               value="#000000"
-              class="circle small black unhoverable"
+              class="circle small black ripple"
             ></button>
             <button
               value="#FFFFFF"
-              class="circle small white unhoverable"
+              class="circle small white ripple"
             ></button>
           </div>
         </nav>
@@ -229,7 +229,6 @@
 
       for (const color of $('#colors').children) {
         color.addEventListener('click', hapticsUtil.tapDefault);
-        color.addEventListener('click', animationsUtil.getClickEffect(color));
       }
     }
 

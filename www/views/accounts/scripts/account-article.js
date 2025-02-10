@@ -110,12 +110,12 @@
         </div>
         <nav class="right-align">
           <button
-            class="border open"
+            class="border open ripple"
             index="${index}"
             ${isOpened ? 'disabled' : ''}
           >
             <i>menu_open</i><span>${openText}</span></button
-          ><button class="border logout" index="${index}">
+          ><button class="border logout ripple" index="${index}">
             <i>logout</i><span>${logoutActionText}</span>
           </button>
         </nav>

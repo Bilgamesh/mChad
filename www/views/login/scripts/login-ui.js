@@ -12,34 +12,17 @@
 
     function registerHaptics() {
       $('#back-btn-1').addEventListener('click', hapticsUtil.tapDefault);
-      $('#back-btn-1').addEventListener(
-        'click',
-        animationsUtil.getClickEffect($('#back-btn-1'))
-      );
       $('#back-btn-2').addEventListener('click', hapticsUtil.tapDefault);
-      $('#back-btn-2').addEventListener(
-        'click',
-        animationsUtil.getClickEffect($('#back-btn-2'))
-      );
-
       $('#submit-btn').addEventListener('click', (e) => {
         if (cordova.platformId === 'browser') return;
         if (e.screenX !== 0 || e.touches[0].screenX !== 0)
           hapticsUtil.tapDefault();
       });
-      $('#submit-btn').addEventListener(
-        'click',
-        animationsUtil.getClickEffect($('#submit-btn'))
-      );
       $('#submit-otp-btn').addEventListener('click', (e) => {
         if (cordova.platformId === 'browser') return;
         if (e.screenX !== 0 || e.touches[0].screenX !== 0)
           hapticsUtil.tapDefault();
       });
-      $('#submit-otp-btn').addEventListener(
-        'click',
-        animationsUtil.getClickEffect($('#submit-otp-btn'))
-      );
       $('#pw-visibility-icon').addEventListener(
         'click',
         hapticsUtil.tapDefault
@@ -127,7 +110,7 @@
                   <nav class="center-align">
                     <button
                       id="back-btn-1"
-                      class="border open unhoverable"
+                      class="border open ripple"
                       onclick="return false"
                       type="reset"
                       ${forumIndex == 0 ? 'disabled' : ''}
@@ -137,7 +120,7 @@
                     </button>
                     <button
                       id="submit-btn"
-                      class="border open unhoverable"
+                      class="border open ripple"
                       type="submit"
                       onclick="return false"
                     >
@@ -162,7 +145,7 @@
                   <nav class="center-align">
                     <button
                       id="back-btn-2"
-                      class="border open unhoverable"
+                      class="border open ripple"
                       onclick="return false"
                       type="reset"
                     >
@@ -171,7 +154,7 @@
                     </button>
                     <button
                       id="submit-otp-btn"
-                      class="border open unhoverable"
+                      class="border open ripple"
                       class="login-button"
                       type="text"
                       onclick="return false"

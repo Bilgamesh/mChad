@@ -26,20 +26,7 @@
       }, speed);
     }
 
-    function getClickEffect(element) {
-      return function () {
-        try {
-          element?.classList.remove('unhoverable');
-          setTimeout(() => {
-            try {
-              element?.classList.add('unhoverable');
-            } catch (err) {}
-          }, 500);
-        } catch (err) {}
-      };
-    }
-
-    return { fadeIn, removeFadeOut, getClickEffect };
+    return { fadeIn, removeFadeOut };
   }
 
   window.modules = window.modules || {};
