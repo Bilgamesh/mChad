@@ -67,13 +67,17 @@ function updateRipple(e) {
   const y = e.clientY - rect.top - radius;
   const rippleContainer = document.createElement("div");
   rippleContainer.className = "ripple-js";
+  const id = 'i' + crypto.randomUUID();
+  rippleContainer.setAttribute('id', id);
   const ripple = document.createElement("div");
   ripple.style.inlineSize = ripple.style.blockSize = `${diameter}px`;
   ripple.style.left = `${x}px`;
   ripple.style.top = `${y}px`;
-  ripple.addEventListener("animationend", () => rippleContainer.remove());
+  ripple.addEventListener("animationend", () => document.querySelector('#' + id)?.remove());
+  ripple.addEventListener("animationcancel", () => document.querySelector('#' + id)?.remove());
   rippleContainer.appendChild(ripple);
   element.appendChild(rippleContainer);
+  setTimeout(() => document.querySelector('#' + id)?.remove(), 1800);
 }
 function updateAllRipples() {
   const ripples = queryAll(".slow-ripple, .ripple, .fast-ripple");
