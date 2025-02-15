@@ -13,88 +13,49 @@
     documentUtil,
     sleep
   }) {
+    moment.locale(languages.getCurrentLanguage());
     const dateTime = moment(new Date(time * 1000)).format('LLL');
     const html = /* HTML */ `
       <div
-        class="bubble ${side}"
         id="${id}"
+        class="bubble ${side}"
         time="${time}"
         user_name="${user.name}"
         user_id="${user.id}"
         message="${encodeQuotes(message.text)}"
         enlarged="false"
-        style="opacity: 1;"
+        style=""
       >
         ${documentUtil.fixMessageLinks(baseUrl, message.html)}
       </div>
-      <div class="label label-${side}" style="opacity: 1;">
+      <div id="label-${id}" class="label label-${side}" style="">
         ${user.name} • ${dateTime}
       </div>
       <div
+        id="av-${id}"
         class="avatar av-${side}"
-        style="opacity: 1; background-image: url(${avatar.src.replace(
+        style="background-image: url(${avatar.src.replace(
           './',
           `${baseUrl}/`
         )})"
       ></div>
     `;
 
-    function createBubble() {
-      const bubble = document.createElement('div');
-      const className = `bubble ${side}`;
-      bubble.setAttribute('class', className);
-      bubble.setAttribute('id', id);
-      bubble.setAttribute('time', time);
-      bubble.setAttribute('user_name', user.name);
-      bubble.setAttribute('user_id', user.id);
-      bubble.setAttribute('message', message.text);
-      bubble.innerHTML = documentUtil.fixMessageLinks(baseUrl, message.html);
-      return bubble;
-    }
-
-    function createAvatar() {
-      const av = document.createElement('div');
-      const avClassName = `avatar av-${side}`;
-      av.setAttribute('class', avClassName);
-      av.setAttribute(
-        'style',
-        `opacity: 1; background-image: url(${avatar.src.replace(
-          './',
-          `${baseUrl}/`
-        )})`
-      );
-      return av;
-    }
-
-    function createLabel() {
-      const label = document.createElement('div');
-      const labelClassName = `label label-${side}`;
-      label.setAttribute('class', labelClassName);
-      moment.locale(languages.getCurrentLanguage());
-      const dateTime = moment(new Date(time * 1000)).format('LLL');
-      label.innerText = `${user.name} • ${dateTime}`;
-      return label;
-    }
-
     function insertElement({ before, fadeIn }) {
-      const bubble = createBubble();
-      const av = createAvatar();
-      const label = createLabel();
+      const template = document.createElement('template');
+      template.innerHTML = getHtml();
 
-      if (fadeIn > 0) {
-        bubble.style.opacity = 0;
-        av.style.opacity = 0;
-        label.style.opacity = 0;
+      for (let i = template.content.children.length - 1; i >= 0; i--) {
+        const node = template.content.children[i];
+        node.style.opacity = fadeIn > 0 ? 0 : 1;
+        el.insertBefore(node, before);
+        before = node;
       }
 
-      el.insertBefore(av, before);
-      el.insertBefore(label, av);
-      el.insertBefore(bubble, label);
-
       if (fadeIn > 0) {
-        animationsUtil.fadeIn(bubble, fadeIn || 200);
-        animationsUtil.fadeIn(av, fadeIn || 200);
-        animationsUtil.fadeIn(label, fadeIn || 200);
+        animationsUtil.fadeIn($('#' + id), fadeIn || 200);
+        animationsUtil.fadeIn($('#av-' + id), fadeIn || 200);
+        animationsUtil.fadeIn($('#label-' + id), fadeIn || 200);
       }
     }
 
