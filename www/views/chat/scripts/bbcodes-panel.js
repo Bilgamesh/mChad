@@ -177,12 +177,11 @@
           }).appendElement();
       } catch (error) {
         console.log(
-          `[${new Date().toLocaleString()}][BBCODES-PANEL] Failed to update bbcodes due to error: ${error}`
+          `[${new Date().toLocaleString()}][BBCODES-PANEL] Failed to update bbcodes due to error: ${error}${
+            retry ? '' : ' Will retry in 2 seconds'
+          }`
         );
         if (!retry) {
-          console.log(
-            `[${new Date().toLocaleString()}][BBCODES-PANEL] Will retry in 2 seconds`
-          );
           setTimeout(() => update({ bbtags }, true));
         }
       }
