@@ -70,12 +70,13 @@ function $$(selector) {
       while (message.includes('<a href="')) {
         const url = message.split('<a href="')[1].split('"')[0];
         if (
-          url.toLowerCase().endsWith('.png') ||
-          url.toLowerCase().endsWith('.jpg') ||
-          url.toLowerCase().endsWith('.jpeg') ||
-          url.toLowerCase().endsWith('.gif') ||
-          url.toLowerCase().endsWith('.svg') ||
-          url.toLowerCase().endsWith('.webp')
+          message.split('<a href="')[1].split('>')[1].startsWith('<img') &&
+          (url.toLowerCase().endsWith('.png') ||
+            url.toLowerCase().endsWith('.jpg') ||
+            url.toLowerCase().endsWith('.jpeg') ||
+            url.toLowerCase().endsWith('.gif') ||
+            url.toLowerCase().endsWith('.svg') ||
+            url.toLowerCase().endsWith('.webp'))
         )
           message = message.replace(
             /\<a href=".+?"/i,
