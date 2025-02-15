@@ -44,11 +44,9 @@ RUN curl -so /tmp/commandlinetools-linux-${ANDROID_CMDTOOLS_VERSION}_latest.zip 
 COPY android.packages android.packages
 RUN ( sleep 5 && while [ 1 ]; do sleep 1; echo y; done ) | sdkmanager --package_file=android.packages
 
-# Create a dummy project to cache official plugins
+# Create a dummy project to cache official and useful plugins
 RUN cordova telemetry off
 RUN cordova create app
-RUN cd app && cordova platform add android@12
-RUN cd app && cordova platform add browser
 RUN cd app && cordova plugin add cordova-plugin-battery-status
 RUN cd app && cordova plugin add cordova-plugin-camera
 RUN cd app && cordova plugin add cordova-plugin-device
@@ -63,6 +61,20 @@ RUN cd app && cordova plugin add cordova-plugin-screen-orientation
 RUN cd app && cordova plugin add cordova-plugin-splashscreen
 RUN cd app && cordova plugin add cordova-plugin-statusbar
 RUN cd app && cordova plugin add cordova-plugin-vibration
+RUN cd app && cordova plugin add cordova-plugin-velda-devicefeedback@0.0.2
+RUN cd app && cordova plugin add cordova-plugin-timer@1.0.1
+RUN cd app && cordova plugin add cordova-plugin-theme-detection@1.3.0
+RUN cd app && cordova plugin add cordova-plugin-secure-key-store@1.5.5
+RUN cd app && cordova plugin add github:fquirin/cordova-plugin-navigationbar#88a00417135ce75092178f0a69688f291c04a06a
+RUN cd app && cordova plugin add github:katzer/cordova-plugin-local-notifications#31612410e335da477902e6597d4010adb81ebbab
+RUN cd app && cordova plugin add cordova-plugin-badge@0.8.9
+RUN cd app && cordova plugin add cordova-plugin-background-fetch@7.2.4
+RUN cd app && cordova plugin add cordova-plugin-advanced-http@3.3.1
+RUN cd app && cordova plugin add cordova-clipboard@1.3.0
+RUN cd app && cordova plugin add cordova-clipboard-api@1.0.1
+RUN cd app && cordova platform add android@12
+RUN cd app && cordova platform add browser
+RUN cd app && rm -f ./platforms/android/app/src/main/java/com/verso/cordova/clipboard/Clipboard.java
 RUN cd app && cordova build android
 RUN cd app && cordova build browser
 RUN rm -rf app
