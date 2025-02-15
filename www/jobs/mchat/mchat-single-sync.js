@@ -78,9 +78,9 @@
           if (creationTime) inMemoryStore.set('creation-time', creationTime);
           if (cookie) await cookieStore.set(cookie); // Forum may return new cookies at any point
           for (const message of messages || []) message.read = true;
-          if (messages) onAdd(messages);
-          if (bbtags) setTimeout(() => onBBtags(bbtags), 500);
+          if (bbtags) onBBtags(bbtags);
           onEditDeleteLimit(editDeleteLimit || 0);
+          if (messages) onAdd(messages);
           afterRefresh();
         }
 
