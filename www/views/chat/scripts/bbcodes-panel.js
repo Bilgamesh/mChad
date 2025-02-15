@@ -156,24 +156,36 @@
       }
     }
 
-    function update({ bbtags }) {
-      // Don't modify bbcodes panel if there are already some bbcodes there
-      // and user is using them
-      if (
-        $('.bbcode').length &&
-        $('#bbcodes-panel').classList.contains('active')
-      )
-        return;
-      if (bbtags.length > 0) $('#bbcodes-panel').innerHTML = '';
-      for (const bbtag of formatBBTags(bbtags))
-        BBCode({
-          el: $('#bbcodes-panel'),
-          bbtag,
-          documentUtil,
-          hapticsUtil,
-          hide: false,
-          clipboardUtil
-        }).appendElement();
+    function update({ bbtags }, retry = false) {
+      try {
+        // Don't modify bbcodes panel if there are already some bbcodes there
+        // and user is using them
+        if (
+          $('.bbcode').length &&
+          $('#bbcodes-panel').classList.contains('active')
+        )
+          return;
+        if (bbtags.length > 0) $('#bbcodes-panel').innerHTML = '';
+        for (const bbtag of formatBBTags(bbtags))
+          BBCode({
+            el: $('#bbcodes-panel'),
+            bbtag,
+            documentUtil,
+            hapticsUtil,
+            hide: false,
+            clipboardUtil
+          }).appendElement();
+      } catch (error) {
+        console.log(
+          `[${new Date().toLocaleString()}][BBCODES-PANEL] Failed to update bbcodes due to error: ${error}\nWill retry in 2 seconds`
+        );
+        if (!retry) {
+          console.log(
+            `[${new Date().toLocaleString()}][BBCODES-PANEL] Will retry in 2 seconds`
+          );
+          setTimeout(() => update({ bbtags }, true));
+        }
+      }
     }
 
     function onDestroy() {
