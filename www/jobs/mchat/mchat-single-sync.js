@@ -79,7 +79,7 @@
           if (cookie) await cookieStore.set(cookie); // Forum may return new cookies at any point
           for (const message of messages || []) message.read = true;
           if (messages) onAdd(messages);
-          if (bbtags) onBBtags(bbtags);
+          if (bbtags) setTimeout(() => onBBtags(bbtags), 500);
           onEditDeleteLimit(editDeleteLimit || 0);
           afterRefresh();
         }

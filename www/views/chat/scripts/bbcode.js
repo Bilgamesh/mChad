@@ -24,12 +24,11 @@
     }
 
     function appendElement() {
-      const bbcodeElement = documentUtil.createElementFromHTML(html);
-      bbcodeElement.addEventListener('click', hapticsUtil.tapDefault);
-      bbcodeElement.setAttribute('hasListener', 'true');
-      addListeners(bbcodeElement);
-      if (hide) bbcodeElement.setAttribute('hide', `${hide}`);
-      el.appendChild(bbcodeElement);
+        const bbcodeElement = documentUtil.createElementFromHTML(html);
+        bbcodeElement.setAttribute('hasListener', 'true');
+        addListeners(bbcodeElement);
+        if (hide) bbcodeElement.setAttribute('hide', `${hide}`);
+        el.appendChild(bbcodeElement);
     }
 
     function addListeners(el) {

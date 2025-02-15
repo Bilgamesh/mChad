@@ -472,7 +472,7 @@
         do {
           $('#chat').scrollTop = $('#chat').scrollHeight;
           await sleep(0); // gives browser overhead for rendering when height of the chat is not rendered yet
-        } while ($('#chat').scrollTop === 0);
+        } while ($('#chat')?.scrollTop === 0);
         return;
       }
       scrollUtil.scrollToBottom(behavior);
