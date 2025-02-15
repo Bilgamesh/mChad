@@ -177,7 +177,7 @@
           }).appendElement();
       } catch (error) {
         console.log(
-          `[${new Date().toLocaleString()}][BBCODES-PANEL] Failed to update bbcodes due to error: ${error}\nWill retry in 2 seconds`
+          `[${new Date().toLocaleString()}][BBCODES-PANEL] Failed to update bbcodes due to error: ${error}`
         );
         if (!retry) {
           console.log(
