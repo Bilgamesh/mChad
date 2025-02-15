@@ -49,17 +49,17 @@ RUN cordova telemetry off
 RUN cordova create app
 RUN cd app && cordova plugin add cordova-plugin-battery-status
 RUN cd app && cordova plugin add cordova-plugin-camera
-RUN cd app && cordova plugin add cordova-plugin-device
+RUN cd app && cordova plugin add cordova-plugin-device@3.0.0
 RUN cd app && cordova plugin add cordova-plugin-dialogs
-RUN cd app && cordova plugin add cordova-plugin-file
+RUN cd app && cordova plugin add cordova-plugin-file@8.0.1
 RUN cd app && cordova plugin add cordova-plugin-geolocation
-RUN cd app && cordova plugin add cordova-plugin-inappbrowser
+RUN cd app && cordova plugin add cordova-plugin-inappbrowser@6.0.0
 RUN cd app && cordova plugin add cordova-plugin-media
 RUN cd app && cordova plugin add cordova-plugin-media-capture
 RUN cd app && cordova plugin add cordova-plugin-network-information
-RUN cd app && cordova plugin add cordova-plugin-screen-orientation
+RUN cd app && cordova plugin add cordova-plugin-screen-orientation@3.0.4
 RUN cd app && cordova plugin add cordova-plugin-splashscreen
-RUN cd app && cordova plugin add cordova-plugin-statusbar
+RUN cd app && cordova plugin add cordova-plugin-statusbar@4.0.0
 RUN cd app && cordova plugin add cordova-plugin-vibration
 RUN cd app && cordova plugin add cordova-plugin-velda-devicefeedback@0.0.2
 RUN cd app && cordova plugin add cordova-plugin-timer@1.0.1
@@ -72,8 +72,8 @@ RUN cd app && cordova plugin add cordova-plugin-background-fetch@7.2.4
 RUN cd app && cordova plugin add cordova-plugin-advanced-http@3.3.1
 RUN cd app && cordova plugin add cordova-clipboard@1.3.0
 RUN cd app && cordova plugin add cordova-clipboard-api@1.0.1
-RUN cd app && cordova platform add android@12
-RUN cd app && cordova platform add browser
+RUN cd app && cordova platform add android@12.0.1
+RUN cd app && cordova platform add browser@7.0.0
 RUN cd app && rm -f ./platforms/android/app/src/main/java/com/verso/cordova/clipboard/Clipboard.java
 RUN cd app && cordova build android
 RUN cd app && cordova build browser
