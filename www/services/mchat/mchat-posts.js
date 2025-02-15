@@ -11,7 +11,7 @@
           }
         };
         const response = await fetchTool.fetchCrossDomain(
-          `${baseUrl}/index.php`,
+          `${baseUrl}/app.php/mchat`,
           options
         );
         const html = await response.text();
