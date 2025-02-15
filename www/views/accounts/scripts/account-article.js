@@ -77,7 +77,11 @@
               @${(forum.name || forum.address) +
               (isOpened ? ' - ' + currentlyOpenedText : '')}
             </p>
-            <p class="${error && !fetching ? 'refresh-error user-count-info' : 'user-count-info'}">
+            <p
+              class="${error && !fetching
+                ? 'refresh-error user-count-info'
+                : 'user-count-info'}"
+            >
               <span id="user-count-info-${index}"
                 >${usersOnlineText} ${onlineUsersData.totalCount}</span
               >
@@ -154,14 +158,12 @@
       $('.user-count-info')[index].classList.remove('refresh-error');
       $('.refresh-message')[index].innerText = refreshingText;
       if ($(`#loading-animation-${index}`)) return;
-      const progressCircle = documentUtil.createHtmlElement({
-        element: 'progress',
-        className: 'circle small',
-        id: `loading-animation-${index}`
-      });
       $('.refresh-icon')[index].setAttribute('hide', 'true');
       $('.refresh-icon')[index].parentElement.insertBefore(
-        progressCircle,
+        documentUtil.createElementFromHTML(/* HTML */ `<progress
+          id="loading-animation-${index}"
+          class="circle small"
+        ></progress>`),
         $('.refresh-icon')[index]
       );
     }

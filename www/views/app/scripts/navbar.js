@@ -97,13 +97,14 @@
         existingBadge.innerText = number;
         return;
       }
-      const badge = documentUtil.createHtmlElement({
-        element: 'div',
-        className: 'badge primary',
-        innerText: number,
-        id
-      });
-      element.appendChild(badge);
+      element.appendChild(
+        documentUtil.createElementFromHTML(/* HTML */ `<div
+          id="${id}"
+          class="badge primary"
+        >
+          ${number}
+        </div>`)
+      );
     }
 
     function init(_router) {

@@ -173,11 +173,11 @@
     }
 
     function appendLogoutProgressCircle(index) {
-      const progressCircle = documentUtil.createHtmlElement({
-        element: 'progress',
-        className: 'circle small'
-      });
-      $('.logout')[index].appendChild(progressCircle);
+      $('.logout')[index].appendChild(
+        documentUtil.createElementFromHTML(/* HTML */ `<progress
+          class="circle small"
+        ></progress>`)
+      );
     }
 
     async function updateUnreadMessagesParagraph(index, unreadMessages) {

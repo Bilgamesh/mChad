@@ -1,12 +1,5 @@
 (function () {
-  function Emoticon({
-    el,
-    pictureUrl,
-    code,
-    documentUtil,
-    hide,
-    hapticsUtil
-  }) {
+  function Emoticon({ el, pictureUrl, code, documentUtil, hide, hapticsUtil }) {
     const html = /* HTML */ `<img
       class="emoticon"
       src="${pictureUrl}"
@@ -15,15 +8,9 @@
     />`;
 
     function appendElement() {
-      const emoticonElement = documentUtil.createHtmlElement({
-        element: 'img',
-        className: 'emoticon',
-        src: pictureUrl,
-        value: code,
-        hapticFeedback: true,
-        hasListener: 'true'
-      });
+      const emoticonElement = documentUtil.createElementFromHTML(html);
       addListeners(emoticonElement);
+      emoticonElement.setAttribute('hasListener', 'true');
       if (hide) emoticonElement.setAttribute('hide', `${hide}`);
       el.appendChild(emoticonElement);
     }

@@ -34,39 +34,14 @@ function $$(selector) {
       ).then(callback);
     }
 
-    function createHtmlElement({
-      id,
-      element,
-      className,
-      src,
-      style,
-      innerHTML,
-      innerText,
-      disabled,
-      children,
-      value,
-      hapticFeedback,
-      translation,
-      hasListener,
-      start,
-      end
-    }) {
-      const el = document.createElement(element);
-      if (id) el.setAttribute('id', id);
-      if (className) el.setAttribute('class', className);
-      if (src) el.setAttribute('src', src);
-      if (style) el.setAttribute('style', style);
-      if (innerHTML) el.innerHTML = innerHTML;
-      if (innerText) el.innerText = innerText;
-      if (disabled) el.disabled = true;
-      if (value) el.setAttribute('value', value);
-      if (children) for (const child of children) el.appendChild(child);
-      if (hapticFeedback) el.addEventListener('click', hapticsUtil.tapDefault);
-      if (translation) el.setAttribute('translation', translation);
-      if (hasListener) el.setAttribute('hasListener', hasListener);
-      if (start) el.setAttribute('start', start);
-      if (end) el.setAttribute('end', end);
-      return el;
+    function createElementFromHTML(htmlString) {
+      return createElementsFromHTML(htmlString)[0];
+    }
+
+    function createElementsFromHTML(htmlString) {
+      const template = document.createElement('template');
+      template.innerHTML = htmlString.trim();
+      return template.content.children;
     }
 
     function removeAllListeners(element) {
@@ -285,7 +260,8 @@ function $$(selector) {
     return {
       getParam,
       removeAllListeners,
-      createHtmlElement,
+      createElementFromHTML,
+      createElementsFromHTML,
       onAllDocumentsLoad,
       unicodeToString,
       fixMessageLinks,

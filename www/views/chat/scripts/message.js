@@ -42,11 +42,9 @@
     `;
 
     function insertElement({ before, fadeIn }) {
-      const template = document.createElement('template');
-      template.innerHTML = getHtml();
-
-      for (let i = template.content.children.length - 1; i >= 0; i--) {
-        const node = template.content.children[i];
+      const elements = documentUtil.createElementsFromHTML(html);
+      for (let i = elements.length - 1; i >= 0; i--) {
+        const node = elements[i];
         node.style.opacity = fadeIn > 0 ? 0 : 1;
         el.insertBefore(node, before);
         before = node;

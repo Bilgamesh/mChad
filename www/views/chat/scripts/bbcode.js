@@ -24,15 +24,9 @@
     }
 
     function appendElement() {
-      const bbcodeElement = documentUtil.createHtmlElement({
-        element: 'div',
-        className: 'chip fill bbcode',
-        hapticFeedback: true,
-        hasListener: 'true',
-        start: bbtag.start,
-        end: bbtag.end,
-        innerHTML: bbtag.icon ? `<i>${bbtag.icon}</i>` : bbtag.name
-      });
+      const bbcodeElement = documentUtil.createElementFromHTML(html);
+      bbcodeElement.addEventListener('click', hapticsUtil.tapDefault);
+      bbcodeElement.setAttribute('hasListener', 'true');
       addListeners(bbcodeElement);
       if (hide) bbcodeElement.setAttribute('hide', `${hide}`);
       el.appendChild(bbcodeElement);
