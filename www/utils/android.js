@@ -29,7 +29,6 @@
     }
 
     function addKeyboardOnListener(listen) {
-      refreshKeyboardDetection();
       const id = crypto.randomUUID();
       keyboardOnListeners.push({ listen, id });
       return id;

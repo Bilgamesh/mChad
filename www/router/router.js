@@ -4,6 +4,7 @@
     Chat,
     Settings,
     Accounts,
+    Image,
     Login,
     languages,
     PersistentStore,
@@ -24,6 +25,7 @@
     urlUtil,
     fetchTool,
     SettingsUi,
+    ImageUi,
     config,
     CookieStore,
     navbar,
@@ -64,6 +66,9 @@
       },
       '#login': {
         script: Login
+      },
+      '#image': {
+        script: Image
       }
     };
     const locationChangeListeners = [];
@@ -127,6 +132,7 @@
           urlUtil,
           fetchTool,
           SettingsUi,
+          ImageUi,
           config,
           CookieStore,
           navbar,

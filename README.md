@@ -119,6 +119,8 @@ This project utilizes several open-source libraries:
 
 - **[Moment.js](https://momentjs.com/)**: A library for parsing and manipulating dates and times.
 
+- **[Viewer.js](https://fengyuanchen.github.io/viewerjs/)**: JavaScript image viewer
+
 - **[cordova-plugin-velda-devicefeedback](https://github.com/VVelda/device-feedback)**: Plugin which provides a way for haptic and acoustic feedback.
 
 - **[cordova-plugin-advanced-http](https://github.com/silkimen/cordova-plugin-advanced-http)**: Cordova / Phonegap plugin for communicating with HTTP servers.

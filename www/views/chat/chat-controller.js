@@ -80,7 +80,8 @@
       forumStorage,
       infiniteScroll,
       popups,
-      badges
+      badges,
+      router
     });
 
     $('#body').setAttribute('page', 'chat');

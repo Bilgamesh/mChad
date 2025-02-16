@@ -69,15 +69,7 @@ function $$(selector) {
     function fixImageLinks(message) {
       while (message.includes('<a href="')) {
         const url = message.split('<a href="')[1].split('"')[0];
-        if (
-          message.split('<a href="')[1].split('>')[1].startsWith('<img') &&
-          (url.toLowerCase().endsWith('.png') ||
-            url.toLowerCase().endsWith('.jpg') ||
-            url.toLowerCase().endsWith('.jpeg') ||
-            url.toLowerCase().endsWith('.gif') ||
-            url.toLowerCase().endsWith('.svg') ||
-            url.toLowerCase().endsWith('.webp'))
-        )
+        if (message.split('<a href="')[1].split('>')[1].startsWith('<img'))
           message = message.replace(
             /\<a href=".+?"/i,
             `<a class="clickable-image" image-url="${url}"`

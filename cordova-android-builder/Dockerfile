@@ -65,7 +65,7 @@ RUN cd app && cordova plugin add cordova-plugin-velda-devicefeedback@0.0.2
 RUN cd app && cordova plugin add cordova-plugin-timer@1.0.1
 RUN cd app && cordova plugin add cordova-plugin-theme-detection@1.3.0
 RUN cd app && cordova plugin add cordova-plugin-secure-key-store@1.5.5
-RUN cd app && cordova plugin add github:fquirin/cordova-plugin-navigationbar#88a00417135ce75092178f0a69688f291c04a06a
+RUN cd app && cordova plugin add github:Bilgamesh/cordova-plugin-navigationbar
 RUN cd app && cordova plugin add github:katzer/cordova-plugin-local-notifications#31612410e335da477902e6597d4010adb81ebbab
 RUN cd app && cordova plugin add cordova-plugin-badge@0.8.9
 RUN cd app && cordova plugin add cordova-plugin-background-fetch@7.2.4

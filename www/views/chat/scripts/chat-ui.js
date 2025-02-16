@@ -25,7 +25,8 @@
     forumStorage,
     ScrollUtil,
     popups,
-    badges
+    badges,
+    router
   }) {
     const cache = { lastSelected: null };
     let messageSubmitListeners = [];
@@ -376,9 +377,14 @@
       const images = $$('a.clickable-image');
       for (const image of images)
         if (image.getAttribute('listener') != 1) {
-          image.addEventListener('click', openImageInFullScreenBrowser);
+          image.addEventListener('click', openInImageViewer);
           image.setAttribute('listener', 1);
         }
+    }
+
+    function openInImageViewer(event) {
+      const url = event.srcElement.currentSrc;
+      router.redirect(`#image?url=${btoa(url)}`);
     }
 
     function openImageInFullScreenBrowser(event) {

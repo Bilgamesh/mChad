@@ -35,7 +35,7 @@
     "cordova-plugin-file": "8.0.1",
     "cordova-plugin-inappbrowser": "6.0.0",
     "cordova-plugin-local-notification": "github:katzer/cordova-plugin-local-notifications#31612410e335da477902e6597d4010adb81ebbab",
-    "cordova-plugin-navigationbar-color": "github:fquirin/cordova-plugin-navigationbar#88a00417135ce75092178f0a69688f291c04a06a",
+    "cordova-plugin-navigationbar-color": "github:Bilgamesh/cordova-plugin-navigationbar",
     "cordova-plugin-screen-orientation": "3.0.4",
     "cordova-plugin-secure-key-store": "1.5.5",
     "cordova-plugin-statusbar": "4.0.0",
