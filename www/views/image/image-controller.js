@@ -2,6 +2,7 @@
   async function Image({
     el,
     documentUtil,
+    themeUtil,
     router,
     sleep,
     ImageUi
@@ -11,11 +12,11 @@
     const encodedUrl = documentUtil.getParam('url');
     const url = atob(encodedUrl);
 
-    const ui = ImageUi({ el, url, sleep });
-
-    ui.hideNativeControls();
+    const ui = ImageUi({ el, url, themeUtil, sleep });
 
     await ui.show();
+
+    ui.hideNativeControls();
 
     function onDestroy() {
       ui.showNativeControls();

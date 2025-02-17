@@ -1,6 +1,8 @@
 (function () {
-  function ImageUi({ el, url, sleep }) {
+  function ImageUi({ el, url, themeUtil, sleep }) {
     function hideNativeControls() {
+      StatusBar.backgroundColorByHexString('#000000');
+      NavigationBar.backgroundColorByHexString('#000000', false);
       StatusBar.hide();
       NavigationBar.hide();
     }
@@ -31,6 +33,10 @@
     }
 
     function showNativeControls() {
+      themeUtil.updateBarsByElementColor(
+        $('#navbar-top'),
+        '--surface-container'
+      );
       StatusBar.show();
       NavigationBar.show();
     }
