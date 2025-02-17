@@ -1,8 +1,10 @@
 (function () {
   async function Image({
     el,
+    languages,
     documentUtil,
-    themeUtil,
+    animationsUtil,
+    hapticsUtil,
     router,
     sleep,
     ImageUi
@@ -12,7 +14,7 @@
     const encodedUrl = documentUtil.getParam('url');
     const url = atob(encodedUrl);
 
-    const ui = ImageUi({ el, url, themeUtil, sleep });
+    const ui = ImageUi({ el, languages, url, animationsUtil, hapticsUtil, sleep });
 
     await ui.show();
 

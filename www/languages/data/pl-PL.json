@@ -57,5 +57,7 @@
   "DELETE_TITLE": "Usuń wiadomość",
   "DELETE_DESC": "Na pewno chcesz usunąć tę wiadomość?",
   "EDIT_TITLE": "Edycja wiadomości",
-  "ARCHIVE_LOAD_ERROR": "Nie udało się wczytać wiadomości z archiwum z powodu błędu"
+  "ARCHIVE_LOAD_ERROR": "Nie udało się wczytać wiadomości z archiwum z powodu błędu",
+  "DOWNLOAD": "Pobierz",
+  "RESET": "Zresetuj"
 }

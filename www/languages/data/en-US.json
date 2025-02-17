@@ -57,5 +57,7 @@
   "DELETE_TITLE": "Delete message",
   "DELETE_DESC": "Are you sure you want to delete this message?",
   "EDIT_TITLE": "Edit message",
-  "ARCHIVE_LOAD_ERROR": "Failed to load archive messages due to error"
+  "ARCHIVE_LOAD_ERROR": "Failed to load archive messages due to error",
+  "DOWNLOAD": "Download",
+  "RESET": "Reset"
 }

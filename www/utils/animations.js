@@ -1,13 +1,13 @@
 (function () {
   function AnimationsUtil() {
-    function fadeIn(element, timeMs) {
-      element.style.opacity = 0;
+    function fadeIn(element, timeMs, minOpacity = 0, maxOpacity = 1) {
+      element.style.opacity = minOpacity;
       let last = +new Date();
       const tick = function () {
         element.style.opacity =
           +element.style.opacity + (new Date() - last) / timeMs;
         last = +new Date();
-        if (+element.style.opacity < 1)
+        if (+element.style.opacity < maxOpacity)
           (window.requestAnimationFrame && requestAnimationFrame(tick)) ||
             setTimeout(tick, 16);
       };
@@ -26,7 +26,21 @@
       }, speed);
     }
 
-    return { fadeIn, removeFadeOut };
+    function fadeOut(element, timeMs, minOpacity = 0, maxOpacity = 1) {
+      element.style.opacity = maxOpacity;
+      let last = +new Date();
+      const tick = function () {
+        element.style.opacity =
+          +element.style.opacity - (new Date() - last) / timeMs;
+        last = +new Date();
+        if (+element.style.opacity > minOpacity)
+          (window.requestAnimationFrame && requestAnimationFrame(tick)) ||
+            setTimeout(tick, 16);
+      };
+      tick();
+    }
+
+    return { fadeIn, removeFadeOut, fadeOut };
   }
 
   window.modules = window.modules || {};
