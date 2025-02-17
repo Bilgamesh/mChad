@@ -18,8 +18,12 @@
 
     ui.hideNativeControls();
 
-    function onDestroy() {
-      ui.showNativeControls();
+    async function onDestroy() {
+      ui.hide();
+      await ui.showNativeControls();
+      /* Give Android time to re-scale the viewport
+      after the control panels are restored before switching to new view */
+      await sleep(100);
     }
 
     router.addOnDestroy(onDestroy);

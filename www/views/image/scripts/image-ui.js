@@ -32,6 +32,10 @@
       }).show();
     }
 
+    function hide() {
+      $('.viewer-canvas')[0].remove();
+    }
+
     function showNativeControls() {
       themeUtil.updateBarsByElementColor(
         $('#navbar-top'),
@@ -45,7 +49,7 @@
 
     function toggleControls() {}
 
-    return { hideNativeControls, show, showNativeControls };
+    return { hideNativeControls, show, hide, showNativeControls };
   }
 
   window.modules = window.modules || {};
