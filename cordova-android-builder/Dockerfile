@@ -59,13 +59,13 @@ RUN cd app && cordova plugin add cordova-plugin-media-capture
 RUN cd app && cordova plugin add cordova-plugin-network-information
 RUN cd app && cordova plugin add cordova-plugin-screen-orientation@3.0.4
 RUN cd app && cordova plugin add cordova-plugin-splashscreen
-RUN cd app && cordova plugin add cordova-plugin-statusbar@4.0.0
+RUN cd app && cordova plugin add github:breautek/cordova-plugin-statusbar#779e7f0425ca77232002df0ceb67ce19dd24cc7f
 RUN cd app && cordova plugin add cordova-plugin-vibration
 RUN cd app && cordova plugin add cordova-plugin-velda-devicefeedback@0.0.2
 RUN cd app && cordova plugin add cordova-plugin-timer@1.0.1
 RUN cd app && cordova plugin add cordova-plugin-theme-detection@1.3.0
 RUN cd app && cordova plugin add cordova-plugin-secure-key-store@1.5.5
-RUN cd app && cordova plugin add github:Bilgamesh/cordova-plugin-navigationbar
+RUN cd app && cordova plugin add github:fquirin/cordova-plugin-navigationbar
 RUN cd app && cordova plugin add github:katzer/cordova-plugin-local-notifications#31612410e335da477902e6597d4010adb81ebbab
 RUN cd app && cordova plugin add cordova-plugin-badge@0.8.9
 RUN cd app && cordova plugin add cordova-plugin-background-fetch@7.2.4
