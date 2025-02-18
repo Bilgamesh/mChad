@@ -250,6 +250,18 @@ function $$(selector) {
       );
     }
 
+    function expandHeaderBy(diff) {
+      const oldHeaderHeight = +window
+        .getComputedStyle(document.body)
+        .getPropertyValue('--header-height')
+        .replace('px', '');
+
+      document.documentElement.style.setProperty(
+        '--header-height',
+        oldHeaderHeight + diff + 'px'
+      );
+    }
+
     return {
       getParam,
       removeAllListeners,
@@ -268,7 +280,8 @@ function $$(selector) {
       extractEditDeleteLimit,
       isJSON,
       preloadImage,
-      reloadImages
+      reloadImages,
+      expandHeaderBy
     };
   }
 

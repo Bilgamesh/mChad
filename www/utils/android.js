@@ -1,5 +1,5 @@
 (function () {
-  function AndroidUtil(themeUtil) {
+  function AndroidUtil(themeUtil, sleep) {
     const IN_APP_FULL_SCREEN_BROWSER_BG_COLOR = '#0e0e0e';
     const IN_APP_BROWSER_BG_COLOR = '#CCCCCC';
     let originalHeight = window.innerHeight;
@@ -60,7 +60,6 @@
         '_blank',
         'location=no'
       );
-      StatusBar.backgroundColorByHexString(IN_APP_FULL_SCREEN_BROWSER_BG_COLOR);
       NavigationBar.backgroundColorByHexString(
         IN_APP_FULL_SCREEN_BROWSER_BG_COLOR,
         false
@@ -76,7 +75,7 @@
     function openInBrowser(url, target) {
       const ref = cordova.InAppBrowser.open(encodeURI(url), target || '_blank');
       if (target !== '_blank') return;
-      StatusBar.backgroundColorByHexString(IN_APP_BROWSER_BG_COLOR);
+      // StatusBar.backgroundColorByHexString(IN_APP_BROWSER_BG_COLOR);
       NavigationBar.backgroundColorByHexString(IN_APP_BROWSER_BG_COLOR, true);
       ref.addEventListener('exit', () => {
         themeUtil.updateBarsByElementColor(
@@ -86,6 +85,18 @@
       });
     }
 
+    async function makeStatusBarTransparent() {
+      const screenHeightBefore = document.documentElement.clientHeight;
+      let screenHeightAfter = screenHeightBefore;
+      StatusBar.overlaysWebView(true);
+      while (screenHeightAfter === screenHeightBefore) {
+        await sleep(10);
+        screenHeightAfter = document.documentElement.clientHeight;
+      }
+      const statusBarHeight = screenHeightAfter - screenHeightBefore;
+      return statusBarHeight;
+    }
+
     return {
       hideKeyboard,
       addKeyboardOnListener,
@@ -93,7 +104,9 @@
       removeKeyboardOnListener,
       removeKeyboardOffListener,
       openInFullScreenBrowser,
-      openInBrowser
+      openInBrowser,
+      makeStatusBarTransparent,
+      refreshKeyboardDetection
     };
   }
 

@@ -7,14 +7,14 @@ body[page='chat'] img {
 }
 
 body[page='chat'] .main-page {
-  height: calc(100vh - 80px - 64px);
-  top: 64px;
+  height: calc(100vh - var(--navigation-bar-height) - var(--header-height));
+  top: var(--header-height);
   overflow-y: hidden;
   position: fixed;
 }
 
 body[page='chat'] .main-page[expanded='true'] {
-  height: calc(100vh - 64px);
+  height: calc(100vh - var(--header-height));
 }
 
 body[page='chat'] .chat {
@@ -37,7 +37,7 @@ body[page='chat'] .navbar-bottom {
 body[page='chat'] .text-panel {
   /* border-top: 1px solid var(--surface-container-high); */
   position: fixed;
-  bottom: 80px;
+  bottom: var(--navigation-bar-height);
   background-color: var(--surface-container);
   width: 100%;
   text-align: center;
@@ -45,7 +45,7 @@ body[page='chat'] .text-panel {
 }
 
 body[page='chat'] .text-panel[expanded='true'] {
-  bottom: 0;
+  bottom: calc(var(--navigation-bar-height) - 80px);
 }
 
 body[page='chat'] #chat-form {
@@ -201,17 +201,17 @@ body[page='chat'] .loading-circle {
 
 body[page='chat'] #scroll-to-bottom-circle {
   position: fixed;
-  top: calc(100vh - 80px - 60px - 40px - 10px);
+  top: calc(100vh - var(--navigation-bar-height) - 60px - 40px - 10px);
   right: 10px;
   z-index: 501;
 }
 
 body[page='chat'] #scroll-to-bottom-circle[lifted='true'] {
-  top: calc(100vh - 80px - 60px - 40px - 10px - 70px);
+  top: calc(100vh - var(--navigation-bar-height) - 60px - 40px - 10px - 70px);
 }
 
 body[page='chat'] #scroll-to-bottom-circle[lifted-slightly='true'] {
-  top: calc(100vh - 80px - 60px - 40px - 10px - 46px);
+  top: calc(100vh - var(--navigation-bar-height) - 60px - 40px - 10px - 46px);
 }
 
 body[page='chat'] #scroll-to-bottom-circle[expanded='true'] {
@@ -295,7 +295,7 @@ body[page='chat'] .emoticon {
 body[page='chat'] #emoticon-panel {
   position: fixed;
 
-  top: calc(100vh - 80px - 60px - 70px);
+  top: calc(100vh - var(--navigation-bar-height) - 60px - 70px);
   height: 70px !important;
 
   /* top: 80px;
@@ -324,7 +324,7 @@ body[page='chat'] #emoticon-panel[expanded='true'] {
 
 body[page='chat'] #bbcodes-panel {
   position: fixed;
-  top: calc(100vh - 80px - 60px - 46px);
+  top: calc(100vh - var(--navigation-bar-height) - 60px - 46px);
   height: 46px;
   width: 100vw !important;
   padding: 0 !important;
@@ -353,7 +353,8 @@ body[page='chat'] #tools-panel {
   position: fixed;
   top: 0;
   background-color: var(--surface-container);
-  height: 64px;
+  height: var(--header-height);
+  padding-top: calc(var(--header-height) - 64px);
   width: 100vw;
   margin: 0;
 }

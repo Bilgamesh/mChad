@@ -1,9 +1,9 @@
 body[page='accounts'] .bg {
   position: fixed;
-  top: 64px;
+  top: var(--header-height);
   width: 100%;
   overflow-y: scroll;
-  height: calc(100% - 64px - 80px);
+  height: calc(100% - var(--navigation-bar-height) - var(--header-height));
   padding-top: 5px;
 }
 
@@ -37,7 +37,7 @@ body[page='accounts'] .refresh-error-dark {
 body[page='accounts'] #new-account-button {
   position: fixed;
   width: fit-content;
-  bottom: 100px;
+  bottom: calc(var(--navigation-bar-height) + 20px);
   right: 20px;
   z-index: 900;
   box-shadow: var(--elevate1);

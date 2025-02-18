@@ -42,7 +42,7 @@
           </nav>
         </dialog>
 
-        <header>
+        <header id="header-main">
           <nav id="navbar-top">
             <h5 id="navbar-top-title" class="max left-align">mChad</h5>
           </nav>

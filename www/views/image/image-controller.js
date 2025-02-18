@@ -4,6 +4,7 @@
     languages,
     documentUtil,
     animationsUtil,
+    themeUtil,
     hapticsUtil,
     router,
     sleep,
@@ -14,18 +15,23 @@
     const encodedUrl = documentUtil.getParam('url');
     const url = atob(encodedUrl);
 
-    const ui = ImageUi({ el, languages, url, animationsUtil, hapticsUtil, sleep });
+    const ui = ImageUi({
+      el,
+      languages,
+      url,
+      animationsUtil,
+      themeUtil,
+      hapticsUtil,
+      sleep
+    });
 
     await ui.show();
 
-    ui.hideNativeControls();
+    ui.darkenNavigationBar();
 
-    async function onDestroy() {
+    function onDestroy() {
       ui.hide();
-      await ui.showNativeControls();
-      /* Give Android time to re-scale the viewport
-      after the control panels are restored before switching to new view */
-      await sleep(100);
+      ui.lightenNavigationBar();
     }
 
     router.addOnDestroy(onDestroy);

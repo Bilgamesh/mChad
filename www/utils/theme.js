@@ -7,7 +7,6 @@
       const mode = preferencesStore.get('mode');
       let color = getComputedStyle(element).getPropertyValue(property);
       if (darken) color = tinycolor.mix(color, '#000000').toHexString();
-      StatusBar.backgroundColorByHexString(color);
       NavigationBar.backgroundColorByHexString(color, mode === 'light');
       if (mode === 'dark') StatusBar.styleLightContent();
       else StatusBar.styleDefault();

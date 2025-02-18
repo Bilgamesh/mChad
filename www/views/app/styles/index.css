@@ -1,3 +1,8 @@
+:root {
+  --header-height: 64px;
+  --navigation-bar-height: 80px;
+}
+
 * {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   /* make transparent link selection, adjust last value opacity 0 to 1.0 */
@@ -30,6 +35,10 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
+}
+
+#header-main {
+  padding-top: calc(var(--header-height) - 64px);
 }
 
 .main-page {
@@ -74,6 +83,11 @@ h1 {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+#navbar-bottom {
+  height: var(--navigation-bar-height);
+  padding-bottom: calc(var(--navigation-bar-height) - 80px);
 }
 
 .navbar a {

@@ -63,13 +63,18 @@
     async () => {
       const themeUtil = ThemeUtil(PersistentStore);
       const languages = Languages(PersistentStore);
-      const androidUtil = AndroidUtil(themeUtil);
+      const androidUtil = AndroidUtil(themeUtil, sleep);
       const animationsUtil = AnimationsUtil();
       const hapticsUtil = HapticsUtil(PersistentStore);
       const documentUtil = DocumentUtil(hapticsUtil);
       const timeUtil = TimeUtil(languages);
       const urlUtil = UrlUtil();
       const clipboardUtil = ClipboardUtil();
+
+      androidUtil.makeStatusBarTransparent().then((statusBarHeight) => {
+        documentUtil.expandHeaderBy(statusBarHeight);
+        androidUtil.refreshKeyboardDetection();
+      });
 
       const navbar = await Navbar({ languages, hapticsUtil, documentUtil });
 

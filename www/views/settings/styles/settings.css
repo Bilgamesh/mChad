@@ -1,9 +1,9 @@
 body[page='settings'] .bg {
   position: absolute;
-  top: 64px;
+  top: var(--header-height);
   width: 100%;
   /* overflow-y: scroll; */
-  height: calc(100% - 64px - 80px);
+  height: calc(100% - var(--navigation-bar-height) - var(--header-height));
   padding-top: 5px;
 }
 
@@ -28,9 +28,9 @@ body[page='settings'] .main {
   border-radius: 0;
   margin: 0;
   position: fixed;
-  top: 64px !important;
+  top: var(--header-height) !important;
   width: 100vw;
-  height: calc(100vh - 80px - 64px);
+  height: calc(100vh - var(--navigation-bar-height) - var(--header-height));
   overflow-y: scroll;
   overscroll-behavior-y: contain;
 }

@@ -1,10 +1,18 @@
 (function () {
-  function ImageUi({ el, languages, url, animationsUtil, hapticsUtil, sleep }) {
+  function ImageUi({
+    el,
+    languages,
+    url,
+    animationsUtil,
+    themeUtil,
+    hapticsUtil,
+    sleep
+  }) {
     let customControlsVisible = false;
     let viewer;
-    function hideNativeControls() {
-      StatusBar.hide();
-      NavigationBar.hide();
+
+    function darkenNavigationBar() {
+      NavigationBar.backgroundColorByHexString('#000000', false);
     }
 
     async function show() {
@@ -70,9 +78,11 @@
       $('#image-view').remove();
     }
 
-    function showNativeControls() {
-      StatusBar.show();
-      NavigationBar.show();
+    function lightenNavigationBar() {
+      themeUtil.updateBarsByElementColor(
+        $('#navbar-top'),
+        '--surface-container'
+      );
     }
 
     function onCanvasClick() {
@@ -101,7 +111,7 @@
       }, 500);
     }
 
-    return { hideNativeControls, show, hide, showNativeControls };
+    return { darkenNavigationBar, show, hide, lightenNavigationBar };
   }
 
   window.modules = window.modules || {};
