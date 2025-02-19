@@ -13,6 +13,7 @@
 
     function darkenNavigationBar() {
       NavigationBar.backgroundColorByHexString('#000000', false);
+      StatusBar.styleLightContent();
     }
 
     async function show() {
