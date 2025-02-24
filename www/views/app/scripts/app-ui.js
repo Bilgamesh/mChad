@@ -27,11 +27,7 @@
 
         <dialog id="global-input-prompt" class="">
           <h5>Default</h5>
-          <div
-            contenteditable="true"
-            id="global-input-prompt-textarea"
-            class="field textarea round fill"
-          ></div>
+          <pre contenteditable="true" id="global-input-prompt-textarea"></pre>
           <nav class="right-align no-space">
             <button class="transparent link ripple" translation="CANCEL">
               ${await languages.getTranslation('CANCEL')}
