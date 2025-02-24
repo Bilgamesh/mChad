@@ -246,6 +246,7 @@
       if (scrollUtil.isViewportNScreensAwayFromBottom(2)) return;
       messages = messages.filter((m) => !isAlreadyAdded(m));
       messages = messages.slice(messages.length - config.MAX_MESSAGE_AMOUNT);
+      if (scrollUtil.isScrolledToBottom()) scrollUtil.scrollUpBy(1); // Prevent scroll jump when scrollable area is expanded
       for (const message of messages) {
         if (isBottomVisible()) message.read = true;
         const messageBubble = Message({
