@@ -21,9 +21,15 @@
       await sleep(0);
       el.innerHTML = /* HTML */ `<div id="image-view-container">
         <div id="image-view" class="page active">
+          <div
+            id="controls-bg-top"
+            class="top-shadow"
+            hide="true"
+            style="opacity: 0"
+          ></div>
           <img id="source-image" src="${url}" alt="${url}" />
           <div
-            id="controls-bg"
+            id="controls-bg-bottom"
             class="bottom-shadow"
             hide="true"
             style="opacity: 0"
@@ -97,17 +103,21 @@
     }
 
     function showCustomControls() {
-      $('#controls-bg').setAttribute('hide', 'false');
+      $('#controls-bg-top').setAttribute('hide', 'false');
+      $('#controls-bg-bottom').setAttribute('hide', 'false');
       $('#controls').setAttribute('hide', 'false');
-      animationsUtil.fadeIn($('#controls-bg'), 500, 0, 1);
+      animationsUtil.fadeIn($('#controls-bg-top'), 500, 0, 1);
+      animationsUtil.fadeIn($('#controls-bg-bottom'), 500, 0, 1);
       animationsUtil.fadeIn($('#controls'), 500, 0, 1);
     }
 
     function hideCustomControls() {
-      animationsUtil.fadeOut($('#controls-bg'), 500, 0, 1);
+      animationsUtil.fadeOut($('#controls-bg-top'), 500, 0, 1);
+      animationsUtil.fadeOut($('#controls-bg-bottom'), 500, 0, 1);
       animationsUtil.fadeOut($('#controls'), 500, 0, 1);
       setTimeout(() => {
-        $('#controls-bg').setAttribute('hide', !customControlsVisible);
+        $('#controls-bg-top').setAttribute('hide', !customControlsVisible);
+        $('#controls-bg-bottom').setAttribute('hide', !customControlsVisible);
         $('#controls').setAttribute('hide', !customControlsVisible);
       }, 500);
     }

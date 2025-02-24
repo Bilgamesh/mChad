@@ -94,6 +94,10 @@
         screenHeightAfter = document.documentElement.clientHeight;
       }
       const statusBarHeight = screenHeightAfter - screenHeightBefore;
+      document.documentElement.style.setProperty(
+        '--status-bar-height',
+        statusBarHeight + 'px'
+      );
       return statusBarHeight;
     }
 

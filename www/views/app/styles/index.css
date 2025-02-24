@@ -1,4 +1,5 @@
 :root {
+  --status-bar-height: 32px;
   --header-height: 64px;
   --navigation-bar-height: 80px;
 }
