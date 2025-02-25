@@ -59,5 +59,7 @@
   "EDIT_TITLE": "Edit message",
   "ARCHIVE_LOAD_ERROR": "Failed to load archive messages due to error",
   "DOWNLOAD": "Download",
-  "RESET": "Reset"
+  "RESET": "Reset",
+  "IMAGE_SAVED": "Image saved as",
+  "IMAGE_SAVED_ERROR": "Failed to save image due to error"
 }

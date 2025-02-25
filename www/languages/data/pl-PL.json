@@ -59,5 +59,7 @@
   "EDIT_TITLE": "Edycja wiadomości",
   "ARCHIVE_LOAD_ERROR": "Nie udało się wczytać wiadomości z archiwum z powodu błędu",
   "DOWNLOAD": "Pobierz",
-  "RESET": "Zresetuj"
+  "RESET": "Zresetuj",
+  "IMAGE_SAVED": "Obrazek zapisany jako",
+  "IMAGE_SAVED_ERROR": "Nie udało się zapisać obrazka z powodu błędu"
 }

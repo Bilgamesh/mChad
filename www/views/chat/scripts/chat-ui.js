@@ -388,10 +388,6 @@
       router.redirect(`#image?url=${btoa(url)}`);
     }
 
-    function openImageInFullScreenBrowser(event) {
-      androidUtil.openInFullScreenBrowser(event.srcElement.currentSrc);
-    }
-
     function addLinkListeners() {
       const links = $$('a.clickable-link');
       for (const link of links)

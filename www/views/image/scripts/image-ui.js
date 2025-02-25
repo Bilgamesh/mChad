@@ -11,6 +11,8 @@
     let customControlsVisible = false;
     let viewer;
 
+    const downloadListeners = [];
+
     function darkenNavigationBar() {
       NavigationBar.backgroundColorByHexString('#000000', false);
       StatusBar.styleLightContent();
@@ -75,9 +77,13 @@
       $('#img-back-btn').addEventListener('click', hapticsUtil.tapDefault);
       $('#img-reset-btn').addEventListener('click', hapticsUtil.tapDefault);
       $('#img-download-btn').addEventListener('click', hapticsUtil.tapDefault);
-
+      $('#img-download-btn').addEventListener('click', onDownload);
       $('#img-reset-btn').addEventListener('click', () => viewer.reset());
       $('#img-back-btn').addEventListener('click', () => window.history.back());
+    }
+
+    function onDownload() {
+      for (const listener of downloadListeners) listener.listen(url);
     }
 
     function hide() {
@@ -122,7 +128,19 @@
       }, 500);
     }
 
-    return { darkenNavigationBar, show, hide, lightenNavigationBar };
+    function addDownloadListener(listen) {
+      const id = crypto.randomUUID();
+      downloadListeners.push({ id, listen });
+      return id;
+    }
+
+    return {
+      darkenNavigationBar,
+      show,
+      hide,
+      lightenNavigationBar,
+      addDownloadListener
+    };
   }
 
   window.modules = window.modules || {};
