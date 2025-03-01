@@ -69,6 +69,7 @@
             messages,
             bbtags,
             editDeleteLimit,
+            messageLimit,
             cookie,
             formToken,
             creationTime
@@ -80,6 +81,7 @@
           for (const message of messages || []) message.read = true;
           if (bbtags) onBBtags(bbtags);
           onEditDeleteLimit(editDeleteLimit || 0);
+          onMessageLimit(messageLimit || 0);
           if (messages) onAdd(messages);
           afterRefresh();
         }
@@ -114,13 +116,20 @@
           (index % 100 === 0 && index !== 0)
         ) {
           timer.pause();
-          const { cookie, bbtags, editDeleteLimit, formToken, creationTime } =
-            await chatService.fetchMainPage();
+          const {
+            cookie,
+            bbtags,
+            editDeleteLimit,
+            messageLimit,
+            formToken,
+            creationTime
+          } = await chatService.fetchMainPage();
           if (formToken) inMemoryStore.set('form-token', formToken);
           if (creationTime) inMemoryStore.set('creation-time', creationTime);
           if (cookie) await cookieStore.set(cookie);
           if (bbtags) onBBtags(bbtags);
           onEditDeleteLimit(editDeleteLimit || 0);
+          onMessageLimit(messageLimit || 0);
         }
 
         /* Periodically fetch user profile
@@ -236,6 +245,16 @@
       forumStorage.set('editDeleteLimit', editDeleteLimit);
       emit({
         event: 'editDeleteLimitUpdate',
+        baseUrl: forum.address,
+        forumIndex
+      });
+    }
+
+    function onMessageLimit(messageLimit) {
+      if (stopped) return;
+      forumStorage.set('messageLimit', messageLimit);
+      emit({
+        event: 'messageLimitUpdate',
         baseUrl: forum.address,
         forumIndex
       });

@@ -18,6 +18,7 @@
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const bbtags = documentUtil.extractBBtags(doc);
         const editDeleteLimit = documentUtil.extractEditDeleteLimit(doc);
+        const messageLimit = documentUtil.extractMessageLimit(doc);
         const messages = parseMessages(html);
         await preloadAvatars(messages);
         const formToken = documentUtil.findInputData(
@@ -42,6 +43,7 @@
           messages,
           bbtags,
           editDeleteLimit,
+          messageLimit,
           cookie,
           formToken,
           creationTime

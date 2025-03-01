@@ -427,3 +427,7 @@ body[page='chat'] .no-transition-label {
   line-height: 2.5rem !important;
   font-size: 0.75rem !important;
 }
+
+body[page='chat'] #limit-info {
+  color: red;
+}

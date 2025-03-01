@@ -141,8 +141,9 @@
               <label
                 id="input-label"
                 class="${inputText ? 'no-transition-label' : ''}"
-                >${await languages.getTranslation('TYPE_SOMETHING')}</label
-              >
+                >${await languages.getTranslation('TYPE_SOMETHING')}
+                <span id="limit-info"></span
+              ></label>
               <i id="bbcodes-panel-icon" class="bbcodes-panel-icon">code</i>
               <i id="emoji-icon" class="emoji-icon">emoticon</i>
             </div>
@@ -152,6 +153,7 @@
 
       chatHeight = $('#chat').clientHeight;
       $('#input-box').value = inputText || '';
+      updateMesageLimitInfo();
       addBubbleContentListeners();
       if (scrollHeight && !goToMessageId) scrollToInstant(scrollHeight);
       else if (scrollHeight !== 0) scrollToBottom('instant');
@@ -207,6 +209,7 @@
       $('#chat').addEventListener('scroll', refreshBadges);
       $('#chat').addEventListener('scroll', attemptHideToolbar);
       $('#text-field').addEventListener('click', enableInputLabelAnimation);
+      $('#input-box').addEventListener('input', updateMesageLimitInfo);
     }
 
     function updateChatHeight() {
@@ -406,6 +409,7 @@
       event.preventDefault();
       const text = $('#text-field').children[0].value || '';
       $('#text-field').children[0].value = '';
+      updateMesageLimitInfo();
       androidUtil.hideKeyboard($('#text-field'));
       document.activeElement.blur();
       if (!text.trim()) return;
@@ -591,6 +595,7 @@
       if (!text || currentForumIndex != forumIndex || $('#input-box').value)
         return;
       $('#input-box').value = text;
+      updateMesageLimitInfo();
     }
 
     function showProgressBar() {
@@ -599,6 +604,21 @@
 
     function hideProgressBar() {
       $('#progress-bar').setAttribute('hide', 'true');
+    }
+
+    function updateMesageLimitInfo() {
+      const limit = forumStorage.get('messageLimit') || 0;
+      if (!limit) {
+        $('#limit-info').innerText = '';
+        return;
+      }
+      const text = $('#input-box').value || '';
+      const length = text.length;
+      if (length / limit < 0.9) {
+        $('#limit-info').innerText = '';
+        return;
+      }
+      $('#limit-info').innerText = `${length}/${limit}`;
     }
 
     return {

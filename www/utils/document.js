@@ -205,6 +205,26 @@ function $$(selector) {
       }
     }
 
+    function extractMessageLimit(doc) {
+      try {
+        for (const script of doc.scripts) {
+          if (script.innerText.includes('editDeleteLimit')) {
+            const limit = script.innerText
+              .split('mssgLngth')[1]
+              .split(',')[0]
+              .replace(':', '')
+              .trim();
+            return +(limit || 0);
+          }
+        }
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][DOCUMENT] Failed to extract message limit due to error: ${err}`
+        );
+        return 0;
+      }
+    }
+
     function extractLogId(doc) {
       try {
         for (const script of doc.scripts) {
@@ -278,6 +298,7 @@ function $$(selector) {
       extractLogId,
       extractBBtags,
       extractEditDeleteLimit,
+      extractMessageLimit,
       isJSON,
       preloadImage,
       reloadImages,
