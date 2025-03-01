@@ -140,6 +140,7 @@
       );
       chatUi.hideNavbar();
       if (inputPromptPresent) chatUi.hideInput();
+      chatUi.toggleScrollButtonVisibility();
       if (
         chatUi.isBottomRendered() &&
         !ScrollUtil($('#chat')).isViewportNScreensAwayFromBottom(4) &&
@@ -150,6 +151,7 @@
     const keyboardOffListenerId = androidUtil.addKeyboardOffListener(() => {
       chatUi.showNavbar();
       chatUi.showInput();
+      chatUi.toggleScrollButtonVisibility();
     });
 
     const newEmoticonsListenerId = globalSynchronizer.addSyncListener(

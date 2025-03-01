@@ -619,6 +619,7 @@
       shrinkAllBubbles,
       showToolbar,
       hideToolbar,
+      toggleScrollButtonVisibility,
       onDestroy,
       addMessageSubmitListener,
       removeMessageSubmitListener,
