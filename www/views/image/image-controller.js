@@ -3,6 +3,7 @@
     el,
     languages,
     documentUtil,
+    androidUtil,
     animationsUtil,
     themeUtil,
     hapticsUtil,
@@ -46,7 +47,19 @@
 
     ui.darkenNavigationBar();
 
-    ui.addDownloadListener((url) => {
+    ui.addDownloadListener(async (url) => {
+      /* Android 11+ does not require permission to create files in Downloads folder.
+      Permission has to be requested for older versions. */
+      if (+device.sdkVersion <= 28) {
+        let hasPermission = await androidUtil.hasPermission(
+          'WRITE_EXTERNAL_STORAGE'
+        );
+        if (!hasPermission)
+          hasPermission = androidUtil.requestPermission(
+            'WRITE_EXTERNAL_STORAGE'
+          );
+        if (!hasPermission) return;
+      }
       const filename = getFileName(url);
       const path = cordova.file.externalRootDirectory + 'download/' + filename;
       console.log(

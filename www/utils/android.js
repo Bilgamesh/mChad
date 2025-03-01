@@ -101,6 +101,40 @@
       return statusBarHeight;
     }
 
+    function hasPermission(permission) {
+      if (!cordova.plugins.permissions[permission])
+        throw 'Such permission does not exist.';
+      return new Promise((resolve) => {
+        cordova.plugins.permissions.checkPermission(
+          cordova.plugins.permissions[permission],
+          (status) => resolve(status.hasPermission),
+          (err) => {
+            console.log(
+              `[${new Date().toLocaleString()}][AndroidUtil] Error when checking permission: ${permission}, error: ${err}`
+            );
+            resolve(false);
+          }
+        );
+      });
+    }
+
+    function requestPermission(permission) {
+      if (!cordova.plugins.permissions[permission])
+        throw 'Such permission does not exist.';
+      return new Promise((resolve) => {
+        cordova.plugins.permissions.requestPermission(
+          cordova.plugins.permissions[permission],
+          (status) => resolve(status.hasPermission),
+          (err) => {
+            console.log(
+              `[${new Date().toLocaleString()}][AndroidUtil] Error when requesting permission: ${permission}, error: ${err}`
+            );
+            resolve(false);
+          }
+        );
+      });
+    }
+
     return {
       hideKeyboard,
       addKeyboardOnListener,
@@ -110,7 +144,9 @@
       openInFullScreenBrowser,
       openInBrowser,
       makeStatusBarTransparent,
-      refreshKeyboardDetection
+      refreshKeyboardDetection,
+      hasPermission,
+      requestPermission
     };
   }
 

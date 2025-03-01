@@ -141,6 +141,8 @@ This project utilizes several open-source libraries:
 
 - **[cordova-plugin-theme-detection](https://github.com/mariusbackes/cordova-plugin-theme-detection)**: Cordova plugin to detect whether dark mode is enabled or not.
 
+- **[cordova-plugin-android-permissions](https://github.com/NeoLSN/cordova-plugin-android-permissions)**: Cordova plugin designed for supporting Android permissions checking mechanism.
+
 ## License
 
 This project is licensed under the terms of [GPL v3.0 license](https://github.com/Bilgamesh/mChad/blob/main/LICENSE).

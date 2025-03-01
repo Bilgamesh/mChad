@@ -41,6 +41,11 @@
     );
 
     console.log(
+      `[${new Date().toLocaleString()}][Config] Android SDK version: ${
+        device.sdkVersion
+      }`
+    );
+    console.log(
       `[${new Date().toLocaleString()}][Config] Language: ${language}`
     );
     console.log(`[${new Date().toLocaleString()}][Config] Mode: ${mode}`);
