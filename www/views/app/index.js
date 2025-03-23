@@ -71,9 +71,15 @@
       const urlUtil = UrlUtil();
       const clipboardUtil = ClipboardUtil();
 
+      // Prevent screen rotation while calculating statusBarHeight
+      screen.orientation.lock(screen.orientation.type);
       androidUtil.makeStatusBarTransparent().then((statusBarHeight) => {
         documentUtil.expandHeaderBy(statusBarHeight);
         androidUtil.refreshKeyboardDetection();
+        window.addEventListener(
+          'orientationchange',
+          androidUtil.reverseScreenRatios
+        );
       });
 
       const navbar = await Navbar({ languages, hapticsUtil, documentUtil });

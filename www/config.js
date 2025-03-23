@@ -15,7 +15,6 @@
     ];
     const MAX_MESSAGE_AMOUNT = 50;
     const MAX_NOTIFICATION_MESSAGES = 4;
-    screen.orientation.lock('portrait');
 
     const preferencesStore = PersistentStore('app-preferences');
     const language =
@@ -30,6 +29,11 @@
     preferencesStore.set('mode', mode);
     const theme = preferencesStore.get('theme') || DEFAULT_THEME;
     preferencesStore.set('theme', theme);
+    let autorotate = preferencesStore.get('autorotate');
+    if (autorotate === undefined) autorotate = true;
+    preferencesStore.set('autorotate', autorotate);
+    if (autorotate) screen.orientation.unlock();
+    else screen.orientation.lock(screen.orientation.type);
     cordova.plugins.notification.local.hasPermission((granted) => {
       if (!granted) preferencesStore.set('local-notifications', false);
     });

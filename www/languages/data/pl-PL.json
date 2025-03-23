@@ -61,5 +61,6 @@
   "DOWNLOAD": "Pobierz",
   "RESET": "Zresetuj",
   "IMAGE_SAVED": "Obrazek zapisany jako",
-  "IMAGE_SAVED_ERROR": "Nie udało się zapisać obrazka z powodu błędu"
+  "IMAGE_SAVED_ERROR": "Nie udało się zapisać obrazka z powodu błędu",
+  "AUTOROTATE": "Autoobracanie"
 }

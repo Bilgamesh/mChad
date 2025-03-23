@@ -2,7 +2,6 @@
   function SettingsUi({
     el,
     hapticsUtil,
-    animationsUtil,
     languages,
     config,
     selectedLanguage,
@@ -12,7 +11,12 @@
       registerHaptics();
     }
 
-    async function displayPage({ mode, localNotifications, hapticFeedback }) {
+    async function displayPage({
+      mode,
+      localNotifications,
+      autorotate,
+      hapticFeedback
+    }) {
       /* Emptying the page just before re-rendering
       and giving browser an overhead via dummy timeout
       makes BeerCSS transition animations much smoother */
@@ -53,91 +57,64 @@
         </nav>
         <nav>
           <div id="colors" class="color-area">
-            <button
-              value="#F44336"
-              class="circle small red ripple"
-            ></button>
-            <button
-              value="#E91E63"
-              class="circle small pink ripple"
-            ></button>
-            <button
-              value="#9C27B0"
-              class="circle small purple ripple"
-            ></button>
+            <button value="#F44336" class="circle small red ripple"></button>
+            <button value="#E91E63" class="circle small pink ripple"></button>
+            <button value="#9C27B0" class="circle small purple ripple"></button>
             <button
               value="#673AB7"
               class="circle small deep-purple ripple"
             ></button>
-            <button
-              value="#3F51B5"
-              class="circle small indigo ripple"
-            ></button>
-            <button
-              value="#2196F3"
-              class="circle small blue ripple"
-            ></button>
+            <button value="#3F51B5" class="circle small indigo ripple"></button>
+            <button value="#2196F3" class="circle small blue ripple"></button>
             <button
               value="#03A9F4"
               class="circle small light-blue ripple"
             ></button>
-            <button
-              value="#00BCD4"
-              class="circle small cyan ripple"
-            ></button>
-            <button
-              value="#009688"
-              class="circle small teal ripple"
-            ></button>
-            <button
-              value="#4CAF50"
-              class="circle small green ripple"
-            ></button>
+            <button value="#00BCD4" class="circle small cyan ripple"></button>
+            <button value="#009688" class="circle small teal ripple"></button>
+            <button value="#4CAF50" class="circle small green ripple"></button>
             <button
               value="#8BC34A"
               class="circle small light-green ripple"
             ></button>
-            <button
-              value="#CDDC39"
-              class="circle small lime ripple"
-            ></button>
-            <button
-              value="#FFEB3B"
-              class="circle small yellow ripple"
-            ></button>
-            <button
-              value="#FFC107"
-              class="circle small amber ripple"
-            ></button>
-            <button
-              value="#FF9800"
-              class="circle small orange ripple"
-            ></button>
+            <button value="#CDDC39" class="circle small lime ripple"></button>
+            <button value="#FFEB3B" class="circle small yellow ripple"></button>
+            <button value="#FFC107" class="circle small amber ripple"></button>
+            <button value="#FF9800" class="circle small orange ripple"></button>
             <button
               value="#FF5722"
               class="circle small deep-orange ripple"
             ></button>
-            <button
-              value="#795548"
-              class="circle small brown ripple"
-            ></button>
-            <button
-              value="#9E9E9E"
-              class="circle small grey ripple"
-            ></button>
+            <button value="#795548" class="circle small brown ripple"></button>
+            <button value="#9E9E9E" class="circle small grey ripple"></button>
             <button
               value="#607D8B"
               class="circle small blue-grey ripple"
             ></button>
-            <button
-              value="#000000"
-              class="circle small black ripple"
-            ></button>
-            <button
-              value="#FFFFFF"
-              class="circle small white ripple"
-            ></button>
+            <button value="#000000" class="circle small black ripple"></button>
+            <button value="#FFFFFF" class="circle small white ripple"></button>
           </div>
+        </nav>
+
+        <div class="space"></div>
+        <div class="space"></div>
+        <div class="space"></div>
+
+        <nav>
+          <h6 class="setting-label" translation="AUTOROTATE">
+            ${await languages.getTranslation('AUTOROTATE')}
+          </h6>
+          <label class="switch icon setting">
+            <input
+              id="autorotate-toggle"
+              type="checkbox"
+              ${autorotate ? 'checked' : ''}
+            />
+            <span>
+              <i>screen_lock_rotation</i>
+              <i>screen_rotation</i>
+            </span>
+          </label>
         </nav>
 
         <div class="space"></div>
@@ -224,6 +201,7 @@
         'click',
         hapticsUtil.tapDefault
       );
+      $('#autorotate-toggle').addEventListener('click', hapticsUtil.tapDefault);
       $('#language-menu').addEventListener('click', hapticsUtil.tapDefault);
       $('#language-menu').addEventListener('change', hapticsUtil.tapDefault);
 
@@ -266,6 +244,10 @@
       $('#language-menu').addEventListener('change', listen);
     }
 
+    function addAutorotateToggleListener(listen) {
+      $('#autorotate-toggle').addEventListener('click', listen);
+    }
+
     return {
       init,
       displayPage,
@@ -274,7 +256,8 @@
       addColorChangeListener,
       addLightModeToggleListener,
       addLocalNotificationsToggleListener,
-      addLanguageMenuChangeListener
+      addLanguageMenuChangeListener,
+      addAutorotateToggleListener
     };
   }
 

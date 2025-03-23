@@ -3,7 +3,6 @@
     el,
     languages,
     PersistentStore,
-    animationsUtil,
     hapticsUtil,
     sleep,
     themeUtil,
@@ -19,7 +18,6 @@
     const settingsUi = SettingsUi({
       el,
       hapticsUtil,
-      animationsUtil,
       languages,
       config,
       selectedLanguage,
@@ -36,6 +34,7 @@
     await settingsUi.displayPage({
       mode: preferencesStore.get('mode'),
       localNotifications: preferencesStore.get('local-notifications'),
+      autorotate: preferencesStore.get('autorotate'),
       hapticFeedback: preferencesStore.get('haptic-feedback')
     });
 
@@ -45,6 +44,7 @@
     settingsUi.addLightModeToggleListener(settingsActions.toggleLightMode);
     settingsUi.addLocalNotificationsToggleListener(settingsActions.toggleNotifications);
     settingsUi.addLanguageMenuChangeListener(settingsActions.changeLanguage);
+    settingsUi.addAutorotateToggleListener(settingsActions.toggleAutorotate);
 
   }
 

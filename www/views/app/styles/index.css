@@ -89,6 +89,7 @@ h1 {
 #navbar-bottom {
   height: var(--navigation-bar-height);
   padding-bottom: calc(var(--navigation-bar-height) - 80px);
+  justify-content: space-evenly;
 }
 
 .navbar a {

@@ -3,18 +3,28 @@
     const IN_APP_FULL_SCREEN_BROWSER_BG_COLOR = '#0e0e0e';
     const IN_APP_BROWSER_BG_COLOR = '#CCCCCC';
     let originalHeight = window.innerHeight;
+    let originalWidth = window.innerWidth;
     const keyboardOnListeners = [];
     const keyboardOffListeners = [];
 
+    // Sudden resize of screen height indicates that keyboard was turned on
     window.addEventListener('resize', () => {
-      if (window.innerHeight < originalHeight)
+      // Only compare to 80% of the original height to account for inaccuracy resulting from presence of system navigation bar
+      if (window.innerHeight < 0.8 * originalHeight)
         for (const listener of keyboardOnListeners) listener.listen();
-      if (window.innerHeight >= originalHeight)
+      if (window.innerHeight >= 0.8 * originalHeight)
         for (const listener of keyboardOffListeners) listener.listen();
     });
 
     function refreshKeyboardDetection() {
       originalHeight = window.innerHeight;
+      originalWidth = window.innerWidth;
+    }
+
+    function reverseScreenRatios() {
+      const width = originalHeight;
+      originalHeight = originalWidth;
+      originalWidth = width;
     }
 
     function hideKeyboard(element) {
@@ -146,7 +156,8 @@
       makeStatusBarTransparent,
       refreshKeyboardDetection,
       hasPermission,
-      requestPermission
+      requestPermission,
+      reverseScreenRatios
     };
   }
 

@@ -1,9 +1,5 @@
 (function () {
-  function SettingsActions({
-    languages,
-    preferencesStore,
-    themeUtil
-  }) {
+  function SettingsActions({ languages, preferencesStore, themeUtil }) {
     function toggleLightMode() {
       const mode = this.checked ? 'light' : 'dark';
       preferencesStore.set('mode', mode);
@@ -25,7 +21,29 @@
           _this.checked = !!granted;
           preferencesStore.set('local-notifications', granted);
         });
-      } catch (err) {}
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][settings-actions][toggleNotifications] Error: ${err}`
+        );
+      }
+    }
+
+    function toggleAutorotate() {
+      try {
+        if (!this.checked) {
+          preferencesStore.set('autorotate', false);
+          preferencesStore.set('screen-orientation', screen.orientation.type);
+          screen.orientation.lock(screen.orientation.type);
+          return;
+        }
+        preferencesStore.set('autorotate', true);
+        preferencesStore.del('screen-orientation');
+        screen.orientation.unlock();
+      } catch (err) {
+        console.log(
+          `[${new Date().toLocaleString()}][settings-actions][toggleAutorotate] Error: ${err}`
+        );
+      }
     }
 
     function toggleHapticFeedback() {
@@ -48,6 +66,7 @@
 
     return {
       toggleLightMode,
+      toggleAutorotate,
       toggleNotifications,
       toggleHapticFeedback,
       setColorTheme,
