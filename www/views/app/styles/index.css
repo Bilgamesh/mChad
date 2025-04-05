@@ -82,14 +82,14 @@ h1 {
   height: 70px;
   font-size: 12px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
 }
 
 #navbar-bottom {
   height: var(--navigation-bar-height);
   padding-bottom: calc(var(--navigation-bar-height) - 80px);
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 
 .navbar a {
