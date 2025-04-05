@@ -205,6 +205,7 @@
     }
 
     function onDestroy() {
+      chatUi.showNavbar();
       globalSynchronizer.removeSyncListener(addListenerId);
       globalSynchronizer.removeSyncListener(addOldListenerId);
       globalSynchronizer.removeSyncListener(deleteListenerId);
