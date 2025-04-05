@@ -34,6 +34,10 @@
     preferencesStore.set('autorotate', autorotate);
     if (autorotate) screen.orientation.unlock();
     else screen.orientation.lock(screen.orientation.type);
+    let transitionAnimations = preferencesStore.get('transition-animations');
+    if (transitionAnimations === undefined) transitionAnimations = true;
+    preferencesStore.set('transition-animations', transitionAnimations);
+    $('#body').setAttribute('transition-animations-disabled', !transitionAnimations);
     cordova.plugins.notification.local.hasPermission((granted) => {
       if (!granted) preferencesStore.set('local-notifications', false);
     });

@@ -15,6 +15,7 @@
       mode,
       localNotifications,
       autorotate,
+      transitionAnimations,
       hapticFeedback
     }) {
       /* Emptying the page just before re-rendering
@@ -122,6 +123,27 @@
         <div class="space"></div>
 
         <nav>
+          <h6 class="setting-label" translation="TRANSITION_ANIMATIONS">
+            ${await languages.getTranslation('TRANSITION_ANIMATIONS')}
+          </h6>
+          <label class="switch icon setting">
+            <input
+              id="transition-animations-toggle"
+              type="checkbox"
+              ${transitionAnimations ? 'checked' : ''}
+            />
+            <span>
+              <i>stop</i>
+              <i>play_arrow</i>
+            </span>
+          </label>
+        </nav>
+
+        <div class="space"></div>
+        <div class="space"></div>
+        <div class="space"></div>
+
+        <nav>
           <h6 class="setting-label" translation="LOCAL_NOTIFICATIONS">
             ${await languages.getTranslation('LOCAL_NOTIFICATIONS')}
           </h6>
@@ -202,6 +224,10 @@
         hapticsUtil.tapDefault
       );
       $('#autorotate-toggle').addEventListener('click', hapticsUtil.tapDefault);
+      $('#transition-animations-toggle').addEventListener(
+        'click',
+        hapticsUtil.tapDefault
+      );
       $('#language-menu').addEventListener('click', hapticsUtil.tapDefault);
       $('#language-menu').addEventListener('change', hapticsUtil.tapDefault);
 
@@ -248,6 +274,10 @@
       $('#autorotate-toggle').addEventListener('click', listen);
     }
 
+    function addTransitionAnimationsToggleListener(listen) {
+      $('#transition-animations-toggle').addEventListener('click', listen);
+    }
+
     return {
       init,
       displayPage,
@@ -257,7 +287,8 @@
       addLightModeToggleListener,
       addLocalNotificationsToggleListener,
       addLanguageMenuChangeListener,
-      addAutorotateToggleListener
+      addAutorotateToggleListener,
+      addTransitionAnimationsToggleListener
     };
   }
 

@@ -62,5 +62,6 @@
   "RESET": "Reset",
   "IMAGE_SAVED": "Image saved as",
   "IMAGE_SAVED_ERROR": "Failed to save image due to error",
-  "AUTOROTATE": "Auto-rotate"
+  "AUTOROTATE": "Auto-rotate",
+  "TRANSITION_ANIMATIONS": "Transition animations"
 }

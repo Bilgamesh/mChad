@@ -50,6 +50,12 @@
       preferencesStore.set('haptic-feedback', this.checked);
     }
 
+    function toggleTransitionAnimations() {
+      preferencesStore.set('transition-animations', this.checked);
+      $('#main-article').classList.remove('page');
+      $('#body').setAttribute('transition-animations-disabled', !this.checked);
+    }
+
     async function setColorTheme() {
       preferencesStore.set('theme', this.value);
       await ui('theme', this.value);
@@ -69,6 +75,7 @@
       toggleAutorotate,
       toggleNotifications,
       toggleHapticFeedback,
+      toggleTransitionAnimations,
       setColorTheme,
       changeLanguage
     };

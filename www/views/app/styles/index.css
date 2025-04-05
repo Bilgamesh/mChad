@@ -38,6 +38,10 @@ body {
   width: 100%;
 }
 
+body[transition-animations-disabled='true'] .page.active {
+  animation: none !important;
+}
+
 #header-main {
   padding-top: calc(var(--header-height) - 64px);
 }

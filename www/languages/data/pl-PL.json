@@ -62,5 +62,6 @@
   "RESET": "Zresetuj",
   "IMAGE_SAVED": "Obrazek zapisany jako",
   "IMAGE_SAVED_ERROR": "Nie udało się zapisać obrazka z powodu błędu",
-  "AUTOROTATE": "Autoobracanie"
+  "AUTOROTATE": "Autoobracanie",
+  "TRANSITION_ANIMATIONS": "Animacje przejść"
 }

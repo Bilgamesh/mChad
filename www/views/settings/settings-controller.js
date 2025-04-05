@@ -35,6 +35,7 @@
       mode: preferencesStore.get('mode'),
       localNotifications: preferencesStore.get('local-notifications'),
       autorotate: preferencesStore.get('autorotate'),
+      transitionAnimations: preferencesStore.get('transition-animations'),
       hapticFeedback: preferencesStore.get('haptic-feedback')
     });
 
@@ -45,6 +46,7 @@
     settingsUi.addLocalNotificationsToggleListener(settingsActions.toggleNotifications);
     settingsUi.addLanguageMenuChangeListener(settingsActions.changeLanguage);
     settingsUi.addAutorotateToggleListener(settingsActions.toggleAutorotate);
+    settingsUi.addTransitionAnimationsToggleListener(settingsActions.toggleTransitionAnimations)
 
   }
 
