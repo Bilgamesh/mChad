@@ -446,10 +446,8 @@
       $('#main-page').setAttribute('expanded', 'false');
       $('#scroll-to-bottom-circle').setAttribute('expanded', 'false');
       // Prevent scroll jump upon next hideNavbar call
-      if (scrollUtil.isScrolledToBottom()) {
-        scrollUtil.scrollUpBy(1);
-        scrollToBottom();
-      }
+      scrollUtil.scrollUpBy(1);
+      scrollUtil.scrollDownBy(1);
     }
 
     function hideNavbar() {
