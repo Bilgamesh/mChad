@@ -22,6 +22,7 @@ function ImageUi({ el, url }) {
 
   async function show() {
     el.innerHTML = '';
+    document.getElementById('body').setAttribute('page', 'image');
     await sleep(0);
     el.innerHTML = /* HTML */ `<div id="image-view-container">
       <div id="image-view" class="page active">

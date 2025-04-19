@@ -1,18 +1,22 @@
 import { ThemeUtil } from './theme.js';
 import { sleep } from './sleep.js';
+import { InMemoryStore } from '../storage/in-memory-store.js';
 
 function AndroidUtil() {
+  const store = InMemoryStore('screen-ratios');
   const themeUtil = ThemeUtil();
   const IN_APP_FULL_SCREEN_BROWSER_BG_COLOR = '#0e0e0e';
   const IN_APP_BROWSER_BG_COLOR = '#CCCCCC';
-  let originalHeight = window.innerHeight;
-  let originalWidth = window.innerWidth;
+  if (!store.has('originalHeight')) {
+    refreshKeyboardDetection();
+  }
   const keyboardOnListeners = [];
   const keyboardOffListeners = [];
 
   // Sudden resize of screen height indicates that keyboard was turned on
   window.addEventListener('resize', () => {
     // Only compare to 80% of the original height to account for inaccuracy resulting from presence of system navigation bar
+    const originalHeight = store.get('originalHeight');
     if (window.innerHeight < 0.8 * originalHeight)
       for (const listener of keyboardOnListeners) listener.listen();
     if (window.innerHeight >= 0.8 * originalHeight)
@@ -20,14 +24,14 @@ function AndroidUtil() {
   });
 
   function refreshKeyboardDetection() {
-    originalHeight = window.innerHeight;
-    originalWidth = window.innerWidth;
+    store.set('originalHeight', window.innerHeight);
+    store.set('originalWidth', window.innerWidth);
   }
 
   function reverseScreenRatios() {
-    const width = originalHeight;
-    originalHeight = originalWidth;
-    originalWidth = width;
+    const width = store.get('originalHeight');
+    store.set('originalHeight', store.get('originalWidth'));
+    store.set('originalWidth', width);
   }
 
   function hideKeyboard(element) {

@@ -34,14 +34,14 @@
     <script src="modules/viewerjs/viewer.js"></script>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 
-    <!-- Page specific CSS. Load order does not matter. -->
+    <!-- Page specific CSS. -->
     <link rel="stylesheet" href="views/accounts/styles/accounts.css" />
     <link rel="stylesheet" href="views/chat/styles/chat.css" />
     <link rel="stylesheet" href="views/login/styles/login.css" />
     <link rel="stylesheet" href="views/settings/styles/settings.css" />
     <link rel="stylesheet" href="views/image/styles/image.css" />
 
-    <!-- Project modules. Load order does not matter. -->
+    <!-- Project modules preload. -->
     <script rel="modulepreload" href="config.js"></script>
     <script rel="modulepreload" href="jobs/background-sync.js"></script>
     <script rel="modulepreload" href="jobs/mchat/mchat-global-sync.js"></script>
@@ -150,6 +150,6 @@
 
   <body id="body" class="dark"></body>
 
-  <!-- App entrypoint. Must be loaded last and after the body is created. -->
+  <!-- App entrypoint. -->
   <script type="module" src="views/app/index.js"></script>
 </html>

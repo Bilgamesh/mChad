@@ -9,8 +9,6 @@ async function Image({ el, router, popups }) {
   const documentUtil = DocumentUtil();
   const languages = Languages();
 
-  document.getElementById('body').setAttribute('page', 'image');
-
   const imageExtensions = [
     'png',
     'jpg',
