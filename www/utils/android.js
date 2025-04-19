@@ -2,7 +2,25 @@ import { ThemeUtil } from './theme.js';
 import { sleep } from './sleep.js';
 import { InMemoryStore } from '../storage/in-memory-store.js';
 
+/**
+ * @returns {{
+ *     hideKeyboard: (element) => void,
+ *     addKeyboardOnListener: (listen) => string,
+ *     addKeyboardOffListener: (listen) => string,
+ *     removeKeyboardOnListener: (id) => void,
+ *     removeKeyboardOffListener: (id) => void,
+ *     openInFullScreenBrowser: (url) => void,
+ *     openInBrowser: (url, target) => void,
+ *     makeStatusBarTransparent: () => Promise<number>,
+ *     refreshKeyboardDetection: () => void,
+ *     hasPermission: (permission) => Promise<any>,
+ *     requestPermission: (permission) => Promise<any>,
+ *     reverseScreenRatios: () => any
+ * }}
+ */
 function AndroidUtil() {
+  const cache = InMemoryStore('android-util');
+  if (cache.has('android-util')) return cache.get('android-util');
   const store = InMemoryStore('screen-ratios');
   const themeUtil = ThemeUtil();
   const IN_APP_FULL_SCREEN_BROWSER_BG_COLOR = '#0e0e0e';
@@ -14,14 +32,17 @@ function AndroidUtil() {
   const keyboardOffListeners = [];
 
   // Sudden resize of screen height indicates that keyboard was turned on
-  window.addEventListener('resize', () => {
-    // Only compare to 80% of the original height to account for inaccuracy resulting from presence of system navigation bar
-    const originalHeight = store.get('originalHeight');
-    if (window.innerHeight < 0.8 * originalHeight)
-      for (const listener of keyboardOnListeners) listener.listen();
-    if (window.innerHeight >= 0.8 * originalHeight)
-      for (const listener of keyboardOffListeners) listener.listen();
-  });
+  if (!store.has('android-resize-set')) {
+    window.addEventListener('resize', () => {
+      // Only compare to 80% of the original height to account for inaccuracy resulting from presence of system navigation bar
+      const originalHeight = store.get('originalHeight');
+      if (window.innerHeight < 0.8 * originalHeight)
+        for (const listener of keyboardOnListeners) listener.listen();
+      if (window.innerHeight >= 0.8 * originalHeight)
+        for (const listener of keyboardOffListeners) listener.listen();
+    });
+    store.set('android-resize-set', true);
+  }
 
   function refreshKeyboardDetection() {
     store.set('originalHeight', window.innerHeight);
@@ -152,7 +173,7 @@ function AndroidUtil() {
     });
   }
 
-  return {
+  const util = {
     hideKeyboard,
     addKeyboardOnListener,
     addKeyboardOffListener,
@@ -166,6 +187,9 @@ function AndroidUtil() {
     requestPermission,
     reverseScreenRatios
   };
+
+  cache.set('android-util', util);
+  return util;
 }
 
 export { AndroidUtil };

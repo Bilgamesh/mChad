@@ -1,6 +1,12 @@
+import { InMemoryStore } from '../storage/in-memory-store.js';
 import { PersistentStore } from '../storage/persistent-store.js';
 
+/**
+ * @returns {{ tapDefault: () => void, longPress: () => void, keyboardTap: () => void }}
+ */
 function HapticsUtil() {
+  const cache = InMemoryStore('haptics-util');
+  if (cache.has('haptics-util')) return cache.get('haptics-util');
   let preferencesStore;
   let enabled = true;
 
@@ -44,7 +50,11 @@ function HapticsUtil() {
       plugins.deviceFeedback.haptic(plugins.deviceFeedback.KEYBOARD_TAP);
   }
 
-  return { tapDefault, longPress, keyboardTap };
+  const util = { tapDefault, longPress, keyboardTap };
+
+  cache.set('haptics-util', util);
+
+  return util;
 }
 
 export { HapticsUtil };

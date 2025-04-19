@@ -155,7 +155,9 @@ function AccountArticle({
     document
       .querySelectorAll('.refresh-icon')
       [index].classList.remove('refresh-error-dark');
-    document.getElementsByClassName('refresh-icon')[index].classList.add('success');
+    document
+      .getElementsByClassName('refresh-icon')
+      [index].classList.add('success');
     document
       .querySelectorAll('.forum-name')
       [index].classList.remove('refresh-error');
@@ -248,7 +250,9 @@ function AccountArticle({
     document
       .querySelectorAll('.refresh-icon')
       [index].classList.remove('refresh-error-dark');
-    document.getElementsByClassName('refresh-icon')[index].classList.add('success');
+    document
+      .getElementsByClassName('refresh-icon')
+      [index].classList.add('success');
     document
       .querySelectorAll('.forum-name')
       [index].classList.remove('refresh-error');
