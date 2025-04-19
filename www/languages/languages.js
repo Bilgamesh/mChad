@@ -1,15 +1,16 @@
+import { InMemoryStore } from '../storage/in-memory-store.js';
 import { PersistentStore } from '../storage/persistent-store.js';
 
 function Languages() {
-  const cache = {};
+  const cache = InMemoryStore('language-cache');
   const preferencesStore = PersistentStore('app-preferences');
 
   async function getPresent() {
     const language = getCurrentLanguage();
-    if (cache[language]) return cache[language];
+    if (cache.has(language)) return cache.get(language);
     const response = await fetch(`/languages/data/${language}.json`);
     const json = await response.json();
-    cache[language] = json;
+    cache.set(language, json);
     return json;
   }
 
