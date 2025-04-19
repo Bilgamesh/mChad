@@ -1,39 +1,42 @@
-(function () {
-  function Emoticon({ el, pictureUrl, code, documentUtil, hide, hapticsUtil }) {
-    const html = /* HTML */ `<img
-      class="emoticon"
-      src="${pictureUrl}"
-      value="${code}"
-      hide="false"
-    />`;
+import { DocumentUtil } from '../../../utils/document.js';
+import { HapticsUtil } from '../../../utils/haptics.js';
 
-    function appendElement() {
-      const emoticonElement = documentUtil.createElementFromHTML(html);
-      addListeners(emoticonElement);
-      emoticonElement.setAttribute('hasListener', 'true');
-      if (hide) emoticonElement.setAttribute('hide', `${hide}`);
-      el.appendChild(emoticonElement);
-    }
+function Emoticon({ el, pictureUrl, code, hide }) {
+  const hapticsUtil = HapticsUtil();
+  const documentUtil = DocumentUtil();
+  const html = /* HTML */ `<img
+    class="emoticon"
+    src="${pictureUrl}"
+    value="${code}"
+    hide="false"
+  />`;
 
-    function addListeners(el) {
-      el.addEventListener('click', addToText);
-      el.addEventListener('click', hapticsUtil.tapDefault);
-    }
-
-    function getHtml() {
-      return html;
-    }
-
-    function addToText() {
-      let text = $('#input-box').value.trim();
-      text += ' ' + this.getAttribute('value');
-      text = text.trim();
-      $('#input-box').value = text + ' ';
-      $('#input-box').focus();
-    }
-
-    return { getHtml, appendElement, addListeners };
+  function appendElement() {
+    const emoticonElement = documentUtil.createElementFromHTML(html);
+    addListeners(emoticonElement);
+    emoticonElement.setAttribute('hasListener', 'true');
+    if (hide) emoticonElement.setAttribute('hide', `${hide}`);
+    el.appendChild(emoticonElement);
   }
-  window.modules = window.modules || {};
-  window.modules.Emoticon = Emoticon;
-})();
+
+  function addListeners(el) {
+    el.addEventListener('click', addToText);
+    el.addEventListener('click', hapticsUtil.tapDefault);
+  }
+
+  function getHtml() {
+    return html;
+  }
+
+  function addToText() {
+    let text = document.getElementById('input-box').value.trim();
+    text += ' ' + this.getAttribute('value');
+    text = text.trim();
+    document.getElementById('input-box').value = text + ' ';
+    document.getElementById('input-box').focus();
+  }
+
+  return { getHtml, appendElement, addListeners };
+}
+
+export { Emoticon };

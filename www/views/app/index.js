@@ -1,203 +1,84 @@
-(function () {
-  const {
-    Config,
-    PersistentStore,
-    FetchTool,
-    ThemeUtil,
-    Navbar,
-    Errors,
-    Chat,
-    Settings,
-    Accounts,
-    Image,
-    Login,
-    Languages,
-    MchatGlobalSynchronizer,
-    MchatSingleSynchronizer,
-    CookieStore,
-    MchatChatService,
-    MchatOnlineUsersService,
-    MchatUserService,
-    MchatEmoticonsService,
-    InMemoryStore,
-    Popups,
-    DocumentUtil,
-    ChatUi,
-    AndroidUtil,
-    AnimationsUtil,
-    HapticsUtil,
-    TouchEvents,
-    sleep,
-    AccountsUi,
-    LoginUi,
-    LoginActions,
-    MchatLoginService,
-    UrlUtil,
-    SettingsUi,
-    Router,
-    Message,
-    Emoticon,
-    AccountArticle,
-    SettingsActions,
-    AccountsActions,
-    NavbarBadges,
-    AppUi,
-    ImageUi,
-    BackgroundSynchronizer,
-    NotificationsService,
-    LocalNotifications,
-    TimeUtil,
-    Timer,
-    EmoticonPanel,
-    ToolsPanel,
-    BBCode,
-    BBCodesPanel,
-    ClipboardUtil,
-    ScrollUtil,
-    InfiniteScroll,
-    Queue
-  } = window.modules;
+import { Config } from '../../config.js';
+import { FetchTool } from '../../utils/fetch-cross-domain.js';
+import { Navbar } from './scripts/navbar.js';
+import { MchatGlobalSynchronizer } from '../../jobs/mchat/mchat-global-sync.js';
+import { Popups } from './scripts/pop-ups.js';
+import { DocumentUtil } from '../../utils/document.js';
+import { AndroidUtil } from '../../utils/android.js';
+import { Router } from '../../router/router.js';
+import { NavbarBadges } from './scripts/badges.js';
+import { AppUi } from './scripts/app-ui.js';
+import { BackgroundSynchronizer } from '../../jobs/background-sync.js';
+import { LocalNotifications } from './scripts/local-notifications.js';
 
-  document.addEventListener(
-    'deviceready',
-    async () => {
-      const themeUtil = ThemeUtil(PersistentStore);
-      const languages = Languages(PersistentStore);
-      const androidUtil = AndroidUtil(themeUtil, sleep);
-      const animationsUtil = AnimationsUtil();
-      const hapticsUtil = HapticsUtil(PersistentStore);
-      const documentUtil = DocumentUtil(hapticsUtil);
-      const timeUtil = TimeUtil(languages);
-      const urlUtil = UrlUtil();
-      const clipboardUtil = ClipboardUtil();
+document.addEventListener(
+  'deviceready',
+  async () => {
+    const androidUtil = AndroidUtil();
+    const documentUtil = DocumentUtil();
 
-      // Prevent screen rotation while calculating statusBarHeight
-      screen.orientation.lock(screen.orientation.type);
-      androidUtil.makeStatusBarTransparent().then((statusBarHeight) => {
-        documentUtil.expandHeaderBy(statusBarHeight);
-        androidUtil.refreshKeyboardDetection();
-        window.addEventListener(
-          'orientationchange',
-          androidUtil.reverseScreenRatios
-        );
-      });
+    // Prevent screen rotation while calculating statusBarHeight
+    screen.orientation.lock(screen.orientation.type);
+    androidUtil.makeStatusBarTransparent().then((statusBarHeight) => {
+      documentUtil.expandHeaderBy(statusBarHeight);
+      androidUtil.refreshKeyboardDetection();
+      window.addEventListener(
+        'orientationchange',
+        androidUtil.reverseScreenRatios
+      );
+    });
 
-      const navbar = await Navbar({ languages, hapticsUtil, documentUtil });
+    const navbar = await Navbar();
 
-      const appUi = AppUi({
-        el: $('#body'),
-        navbar,
-        languages,
-        sleep,
-        PersistentStore
-      });
+    const appUi = AppUi({
+      el: document.getElementById('body'),
+      navbar
+    });
 
-      const badges = NavbarBadges({
-        navbar,
-        documentUtil,
-        PersistentStore,
-        InMemoryStore
-      });
+    const badges = NavbarBadges({
+      navbar
+    });
 
-      await appUi.displayPage();
+    await appUi.displayPage();
 
-      const config = await Config(PersistentStore, themeUtil);
-      const fetchTool = FetchTool(config);
+    const config = await Config();
+    const fetchTool = FetchTool(config);
 
-      const popups = Popups(hapticsUtil, documentUtil, themeUtil, sleep);
+    const popups = Popups();
 
-      const globalSynchronizer = MchatGlobalSynchronizer({
-        PersistentStore,
-        MchatSingleSynchronizer,
-        CookieStore,
-        MchatChatService,
-        MchatOnlineUsersService,
-        MchatUserService,
-        MchatEmoticonsService,
-        InMemoryStore,
-        fetchTool,
-        config,
-        documentUtil,
-        languages,
-        popups,
-        Timer
-      });
+    const globalSynchronizer = MchatGlobalSynchronizer({
+      config,
+      fetchTool,
+      popups
+    });
 
-      const backgroundSynchronizer = BackgroundSynchronizer({
-        PersistentStore,
-        MchatChatService,
-        CookieStore,
-        InMemoryStore,
-        fetchTool,
-        config,
-        documentUtil
-      });
+    const backgroundSynchronizer = BackgroundSynchronizer({
+      fetchTool
+    });
 
-      globalSynchronizer.addSyncListener('refresh-end', badges.refreshBadges);
+    globalSynchronizer.addSyncListener('refresh-end', badges.refreshBadges);
 
-      const router = Router({
-        Errors,
-        Chat,
-        Settings,
-        Accounts,
-        Image,
-        Login,
-        languages,
-        PersistentStore,
-        globalSynchronizer,
-        documentUtil,
-        androidUtil,
-        ChatUi,
-        animationsUtil,
-        hapticsUtil,
-        TouchEvents,
-        InMemoryStore,
-        sleep,
-        AccountsUi,
-        LoginUi,
-        themeUtil,
-        LoginActions,
-        MchatLoginService,
-        urlUtil,
-        fetchTool,
-        SettingsUi,
-        ImageUi,
-        config,
-        CookieStore,
-        navbar,
-        Message,
-        Emoticon,
-        AccountArticle,
-        SettingsActions,
-        AccountsActions,
-        badges,
-        popups,
-        timeUtil,
-        Timer,
-        EmoticonPanel,
-        ToolsPanel,
-        BBCode,
-        BBCodesPanel,
-        clipboardUtil,
-        ScrollUtil,
-        InfiniteScroll,
-        Queue
-      });
+    const router = Router({
+      config,
+      globalSynchronizer,
+      fetchTool,
+      navbar,
+      badges,
+      popups
+    });
 
-      const localNotifications = LocalNotifications({
-        NotificationsService,
-        config,
-        router
-      });
+    const localNotifications = LocalNotifications({
+      config,
+      router
+    });
 
-      router.init();
-      router.handleLocation();
-      navbar.init(router, globalSynchronizer);
-      globalSynchronizer.startSync();
-      router.addLocationChangeListener(badges.refreshBadges);
-      backgroundSynchronizer.addSyncListener(localNotifications.notify);
-      if (cordova.platformId !== 'browser') await backgroundSynchronizer.init();
-    },
-    false
-  );
-})();
+    router.init();
+    router.handleLocation();
+    navbar.init(router, globalSynchronizer);
+    globalSynchronizer.startSync();
+    router.addLocationChangeListener(badges.refreshBadges);
+    backgroundSynchronizer.addSyncListener(localNotifications.notify);
+    if (cordova.platformId !== 'browser') await backgroundSynchronizer.init();
+  },
+  false
+);

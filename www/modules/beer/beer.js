@@ -73,11 +73,11 @@ function updateRipple(e) {
   ripple.style.inlineSize = ripple.style.blockSize = `${diameter}px`;
   ripple.style.left = `${x}px`;
   ripple.style.top = `${y}px`;
-  ripple.addEventListener("animationend", () => document.querySelector('#' + id)?.remove());
-  ripple.addEventListener("animationcancel", () => document.querySelector('#' + id)?.remove());
+  ripple.addEventListener("animationend", () => document.getElementById('' + id)?.remove());
+  ripple.addEventListener("animationcancel", () => document.getElementById('' + id)?.remove());
   rippleContainer.appendChild(ripple);
   element.appendChild(rippleContainer);
-  setTimeout(() => document.querySelector('#' + id)?.remove(), 1800);
+  setTimeout(() => document.getElementById('' + id)?.remove(), 1800);
 }
 function updateAllRipples() {
   const ripples = queryAll(".slow-ripple, .ripple, .fast-ripple");

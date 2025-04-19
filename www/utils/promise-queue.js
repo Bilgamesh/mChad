@@ -37,5 +37,4 @@ class Queue {
   }
 }
 
-window.modules = window.modules || {};
-window.modules.Queue = Queue;
+export { Queue };

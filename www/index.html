@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src *; object-src 'none'; base-uri 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; media-src *; img-src *; frame-src 'none';"
+      content="default-src *; script-src localhost localhost:8000 'unsafe-eval'; style-src localhost localhost:8000 'unsafe-inline'; media-src *; img-src *; frame-src 'self';"
     />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
@@ -42,66 +42,114 @@
     <link rel="stylesheet" href="views/image/styles/image.css" />
 
     <!-- Project modules. Load order does not matter. -->
-    <script src="config.js"></script>
-    <script src="jobs/background-sync.js"></script>
-    <script src="jobs/mchat/mchat-global-sync.js"></script>
-    <script src="jobs/mchat/mchat-single-sync.js"></script>
-    <script src="languages/languages.js"></script>
-    <script src="router/router.js"></script>
-    <script src="services/mchat/mchat-emoticons.js"></script>
-    <script src="services/mchat/mchat-login.js"></script>
-    <script src="services/mchat/mchat-online-users.js"></script>
-    <script src="services/mchat/mchat-posts.js"></script>
-    <script src="services/mchat/mchat-user.js"></script>
-    <script src="services/notifications.js"></script>
-    <script src="storage/cookie-store.js"></script>
-    <script src="storage/in-memory-store.js"></script>
-    <script src="storage/persistent-store.js"></script>
-    <script src="utils/android.js"></script>
-    <script src="utils/animations.js"></script>
-    <script src="utils/clipboard.js"></script>
-    <script src="utils/document.js"></script>
-    <script src="utils/fetch-cross-domain.js"></script>
-    <script src="utils/haptics.js"></script>
-    <script src="utils/scroll.js"></script>
-    <script src="utils/sleep.js"></script>
-    <script src="utils/theme.js"></script>
-    <script src="utils/time.js"></script>
-    <script src="utils/timer.js"></script>
-    <script src="utils/url.js"></script>
-    <script src="utils/promise-queue.js"></script>
-    <script src="views/accounts/accounts-controller.js"></script>
-    <script src="views/accounts/scripts/account-article.js"></script>
-    <script src="views/accounts/scripts/accounts-actions.js"></script>
-    <script src="views/accounts/scripts/accounts-ui.js"></script>
-    <script src="views/app/scripts/navbar.js"></script>
-    <script src="views/app/scripts/app-ui.js"></script>
-    <script src="views/app/scripts/badges.js"></script>
-    <script src="views/app/scripts/local-notifications.js"></script>
-    <script src="views/app/scripts/pop-ups.js"></script>
-    <script src="views/chat/chat-controller.js"></script>
-    <script src="views/chat/scripts/bbcode.js"></script>
-    <script src="views/chat/scripts/bbcodes-panel.js"></script>
-    <script src="views/chat/scripts/emoticon.js"></script>
-    <script src="views/chat/scripts/emoticon-panel.js"></script>
-    <script src="views/chat/scripts/message.js"></script>
-    <script src="views/chat/scripts/tools-panel.js"></script>
-    <script src="views/chat/scripts/chat-ui.js"></script>
-    <script src="views/chat/scripts/infinite-scroll.js"></script>
-    <script src="views/chat/scripts/touch-events.js"></script>
-    <script src="views/errors/errors.js"></script>
-    <script src="views/image/image-controller.js"></script>
-    <script src="views/image/scripts/image-ui.js"></script>
-    <script src="views/login/scripts/login-actions.js"></script>
-    <script src="views/login/scripts/login-ui.js"></script>
-    <script src="views/login/login-controller.js"></script>
-    <script src="views/settings/scripts/settings-actions.js"></script>
-    <script src="views/settings/scripts/settings-ui.js"></script>
-    <script src="views/settings/settings-controller.js"></script>
+    <script rel="modulepreload" href="config.js"></script>
+    <script rel="modulepreload" href="jobs/background-sync.js"></script>
+    <script rel="modulepreload" href="jobs/mchat/mchat-global-sync.js"></script>
+    <script rel="modulepreload" href="jobs/mchat/mchat-single-sync.js"></script>
+    <script rel="modulepreload" href="languages/languages.js"></script>
+    <script rel="modulepreload" href="router/router.js"></script>
+    <script
+      rel="modulepreload"
+      href="services/mchat/mchat-emoticons.js"
+    ></script>
+    <script rel="modulepreload" href="services/mchat/mchat-login.js"></script>
+    <script
+      rel="modulepreload"
+      href="services/mchat/mchat-online-users.js"
+    ></script>
+    <script rel="modulepreload" href="services/mchat/mchat-posts.js"></script>
+    <script rel="modulepreload" href="services/mchat/mchat-user.js"></script>
+    <script rel="modulepreload" href="services/notifications.js"></script>
+    <script rel="modulepreload" href="storage/cookie-store.js"></script>
+    <script rel="modulepreload" href="storage/in-memory-store.js"></script>
+    <script rel="modulepreload" href="storage/persistent-store.js"></script>
+    <script rel="modulepreload" href="utils/android.js"></script>
+    <script rel="modulepreload" href="utils/animations.js"></script>
+    <script rel="modulepreload" href="utils/clipboard.js"></script>
+    <script rel="modulepreload" href="utils/document.js"></script>
+    <script rel="modulepreload" href="utils/fetch-cross-domain.js"></script>
+    <script rel="modulepreload" href="utils/haptics.js"></script>
+    <script rel="modulepreload" href="utils/scroll.js"></script>
+    <script rel="modulepreload" href="utils/sleep.js"></script>
+    <script rel="modulepreload" href="utils/theme.js"></script>
+    <script rel="modulepreload" href="utils/time.js"></script>
+    <script rel="modulepreload" href="utils/timer.js"></script>
+    <script rel="modulepreload" href="utils/url.js"></script>
+    <script rel="modulepreload" href="utils/promise-queue.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/accounts/accounts-controller.js"
+    ></script>
+    <script
+      rel="modulepreload"
+      href="views/accounts/scripts/account-article.js"
+    ></script>
+    <script
+      rel="modulepreload"
+      href="views/accounts/scripts/accounts-actions.js"
+    ></script>
+    <script
+      rel="modulepreload"
+      href="views/accounts/scripts/accounts-ui.js"
+    ></script>
+    <script rel="modulepreload" href="views/app/scripts/navbar.js"></script>
+    <script rel="modulepreload" href="views/app/scripts/app-ui.js"></script>
+    <script rel="modulepreload" href="views/app/scripts/badges.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/app/scripts/local-notifications.js"
+    ></script>
+    <script rel="modulepreload" href="views/app/scripts/pop-ups.js"></script>
+    <script rel="modulepreload" href="views/chat/chat-controller.js"></script>
+    <script rel="modulepreload" href="views/chat/scripts/bbcode.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/chat/scripts/bbcodes-panel.js"
+    ></script>
+    <script rel="modulepreload" href="views/chat/scripts/emoticon.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/chat/scripts/emoticon-panel.js"
+    ></script>
+    <script rel="modulepreload" href="views/chat/scripts/message.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/chat/scripts/tools-panel.js"
+    ></script>
+    <script rel="modulepreload" href="views/chat/scripts/chat-ui.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/chat/scripts/infinite-scroll.js"
+    ></script>
+    <script
+      rel="modulepreload"
+      href="views/chat/scripts/touch-events.js"
+    ></script>
+    <script rel="modulepreload" href="views/errors/errors.js"></script>
+    <script rel="modulepreload" href="views/image/image-controller.js"></script>
+    <script rel="modulepreload" href="views/image/scripts/image-ui.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/login/scripts/login-actions.js"
+    ></script>
+    <script rel="modulepreload" href="views/login/scripts/login-ui.js"></script>
+    <script rel="modulepreload" href="views/login/login-controller.js"></script>
+    <script
+      rel="modulepreload"
+      href="views/settings/scripts/settings-actions.js"
+    ></script>
+    <script
+      rel="modulepreload"
+      href="views/settings/scripts/settings-ui.js"
+    ></script>
+    <script
+      rel="modulepreload"
+      href="views/settings/settings-controller.js"
+    ></script>
   </head>
 
   <body id="body" class="dark"></body>
 
   <!-- App entrypoint. Must be loaded last and after the body is created. -->
-  <script src="views/app/index.js"></script>
+  <script type="module" src="views/app/index.js"></script>
 </html>

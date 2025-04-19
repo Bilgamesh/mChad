@@ -1,91 +1,66 @@
-(function () {
-  async function Login({
+import { PersistentStore } from '../../storage/persistent-store.js';
+import { DocumentUtil } from '../../utils/document.js';
+import { CookieStore } from '../../storage/cookie-store.js';
+import { LoginActions } from './scripts/login-actions.js';
+import { LoginUi } from './scripts/login-ui.js';
+
+async function Login({ el, globalSynchronizer, router, fetchTool, popups }) {
+  const DEFAULT_FORUM_INDEX = '0';
+  const documentUtil = DocumentUtil();
+  const forumIndex = documentUtil.getParam('forumIndex') || DEFAULT_FORUM_INDEX;
+
+  document.getElementById('body').setAttribute('page', 'login');
+
+  const loginUi = LoginUi({
     el,
-    languages,
-    PersistentStore,
-    globalSynchronizer,
-    documentUtil,
-    router,
-    animationsUtil,
-    hapticsUtil,
-    sleep,
-    LoginUi,
-    themeUtil,
-    LoginActions,
-    MchatLoginService,
-    urlUtil,
+    forumIndex
+  });
+
+  await loginUi.displayPage();
+
+  const globalStorage = PersistentStore('*');
+  const forums = globalStorage.get('forums') || [];
+
+  const loginActions = LoginActions({
+    loginUi,
+    forums,
     fetchTool,
-    CookieStore,
     popups
-  }) {
-    const DEFAULT_FORUM_INDEX = '0';
-    const forumIndex =
-      documentUtil.getParam('forumIndex') || DEFAULT_FORUM_INDEX;
+  });
 
-    $('#body').setAttribute('page', 'login');
+  if (forums[forumIndex]) return router.redirect('#chat');
 
-    const loginUi = LoginUi({
-      el,
-      sleep,
-      animationsUtil,
-      hapticsUtil,
-      themeUtil,
-      languages,
-      forumIndex
-    });
+  loginUi.init();
 
-    await loginUi.displayPage();
+  loginUi.addLoginSubmitListener(loginActions.onLoginClick);
+  loginUi.addOtpSubmitListener(loginActions.onOTPsubmission);
+  loginUi.addAddressKeyUpListener(loginActions.checkExistingAccounts);
+  loginUi.addAddressFocusListener(loginActions.stopUrlDiscovery);
+  loginUi.addAddressBlurListener(loginActions.startUrlDiscovery);
+  loginUi.addUsernameKeyUpListener(loginActions.checkExistingAccounts);
 
-    const globalStorage = PersistentStore('*');
-    const forums = globalStorage.get('forums') || [];
+  loginActions.addLoginListener(onSuccessfulLogin);
 
-    const loginActions = LoginActions({
-      loginUi,
-      forums,
-      MchatLoginService,
-      urlUtil,
-      PersistentStore,
-      languages,
-      fetchTool,
-      sleep,
-      popups,
-      documentUtil
-    });
+  loginUi.hideLoadingScreen();
 
-    if (forums[forumIndex]) return router.redirect('#chat');
-
-    loginUi.init();
-
-    loginUi.addLoginSubmitListener(loginActions.onLoginClick);
-    loginUi.addOtpSubmitListener(loginActions.onOTPsubmission);
-    loginUi.addAddressKeyUpListener(loginActions.checkExistingAccounts);
-    loginUi.addAddressFocusListener(loginActions.stopUrlDiscovery);
-    loginUi.addAddressBlurListener(loginActions.startUrlDiscovery);
-    loginUi.addUsernameKeyUpListener(loginActions.checkExistingAccounts);
-
-    loginActions.addLoginListener(onSuccessfulLogin);
-
+  async function onSuccessfulLogin({ address, userId, cookie, forumName }) {
+    rememberForum(address, userId, forumName);
+    await CookieStore(`${address}_${userId}`, PersistentStore).set(cookie);
     loginUi.hideLoadingScreen();
-
-    async function onSuccessfulLogin({ address, userId, cookie, forumName }) {
-      rememberForum(address, userId, forumName);
-      await CookieStore(`${address}_${userId}`, PersistentStore).set(cookie);
-      loginUi.hideLoadingScreen();
-      router.redirect(`#chat?forumIndex=${forumIndex}`);
-      globalSynchronizer.restartSync();
-    }
-
-    function rememberForum(address, userId, name) {
-      const index = globalStorage.add('forums', { address, userId, name }) - 1;
-      return index;
-    }
-
-    function onDestroy() {
-      loginUi.restoreNavbarColors();
-    }
-
-    router.addOnDestroy(onDestroy);
+    router.redirect(`#chat?forumIndex=${forumIndex}`);
+    globalSynchronizer.restartSync();
   }
-  window.modules = window.modules || {};
-  window.modules.Login = Login;
-})();
+
+  function rememberForum(address, userId, name) {
+    const index = globalStorage.add('forums', { address, userId, name }) - 1;
+    return index;
+  }
+
+  function onDestroy() {
+    loginUi.restoreNavbarColors();
+  }
+
+  router.addOnDestroy(onDestroy);
+}
+
+export { Login };

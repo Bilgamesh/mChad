@@ -1,25 +1,26 @@
-(function () {
-  function ClipboardUtil() {
-    function paste() {
-      return new Promise((resolve, reject) => {
-        cordova.plugins.clipboard.paste(({ type, error, data }) => {
-          if (error) reject(error);
-          resolve(data);
-        }, reject);
-      });
-    }
-
-    return { paste };
+function ClipboardUtilAndroid() {
+  function paste() {
+    return new Promise((resolve, reject) => {
+      cordova.plugins.clipboard.paste(({ type, error, data }) => {
+        if (error) reject(error);
+        resolve(data);
+      }, reject);
+    });
   }
 
-  function ClipboardUtilBrowser() {
-    function paste() {
-      return navigator.clipboard.readText();
-    }
-    return { paste };
-  }
+  return { paste };
+}
 
-  window.modules = window.modules || {};
-  window.modules.ClipboardUtil =
-    cordova.platformId === 'browser' ? ClipboardUtilBrowser : ClipboardUtil;
-})();
+function ClipboardUtilBrowser() {
+  function paste() {
+    return navigator.clipboard.readText();
+  }
+  return { paste };
+}
+
+const ClipboardUtil =
+  cordova.platformId === 'browser'
+    ? ClipboardUtilBrowser
+    : ClipboardUtilAndroid;
+
+export { ClipboardUtil };
