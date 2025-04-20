@@ -63,6 +63,7 @@ function BackgroundSynchronizer({ fetchTool }) {
       const cookieStore = CookieStore(`${forum.address}_${forum.userId}`);
       const chatService = MchatChatService({
         baseUrl: forum.address,
+        cookieStore,
         fetchTool
       });
       const existingMessages = inMemoryStore.get('messages') || [];
