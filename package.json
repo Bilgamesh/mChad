@@ -4,6 +4,7 @@
   "version": "0.9.7",
   "main": "www/index.html",
   "scripts": {
+    "start-proxy": "docker run -d -p 9159:9159 hoppscotch/proxyscotch",
     "build": "npm run resolve-plugin-conflicts && cordova build android",
     "build-release": "npm run resolve-plugin-conflicts && cordova build android --release -- --packageType=apk",
     "build-docker": "docker run -v %INIT_CWD%:/opt/src --rm cordova //bin/bash -c \"npm run build\"",
@@ -44,9 +45,6 @@
     "cordova-plugin-timer": "1.0.1",
     "cordova-plugin-velda-devicefeedback": "0.0.2",
     "es6-promise-plugin": "^4.2.2",
-    "express": "^4.19.2",
-    "express-formidable": "^1.2.0",
-    "node-fetch": "^3.3.2",
     "nodemon": "^3.1.0",
     "watch": "^1.0.2"
   },

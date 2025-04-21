@@ -48,6 +48,36 @@ function FetchTool(config) {
   function requestViaProxy(url, options) {
     return new Promise((resolve, reject) => {
       console.log(`[${new Date().toLocaleString()}] ${options.method} ${url}`);
+      const _url = url;
+      url = config.PROXY_URL;
+      setDataSerializer('application/json; charset=utf-8');
+      if (options.headers['content-type']?.includes('x-www-form-urlencoded'))
+        options.body = new URLSearchParams(options.body).toString();
+      const httpOptions = {
+        method: 'POST',
+        data: {
+          url: _url,
+          data: options.body,
+          headers: options.headers,
+          method: options.method,
+          wantsBinary: true
+        },
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+      };
+      cordova.plugin.http.sendRequest(
+        url,
+        httpOptions,
+        (response) => onSuccess(resolve, reject, response, _url),
+        (response) => onFailure(resolve, reject, response, _url)
+      );
+    });
+  }
+
+  function requestViaProxyOld(url, options) {
+    return new Promise((resolve, reject) => {
+      console.log(`[${new Date().toLocaleString()}] ${options.method} ${url}`);
       options.headers = options.headers || {};
       options.headers['Target-URL'] = url;
       if (options.headers.cookie)
@@ -77,10 +107,11 @@ function FetchTool(config) {
     try {
       console.log(`[${new Date().toLocaleString()}] ${url} ${response.status}`);
       if (config.USE_PROXY) {
-        const { text, headers } = JSON.parse(response.data);
-        response.data = text;
+        const { data, headers, status } = JSON.parse(response.data);
+        response.status = status;
+        response.data = atob(data);
+        response.data = utf8.decode(response.data);
         response.headers = headers;
-        response.headers['set-cookie'] = response.headers['set-kookie'];
       }
       return resolve({
         status: response.status,
@@ -99,10 +130,10 @@ function FetchTool(config) {
     try {
       console.log(`[${new Date().toLocaleString()}] ${url} ${response.status}`);
       if (config.USE_PROXY) {
-        const { text, headers } = JSON.parse(response.error);
-        response.error = text;
+        const { data, headers, status } = JSON.parse(response.error);
+        response.status = status;
+        response.error = atob(data);
         response.headers = headers;
-        response.headers['set-cookie'] = response.headers['set-kookie'];
       }
       /* Status 302 redirect is returned as an error because we specifically disable redirect.
         Yet we need to return this response as a successful resolve, because we need to extract
