@@ -75,6 +75,34 @@ function FetchTool(config) {
     });
   }
 
+  function requestViaProxyOld(url, options) {
+    return new Promise((resolve, reject) => {
+      console.log(`[${new Date().toLocaleString()}] ${options.method} ${url}`);
+      options.headers = options.headers || {};
+      options.headers['Target-URL'] = url;
+      if (options.headers.cookie)
+        options.headers.kookie = options.headers.cookie;
+      options.headers['user-operative'] =
+        options.headers['user-agent'] || config.DEFAULT_USER_AGENT;
+      const _url = url;
+      url = config.PROXY_URL;
+      setDataSerializer(options.headers['content-type']);
+      const timeParam = { key: '_time', value: new Date().getTime() };
+      url = addUrlParameters(url, [timeParam]);
+      const httpOptions = {
+        method: options.method,
+        data: options.body,
+        headers: options.headers
+      };
+      cordova.plugin.http.sendRequest(
+        url,
+        httpOptions,
+        (response) => onSuccess(resolve, reject, response, _url),
+        (response) => onFailure(resolve, reject, response, _url)
+      );
+    });
+  }
+
   function onSuccess(resolve, reject, response, url) {
     try {
       console.log(`[${new Date().toLocaleString()}] ${url} ${response.status}`);
