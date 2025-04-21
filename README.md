@@ -55,8 +55,6 @@ This is a Cordova project that can be run in a browser on a computer for ease of
 npm install -g cordova
 npm install
 cordova platform add browser
-cd proxy-server
-npm install
 ```
 
 ### Run a proxy server
