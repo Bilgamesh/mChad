@@ -4,7 +4,7 @@ import { ThemeUtil } from './utils/theme.js';
 async function Config() {
   const themeUtil = ThemeUtil();
   const USE_PROXY = cordova.platformId === 'browser';
-  const PROXY_URL = 'http://localhost:9159';
+  const PROXY_URL = 'http://localhost:3000';
   const SYNC_INTERVAL_MS = 5000;
   const DEFAULT_USER_AGENT =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';

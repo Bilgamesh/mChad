@@ -59,14 +59,13 @@ cd proxy-server
 npm install
 ```
 
-### Run a proxy server
+### Run proxy-server
 
-When this application is run in a browser, it requires a proxy server to work around same-origin policy preventing the app from accessing external phpBB forums. Proxy server is not required when running the application on Android.
-
-The web version of this application is compatible with [Proxyscotch](https://github.com/hoppscotch/proxyscotch)
+This application includes a proxy-server that needs to be run before the application can be used in the web browser. The purpose of this proxy is to work around issues with CORS preventing the app from accessing external phpBB forums. Proxy server is not used when running the application on Android.
 
 ```Powershell
-docker run -d -p 9159:9159 hoppscotch/proxyscotch
+cd proxy-server
+npm start
 ```
 
 ### Run mChad
