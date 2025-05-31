@@ -143,10 +143,6 @@ class _TotpPageState extends State<TotpPage> {
     MchatLoginModel loginData,
   ) async {
     totpController.clear();
-    setState(() {
-      loading = false;
-    });
-
     var account = Account(
       userName: widget.username,
       userId: loginData.userId!,
@@ -160,7 +156,9 @@ class _TotpPageState extends State<TotpPage> {
     Account.saveAll();
     account.updateNotifiers();
     MchatSyncManager().restartAll();
-
+    setState(() {
+      loading = false;
+    });
     if (!context.mounted) return;
     Navigator.pushAndRemoveUntil(
       context,

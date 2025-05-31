@@ -339,10 +339,6 @@ class _LoginPageState extends State<LoginPage> {
     BuildContext context,
     MchatLoginModel loginData,
   ) async {
-    setState(() {
-      loading = false;
-    });
-
     var account = Account(
       userName: usernameController.text,
       userId: loginData.userId!,
@@ -357,6 +353,9 @@ class _LoginPageState extends State<LoginPage> {
     account.updateNotifiers();
     MchatSyncManager().restartAll();
 
+    setState(() {
+      loading = false;
+    });
     if (!context.mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
