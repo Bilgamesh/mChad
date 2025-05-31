@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
@@ -27,8 +29,8 @@ class ChatImageWidget extends StatelessWidget {
             imageUrl: src,
             httpHeaders: src.startsWith(account.forumUrl) ? headers : {},
             cacheKey: cacheKey,
-            height: MediaQuery.sizeOf(context).width / 1.5,
-            width: MediaQuery.sizeOf(context).width / 1.5,
+            height: min(MediaQuery.sizeOf(context).width / 1.5, 300),
+            width: min(MediaQuery.sizeOf(context).width / 1.5, 300),
             fit: BoxFit.cover,
             placeholder:
                 (context, url) =>
