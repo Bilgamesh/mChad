@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
@@ -34,6 +36,10 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var constraint = min(
+      MediaQuery.sizeOf(context).width / 1.5,
+      MediaQuery.sizeOf(context).height / 1.5,
+    );
     return Padding(
       padding: EdgeInsets.only(
         top: isFollowUp ? 0.0 : 10.0,
@@ -52,9 +58,7 @@ class ChatBubble extends StatelessWidget {
                   left: 10,
                   right: 10,
                 ),
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.sizeOf(context).width / 1.5,
-                ),
+                constraints: BoxConstraints(maxWidth: constraint),
                 decoration: BoxDecoration(
                   color:
                       isSentByMe
@@ -105,6 +109,7 @@ class ChatBubble extends StatelessWidget {
                       padding: EdgeInsets.all(10),
                       child: HtmlWidget(
                         message.message.shortHtml,
+                        renderMode: RenderMode.column,
                         customStylesBuilder: (element) {
                           if (element.innerHtml.contains('cite') ||
                               (element.attributes['href']?.contains(

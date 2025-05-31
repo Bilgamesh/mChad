@@ -14,6 +14,10 @@ class ChatImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var constraint = min(
+      MediaQuery.sizeOf(context).width / 1.5,
+      MediaQuery.sizeOf(context).height / 1.5,
+    );
     var headers = {
       'x-requested-with': 'XMLHttpRequest',
       'cookie': account.cachedCookies ?? '',
@@ -22,21 +26,19 @@ class ChatImageWidget extends StatelessWidget {
     var cacheKey = CryptoUtil.generateMd5('$headers$src');
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
-      child: FittedBox(
-        child: GestureDetector(
-          onTap: () => open(context, headers, cacheKey),
-          child: CachedNetworkImage(
-            imageUrl: src,
-            httpHeaders: src.startsWith(account.forumUrl) ? headers : {},
-            cacheKey: cacheKey,
-            height: min(MediaQuery.sizeOf(context).width / 1.5, 300),
-            width: min(MediaQuery.sizeOf(context).width / 1.5, 300),
-            fit: BoxFit.cover,
-            placeholder:
-                (context, url) =>
-                    CircularProgressIndicator(padding: EdgeInsets.all(100)),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
+      child: GestureDetector(
+        onTap: () => open(context, headers, cacheKey),
+        child: CachedNetworkImage(
+          imageUrl: src,
+          httpHeaders: src.startsWith(account.forumUrl) ? headers : {},
+          cacheKey: cacheKey,
+          height: constraint,
+          width: constraint,
+          fit: BoxFit.cover,
+          placeholder:
+              (context, url) =>
+                  CircularProgressIndicator(padding: EdgeInsets.all(100)),
+          errorWidget: (context, url, error) => Icon(Icons.error),
         ),
       ),
     );

@@ -346,7 +346,10 @@ class MchatSync {
     loadingArchive = true;
     try {
       var startIndex = messageMapNotifier.value[account]?.length;
-      if (startIndex == null) return;
+      if (startIndex == null) {
+        loadingArchive = false;
+        return;
+      }
       var response = await MchatChatService(
         account: account,
       ).fetchArchive(startIndex);
