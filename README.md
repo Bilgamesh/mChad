@@ -1,6 +1,6 @@
 <div align="center">
     <a href="https://github.com/Bilgamesh/mChad">
-        <img src="./www/img/icon/mipmap-xxxhdpi/ic_launcher.png" alt="mChad Logo" width="80" height="80">
+        <img src="./android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="mChad Logo" width="80" height="80">
     </a>
     <h1 align="center">mChad</h1>
     <a href="https://github.com/Bilgamesh/mChad/releases">
