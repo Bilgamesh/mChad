@@ -19,7 +19,9 @@ class SettingsModel {
   }) : colorScheme = ColorScheme.fromSeed(
          seedColor: KAppTheme.appColors.elementAt(colorIndex),
          brightness: isDark ? Brightness.dark : Brightness.light,
-       );
+       ) {
+    if (languageIndex == -1) languageIndex = 0;
+  }
   int colorIndex;
   bool isDark;
   bool notifications;
