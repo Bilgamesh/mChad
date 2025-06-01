@@ -75,7 +75,7 @@ class GithubUpdateService {
     throw 'apk not found';
   }
 
-  Future<String> getSha256checksum(dynamic assets) async {
+  Future<String?> getSha256checksum(dynamic assets) async {
     for (var asset in assets) {
       if (asset['name'].toString().toLowerCase().endsWith('sha256')) {
         var url = asset['browser_download_url'].toString();
@@ -86,7 +86,7 @@ class GithubUpdateService {
         return response.body.split(' ').first;
       }
     }
-    throw 'sha256 not found';
+    return null;
   }
 
   Future<void> downloadLatest() async {
