@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/views/widgets/chat_bubble_widget.dart';
@@ -21,6 +22,7 @@ class MessageRowWidget extends StatefulWidget {
     required this.isOnline,
     required this.hasFollowUp,
     required this.isFollowUp,
+    required this.settings,
   }) : messages = messageMap[account]!,
        message = messageMap[account]![index],
        isSender = messageMap[account]![index].user.id == account.userId,
@@ -38,6 +40,7 @@ class MessageRowWidget extends StatefulWidget {
   final bool isOnline;
   final bool hasFollowUp;
   final bool isFollowUp;
+  final SettingsModel settings;
 
   @override
   State<MessageRowWidget> createState() => _MessageRowWidgetState();
@@ -76,7 +79,9 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
 
     return AnimatedOpacity(
       opacity: (loaded! && !widget.message.isDeleting) ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 500),
+      duration: Duration(
+        milliseconds: widget.settings.transitionAnimations ? 500 : 0,
+      ),
       child: VisibilityDetector(
         key: Key('${widget.message.id}-padding'),
         onVisibilityChanged: (info) {

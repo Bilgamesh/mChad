@@ -65,39 +65,41 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
           child: ValueListenableBuilder(
             valueListenable: bbtagMapNotifier,
             builder:
-                (context, bbtagMap, child) => Wrap(
-                  children: List.generate(
-                    bbtagMap[widget.account]?.length ?? 0,
-                    (index) =>
-                        shouldBeAvailable(
-                              bbtagMap[widget.account]![index],
-                              bbtagMap[widget.account]!,
-                            )
-                            ? Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: IconButton.filled(
-                                  isSelected: bbtagMap[widget.account]![index]
-                                      .supportsContent(clipboardData?.text),
-                                  onPressed:
-                                      () => onBbCodeTap(
-                                        context,
-                                        bbtagMap[widget.account]![index],
-                                      ),
-                                  onLongPress:
-                                      () => onBbCodeTap(
-                                        context,
-                                        bbtagMap[widget.account]![index],
-                                      ),
-                                  icon: Icon(
-                                    bbtagMap[widget.account]![index].icon,
+                (context, bbtagMap, child) => SafeArea(
+                  child: Wrap(
+                    children: List.generate(
+                      bbtagMap[widget.account]?.length ?? 0,
+                      (index) =>
+                          shouldBeAvailable(
+                                bbtagMap[widget.account]![index],
+                                bbtagMap[widget.account]!,
+                              )
+                              ? Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: IconButton.filled(
+                                    isSelected: bbtagMap[widget.account]![index]
+                                        .supportsContent(clipboardData?.text),
+                                    onPressed:
+                                        () => onBbCodeTap(
+                                          context,
+                                          bbtagMap[widget.account]![index],
+                                        ),
+                                    onLongPress:
+                                        () => onBbCodeTap(
+                                          context,
+                                          bbtagMap[widget.account]![index],
+                                        ),
+                                    icon: Icon(
+                                      bbtagMap[widget.account]![index].icon,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                            : SizedBox.shrink(),
+                              )
+                              : SizedBox.shrink(),
+                    ),
                   ),
                 ),
           ),

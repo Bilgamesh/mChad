@@ -61,7 +61,9 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
       valueListenable: settingsNotifier,
       builder:
           (context, settings, child) => AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
+            duration: Duration(
+              milliseconds: settings.transitionAnimations ? 150 : 0,
+            ),
             transitionBuilder:
                 (child, animation) => SlideTransition(
                   position: (animation.value == 1 ? offset2 : offset1).animate(

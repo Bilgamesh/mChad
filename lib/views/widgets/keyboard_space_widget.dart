@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/ui_util.dart';
 
 class KeyboardSpaceWidget extends StatelessWidget {
@@ -8,13 +9,19 @@ class KeyboardSpaceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedPadding(
-      duration: const Duration(milliseconds: 70),
-      curve: Curves.easeOut,
-      padding: EdgeInsets.only(
-        bottom: UiUtil.getBottomSafeAreaHeight(context, withNavbar),
-      ),
-      child: SizedBox.shrink(),
+    return ValueListenableBuilder(
+      valueListenable: settingsNotifier,
+      builder:
+          (context, settings, child) => AnimatedPadding(
+            duration: Duration(
+              milliseconds: settings.transitionAnimations ? 70 : 0,
+            ),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(
+              bottom: UiUtil.getBottomSafeAreaHeight(context, withNavbar),
+            ),
+            child: SizedBox.shrink(),
+          ),
     );
   }
 }

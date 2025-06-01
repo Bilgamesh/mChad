@@ -70,7 +70,7 @@ class TabsPage extends StatelessWidget {
                             },
                           )
                           : selectedTab == 0
-                          ? FloatingScrollButtonWidget()
+                          ? FloatingScrollButtonWidget(settings: settings)
                           : null,
                   bottomNavigationBar: ValueListenableBuilder(
                     valueListenable: selectedAccountNotifier,

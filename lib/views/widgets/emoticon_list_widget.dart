@@ -37,59 +37,64 @@ class EmoticonListWidget extends StatelessWidget {
           child: ValueListenableBuilder(
             valueListenable: emoticonMapNotifer,
             builder:
-                (context, emoticonMap, child) => Wrap(
-                  children: List.generate(
-                    emoticonMap[account]?.length ?? 0,
-                    (index) => Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: ValueListenableBuilder(
-                          valueListenable: settingsNotifier,
-                          builder:
-                              (context, settings, child) => Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      settings
-                                          .colorScheme
-                                          .surfaceContainerHighest,
-                                ),
-                                height: 65,
-                                width: 65,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  child: Tooltip(
-                                    message: emoticonMap[account]![index].title,
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      onTap:
-                                          () => onEmoticonTap(
-                                            context,
-                                            emoticonMap[account]![index],
-                                          ),
-                                      child: FittedBox(
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              emoticonMap[account]![index]
-                                                  .pictureUrl,
-                                          httpHeaders:
-                                              emoticonMap[account]![index]
-                                                      .pictureUrl
-                                                      .startsWith(
-                                                        account.forumUrl,
-                                                      )
-                                                  ? headers
-                                                  : {},
-                                          cacheKey: CryptoUtil.generateMd5(
-                                            '$headers${emoticonMap[account]![index].pictureUrl}',
+                (context, emoticonMap, child) => SafeArea(
+                  child: Wrap(
+                    children: List.generate(
+                      emoticonMap[account]?.length ?? 0,
+                      (index) => Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: ValueListenableBuilder(
+                            valueListenable: settingsNotifier,
+                            builder:
+                                (context, settings, child) => Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        settings
+                                            .colorScheme
+                                            .surfaceContainerHighest,
+                                  ),
+                                  height: 65,
+                                  width: 65,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    child: Tooltip(
+                                      message:
+                                          emoticonMap[account]![index].title,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(
+                                          12.0,
+                                        ),
+                                        onTap:
+                                            () => onEmoticonTap(
+                                              context,
+                                              emoticonMap[account]![index],
+                                            ),
+                                        child: FittedBox(
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                emoticonMap[account]![index]
+                                                    .pictureUrl,
+                                            httpHeaders:
+                                                emoticonMap[account]![index]
+                                                        .pictureUrl
+                                                        .startsWith(
+                                                          account.forumUrl,
+                                                        )
+                                                    ? headers
+                                                    : {},
+                                            cacheKey: CryptoUtil.generateMd5(
+                                              '$headers${emoticonMap[account]![index].pictureUrl}',
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
+                          ),
                         ),
                       ),
                     ),

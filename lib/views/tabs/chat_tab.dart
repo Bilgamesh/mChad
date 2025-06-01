@@ -62,100 +62,114 @@ class _ChatTabState extends State<ChatTab> {
           (context, account, child) => ValueListenableBuilder(
             valueListenable: messageMapNotifier,
             builder:
-                (context, messageMap, child) => Column(
-                  children: [
-                    Expanded(
-                      child: Align(
-                        alignment:
-                            (messageMap[account!]?.length ?? 0) > 0
-                                ? Alignment.topCenter
-                                : Alignment.center,
-                        child: ValueListenableBuilder(
-                          valueListenable: onlineUsersMapNotifer,
-                          builder:
-                              (
-                                context,
-                                onlineUsersMap,
-                                child,
-                              ) => ListView.builder(
-                                itemCount:
-                                    ((messageMap[account]?.length ?? 0) + 2),
-                                reverse: true,
-                                controller: scrollController,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  if (index == 0) {
-                                    return SizedBox(height: 100.0);
-                                  }
-                                  if (index - 1 <
-                                      (messageMap[account]?.length ?? 0)) {
-                                    return MessageRowWidget(
-                                      key: Key(
-                                        '${messageMap[account]![index - 1].id}',
-                                      ),
-                                      index: index - 1,
-                                      account: account,
-                                      messageMap: messageMap,
+                (context, messageMap, child) => ValueListenableBuilder(
+                  valueListenable: settingsNotifier,
+                  builder:
+                      (context, settings, child) => Column(
+                        children: [
+                          Expanded(
+                            child: Align(
+                              alignment:
+                                  (messageMap[account!]?.length ?? 0) > 0
+                                      ? Alignment.topCenter
+                                      : Alignment.center,
+                              child: ValueListenableBuilder(
+                                valueListenable: onlineUsersMapNotifer,
+                                builder:
+                                    (
+                                      context,
+                                      onlineUsersMap,
+                                      child,
+                                    ) => ListView.builder(
+                                      itemCount:
+                                          ((messageMap[account]?.length ?? 0) +
+                                              2),
+                                      reverse: true,
+                                      controller: scrollController,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        if (index == 0) {
+                                          return SizedBox(height: 100.0);
+                                        }
+                                        if (index - 1 <
+                                            (messageMap[account]?.length ??
+                                                0)) {
+                                          return MessageRowWidget(
+                                            key: Key(
+                                              '${messageMap[account]![index - 1].id}',
+                                            ),
+                                            index: index - 1,
+                                            account: account,
+                                            messageMap: messageMap,
+                                            chatboxFocusNode: chatboxFocusNode,
+                                            textController: textController,
+                                            hasFollowUp: hasFollowUpMessage(
+                                              index - 1,
+                                              messageMap[account]!,
+                                            ),
+                                            isFollowUp: hasFollowUpMessage(
+                                              index,
+                                              messageMap[account]!,
+                                            ),
+                                            isOnline: isOnline(
+                                              onlineUsersMap[account],
+                                              messageMap[account]![index - 1]
+                                                  .user
+                                                  .id,
+                                            ),
+                                            settings: settings,
+                                          );
+                                        }
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 32.0,
+                                          ),
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                              ),
+                            ),
+                          ),
+                          ValueListenableBuilder(
+                            valueListenable: messageLimitMapNotifier,
+                            builder:
+                                (context, messageLimitMap, child) =>
+                                    ChatboxWidget(
                                       chatboxFocusNode: chatboxFocusNode,
                                       textController: textController,
-                                      hasFollowUp: hasFollowUpMessage(
-                                        index - 1,
-                                        messageMap[account]!,
-                                      ),
-                                      isFollowUp: hasFollowUpMessage(
-                                        index,
-                                        messageMap[account]!,
-                                      ),
-                                      isOnline: isOnline(
-                                        onlineUsersMap[account],
-                                        messageMap[account]![index - 1].user.id,
-                                      ),
-                                    );
-                                  }
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 32.0,
+                                      account: account,
+                                      messageLimit:
+                                          messageLimitMap[account] ?? 0,
+                                      onCodePressed: (
+                                        TextSelection? lastTextSelection,
+                                      ) {
+                                        HapticsUtil.vibrate();
+                                        openTextWidgetsModal(
+                                          context,
+                                          account,
+                                          Tabs.bbcodes,
+                                          lastTextSelection,
+                                        );
+                                      },
+                                      onEmojiPressed: (
+                                        TextSelection? lastTextSelection,
+                                      ) {
+                                        HapticsUtil.vibrate();
+                                        openTextWidgetsModal(
+                                          context,
+                                          account,
+                                          Tabs.emoticons,
+                                          lastTextSelection,
+                                        );
+                                      },
                                     ),
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                },
-                              ),
-                        ),
-                      ),
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: messageLimitMapNotifier,
-                      builder:
-                          (context, messageLimitMap, child) => ChatboxWidget(
-                            chatboxFocusNode: chatboxFocusNode,
-                            textController: textController,
-                            account: account,
-                            messageLimit: messageLimitMap[account] ?? 0,
-                            onCodePressed: (TextSelection? lastTextSelection) {
-                              HapticsUtil.vibrate();
-                              openTextWidgetsModal(
-                                context,
-                                account,
-                                Tabs.bbcodes,
-                                lastTextSelection,
-                              );
-                            },
-                            onEmojiPressed: (TextSelection? lastTextSelection) {
-                              HapticsUtil.vibrate();
-                              openTextWidgetsModal(
-                                context,
-                                account,
-                                Tabs.emoticons,
-                                lastTextSelection,
-                              );
-                            },
                           ),
-                    ),
-
-                    KeyboardSpaceWidget(withNavbar: true),
-                  ],
+                          KeyboardSpaceWidget(withNavbar: true),
+                        ],
+                      ),
                 ),
           ),
     );
@@ -181,15 +195,13 @@ class _ChatTabState extends State<ChatTab> {
             snapSizes: [0.5, 1.0],
             expand: false,
             builder:
-                (context, scrollController) => SafeArea(
-                  child: TextWidgetsModalWidget(
-                    account: account,
-                    tab: tab,
-                    textController: textController,
-                    lastTextSelection: lastTextSelection,
-                    chatboxFocusNode: chatboxFocusNode,
-                    scrollController: scrollController,
-                  ),
+                (context, scrollController) => TextWidgetsModalWidget(
+                  account: account,
+                  tab: tab,
+                  textController: textController,
+                  lastTextSelection: lastTextSelection,
+                  chatboxFocusNode: chatboxFocusNode,
+                  scrollController: scrollController,
                 ),
           ),
     );

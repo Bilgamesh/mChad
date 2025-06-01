@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/ui_util.dart';
 
 class FloatingScrollButtonWidget extends StatelessWidget {
-  const FloatingScrollButtonWidget({Key? key}) : super(key: key);
+  const FloatingScrollButtonWidget({Key? key, required this.settings})
+    : super(key: key);
+  final SettingsModel settings;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,9 @@ class FloatingScrollButtonWidget extends StatelessWidget {
           (context, scrollController, child) =>
               (scrollController?.offset ?? 0) >= 2000
                   ? AnimatedPadding(
-                    duration: const Duration(milliseconds: 70),
+                    duration: Duration(
+                      milliseconds: settings.transitionAnimations ? 70 : 0,
+                    ),
                     curve: Curves.easeOut,
                     padding: EdgeInsets.only(
                       bottom:
