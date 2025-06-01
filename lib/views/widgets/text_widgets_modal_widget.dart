@@ -4,7 +4,6 @@ import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/views/widgets/bbcodes_list_widget.dart';
 import 'package:mchad/views/widgets/emoticon_list_widget.dart';
-import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 
 enum Tabs { emoticons, bbcodes }
 
