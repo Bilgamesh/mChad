@@ -19,9 +19,7 @@ class SettingsModel {
   }) : colorScheme = ColorScheme.fromSeed(
          seedColor: KAppTheme.appColors.elementAt(colorIndex),
          brightness: isDark ? Brightness.dark : Brightness.light,
-       ) {
-    if (languageIndex == -1) languageIndex = 0;
-  }
+       );
   int colorIndex;
   bool isDark;
   bool notifications;
@@ -47,6 +45,9 @@ class SettingsModel {
   }
 
   static SettingsModel getDefault() {
+    var systemLanguageIndex = AppLocalizations.supportedLocales.indexWhere(
+      (locale) => locale.languageCode == Platform.localeName.split('_').first,
+    );
     return SettingsModel(
       colorIndex: 0,
       isDark:
@@ -54,9 +55,7 @@ class SettingsModel {
           Brightness.dark,
       notifications: false,
       haptics: false,
-      languageIndex: AppLocalizations.supportedLocales.indexWhere(
-        (locale) => locale.languageCode == Platform.localeName.split('_').first,
-      ),
+      languageIndex: systemLanguageIndex != -1 ? systemLanguageIndex : 0,
       transitionAnimations: true,
     );
   }
