@@ -1,13 +1,27 @@
-import 'package:mchad/data/notifiers.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mchad/utils/localization_util.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeUtil {
-  static String convertToAgo(DateTime input) {
+  static Future<String> convertToAgo(DateTime input) async {
     Duration diff = DateTime.now().difference(input);
+    var localization = await LocalizationUtil.currentLocalization;
 
     if (diff.inSeconds >= 1) {
-      return '${diff.inSeconds} ${diff.inSeconds == 1 ? languageNotifier.value.secondAgo : languageNotifier.value.secondsAgo}';
+      return '${diff.inSeconds} ${diff.inSeconds == 1 ? localization.secondAgo : localization.secondsAgo}';
     } else {
-      return languageNotifier.value.justNow;
+      return localization.justNow;
+    }
+  }
+
+  static String convertToAgoSync(DateTime input, BuildContext context) {
+    Duration diff = DateTime.now().difference(input);
+    var localization = AppLocalizations.of(context)!;
+
+    if (diff.inSeconds >= 1) {
+      return '${diff.inSeconds} ${diff.inSeconds == 1 ? localization.secondAgo : localization.secondsAgo}';
+    } else {
+      return localization.justNow;
     }
   }
 }

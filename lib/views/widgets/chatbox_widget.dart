@@ -6,6 +6,7 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/utils/modal_util.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final offset1 = Tween(begin: const Offset(0, 1), end: const Offset(0, 0));
 final offset2 = Tween(begin: const Offset(0, 1), end: const Offset(0, 0));
@@ -121,7 +122,8 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
                                   ],
                                 ),
                               ),
-                              hintText: settings.language.chatboxHint,
+                              hintText:
+                                  AppLocalizations.of(context)!.chatboxHint,
                               labelText:
                                   labelText.isNotEmpty ? labelText : null,
                               labelStyle: TextStyle(

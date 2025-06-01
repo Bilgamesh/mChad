@@ -11,6 +11,7 @@ import 'package:mchad/utils/time_util.dart';
 import 'package:mchad/views/widgets/online_users_modal.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountCardWidget extends StatefulWidget {
   const AccountCardWidget({
@@ -37,17 +38,22 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   String? lastCookies;
   @override
   void initState() {
-    timeRelative = TimeUtil.convertToAgo(
-      refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
-    );
-    timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
+    timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
+      var timeRelativeNew = await TimeUtil.convertToAgo(
+        refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
+      );
       setState(() {
-        timeRelative = TimeUtil.convertToAgo(
-          refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
-        );
+        timeRelative = timeRelativeNew;
       });
     });
     super.initState();
+  }
+
+  String getTimeRelative(BuildContext context) {
+    return TimeUtil.convertToAgoSync(
+      refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
+      context,
+    );
   }
 
   @override
@@ -130,7 +136,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                         FittedBox(
                           child: Text(
                             widget.isSelected
-                                ? '@${widget.account.forumName} - ${settings.language.currentlySelected}'
+                                ? '@${widget.account.forumName} - ${AppLocalizations.of(context)!.currentlySelected}'
                                 : '@${widget.account.forumName}',
                           ),
                         ),
@@ -138,7 +144,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                           child: Row(
                             children: [
                               Text(
-                                '${settings.language.numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
+                                '${AppLocalizations.of(context)!.numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
                               ),
                               IconButton(
                                 onPressed: () {
@@ -163,7 +169,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                                 return SizedBox(
                                   height: 30,
                                   child: Text(
-                                    '${settings.language.unreadMessages}: ${unreadMessages.length}',
+                                    '${AppLocalizations.of(context)!.unreadMessages}: ${unreadMessages.length}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -185,11 +191,13 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                                     child: Text(
                                       refreshStatusMap[widget.account] ==
                                               VerificationStatus.loading
-                                          ? settings.language.chatRefreshing
+                                          ? AppLocalizations.of(
+                                            context,
+                                          )!.chatRefreshing
                                           : (refreshStatusMap[widget.account] ==
                                                   VerificationStatus.error
-                                              ? '${settings.language.chatRefreshError} $timeRelative'
-                                              : '${settings.language.chatRefreshed} $timeRelative'),
+                                              ? '${AppLocalizations.of(context)!.chatRefreshError} ${timeRelative ?? getTimeRelative(context)}'
+                                              : '${AppLocalizations.of(context)!.chatRefreshed} ${timeRelative ?? getTimeRelative(context)}'),
                                       style:
                                           refreshStatusMap[widget.account] ==
                                                   VerificationStatus.error
@@ -209,7 +217,9 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                               child: Row(
                                 children: [
                                   Icon(Icons.menu_open),
-                                  Text(' ${settings.language.open} '),
+                                  Text(
+                                    ' ${AppLocalizations.of(context)!.open} ',
+                                  ),
                                 ],
                               ),
                             ),
@@ -219,7 +229,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                               child: Row(
                                 children: [
                                   Icon(Icons.logout),
-                                  Text(settings.language.logout),
+                                  Text(AppLocalizations.of(context)!.logout),
                                 ],
                               ),
                             ),

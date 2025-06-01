@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/languages/dictionaries.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/bbtag_model.dart';
 import 'package:mchad/data/models/emoticons_response_model.dart';
-import 'package:mchad/data/models/language_dictionary_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
@@ -17,10 +15,6 @@ class PropertyValueNotifier<T> extends ValueNotifier<T> {
     super.notifyListeners();
   }
 }
-
-ValueNotifier<LanguageDictionary> languageNotifier = ValueNotifier(
-  Dictionaries.all[0],
-);
 
 ValueNotifier<int> selectedTabNotifier = ValueNotifier(0);
 

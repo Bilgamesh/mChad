@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
-import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/views/widgets/bbcodes_list_widget.dart';
 import 'package:mchad/views/widgets/emoticon_list_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum Tabs { emoticons, bbcodes }
 
@@ -38,30 +38,26 @@ class _TextWidgetsModalWidgetState extends State<TextWidgetsModalWidget> {
       width: double.infinity,
       child: Column(
         children: [
-          ValueListenableBuilder(
-            valueListenable: languageNotifier,
-            builder:
-                (context, language, child) => SegmentedButton(
-                  segments: [
-                    ButtonSegment(
-                      value: Tabs.bbcodes,
-                      label: Text(language.bbcodes),
-                      icon: Icon(Icons.code),
-                    ),
-                    ButtonSegment(
-                      value: Tabs.emoticons,
-                      label: Text(language.emoticons),
-                      icon: Icon(Icons.emoji_emotions_outlined),
-                    ),
-                  ],
-                  selected: tab!,
-                  onSelectionChanged: (selection) {
-                    HapticsUtil.vibrate();
-                    setState(() {
-                      tab = selection;
-                    });
-                  },
-                ),
+          SegmentedButton(
+            segments: [
+              ButtonSegment(
+                value: Tabs.bbcodes,
+                label: Text(AppLocalizations.of(context)!.bbcodes),
+                icon: Icon(Icons.code),
+              ),
+              ButtonSegment(
+                value: Tabs.emoticons,
+                label: Text(AppLocalizations.of(context)!.emoticons),
+                icon: Icon(Icons.emoji_emotions_outlined),
+              ),
+            ],
+            selected: tab!,
+            onSelectionChanged: (selection) {
+              HapticsUtil.vibrate();
+              setState(() {
+                tab = selection;
+              });
+            },
           ),
           tab?.first == Tabs.bbcodes
               ? BbcodesListWidget(

@@ -7,6 +7,7 @@ import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/widgets/account_card_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'accounts_tab');
@@ -16,76 +17,81 @@ class AccountsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: languageNotifier,
-      builder:
-          (context, language, child) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            child: ValueListenableBuilder(
-              valueListenable: accountsNotifier,
-              builder:
-                  (context, accounts, child) => ListView(
-                    // physics: AlwaysScrollableScrollPhysics(),
-                    children: [
-                      ...List.generate(
-                        accounts.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: ValueListenableBuilder(
-                            valueListenable: selectedAccountNotifier,
-                            builder:
-                                (
-                                  context,
-                                  selectedAccount,
-                                  child,
-                                ) => AccountCardWidget(
-                                  account: accounts.elementAt(index),
-                                  isSelected:
-                                      accounts[index] == selectedAccount,
-                                  onOpen: () => open(accounts[index]),
-                                  onSelect:
-                                      accounts[index] == selectedAccount
-                                          ? null
-                                          : () => select(accounts[index]),
-                                  onLogout: () {
-                                    HapticsUtil.vibrate();
-                                    showDialog(
-                                      context: context,
-                                      builder:
-                                          (context) => AlertDialog(
-                                            title: Text(language.logout),
-                                            content: Text(
-                                              '${language.logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${language.account}?',
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  HapticsUtil.vibrate();
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: Text(language.cancel),
-                                              ),
-                                              TextButton(
-                                                onPressed:
-                                                    () => logout(
-                                                      context,
-                                                      accounts.elementAt(index),
-                                                    ),
-                                                child: Text(language.confirm),
-                                              ),
-                                            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      child: ValueListenableBuilder(
+        valueListenable: accountsNotifier,
+        builder:
+            (context, accounts, child) => ListView(
+              // physics: AlwaysScrollableScrollPhysics(),
+              children: [
+                ...List.generate(
+                  accounts.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: ValueListenableBuilder(
+                      valueListenable: selectedAccountNotifier,
+                      builder:
+                          (
+                            context,
+                            selectedAccount,
+                            child,
+                          ) => AccountCardWidget(
+                            account: accounts.elementAt(index),
+                            isSelected: accounts[index] == selectedAccount,
+                            onOpen: () => open(accounts[index]),
+                            onSelect:
+                                accounts[index] == selectedAccount
+                                    ? null
+                                    : () => select(accounts[index]),
+                            onLogout: () {
+                              HapticsUtil.vibrate();
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => AlertDialog(
+                                      title: Text(
+                                        AppLocalizations.of(context)!.logout,
+                                      ),
+                                      content: Text(
+                                        '${AppLocalizations.of(context)!.logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context)!.account}?',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            HapticsUtil.vibrate();
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.cancel,
                                           ),
-                                    );
-                                  },
-                                ),
+                                        ),
+                                        TextButton(
+                                          onPressed:
+                                              () => logout(
+                                                context,
+                                                accounts.elementAt(index),
+                                              ),
+                                          child: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!.confirm,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              );
+                            },
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 200.0),
-                    ],
+                    ),
                   ),
+                ),
+                SizedBox(height: 200.0),
+              ],
             ),
-          ),
+      ),
     );
   }
 

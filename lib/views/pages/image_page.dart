@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImagePage extends StatefulWidget {
   const ImagePage({
@@ -57,7 +57,7 @@ class _ImagePageState extends State<ImagePage> {
             uiVisible
                 ? [
                   IconButton(
-                    onPressed: () => download(widget.src, fileName),
+                    onPressed: () => download(widget.src, fileName, context),
                     icon: Icon(Icons.download),
                   ),
                   IconButton(
@@ -125,7 +125,11 @@ class _ImagePageState extends State<ImagePage> {
     return false;
   }
 
-  Future<void> download(String url, String fileName) async {
+  Future<void> download(
+    String url,
+    String fileName,
+    BuildContext context,
+  ) async {
     HapticsUtil.vibrate();
     try {
       if (!hasExtension(fileName)) {
@@ -149,7 +153,10 @@ class _ImagePageState extends State<ImagePage> {
       }
       var res = await get(Uri.parse(url));
       await file.writeAsBytes(res.bodyBytes);
-      ModalUtil.showMessage('${languageNotifier.value.imageSaved} $fileName');
+      if (!context.mounted) return;
+      ModalUtil.showMessage(
+        '${AppLocalizations.of(context)!.imageSaved} $fileName',
+      );
     } catch (e) {
       ModalUtil.showError(e);
     }

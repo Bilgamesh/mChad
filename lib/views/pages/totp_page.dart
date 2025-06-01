@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/mchat_login_model.dart';
-import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/services/mchat/mchat_login_service.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/utils/modal_util.dart';
@@ -9,6 +8,7 @@ import 'package:mchad/views/pages/tabs_page.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'login_page');
@@ -50,65 +50,61 @@ class _TotpPageState extends State<TotpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: languageNotifier,
-      builder:
-          (context, language, child) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              title: Text(language.appName),
-              actions: [DarkModeButtonWidget()],
-            ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: Center(
-                    child:
-                        loading
-                            ? LoadingWidget()
-                            : ListView(
-                              padding: const EdgeInsets.all(20.0),
-                              shrinkWrap: true,
-                              children: [
-                                Icon(Icons.forum_outlined, size: 70.0),
-                                SizedBox(height: 20.0),
-                                Center(
-                                  child: Text(
-                                    language.loginPageLabel,
-                                    style: TextStyle(fontSize: 20.0),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                TextField(
-                                  keyboardType:
-                                      TextInputType.numberWithOptions(),
-                                  controller: totpController,
-                                  onTapOutside:
-                                      (event) =>
-                                          FocusScope.of(context).unfocus(),
-                                  onSubmitted:
-                                      (value) =>
-                                          validated ? onSubmit(context) : null,
-                                  decoration: InputDecoration(
-                                    labelText: language.totpTextFieldHint,
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                OutlinedButton(
-                                  onPressed:
-                                      validated
-                                          ? () => onSubmit(context)
-                                          : null,
-                                  child: Text(language.loginButtonLabel),
-                                ),
-                              ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.appName),
+        actions: [DarkModeButtonWidget()],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child:
+                  loading
+                      ? LoadingWidget()
+                      : ListView(
+                        padding: const EdgeInsets.all(20.0),
+                        shrinkWrap: true,
+                        children: [
+                          Icon(Icons.forum_outlined, size: 70.0),
+                          SizedBox(height: 20.0),
+                          Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.loginPageLabel,
+                              style: TextStyle(fontSize: 20.0),
                             ),
-                  ),
-                ),
-                KeyboardSpaceWidget(withNavbar: false),
-              ],
+                          ),
+                          SizedBox(height: 20.0),
+                          TextField(
+                            keyboardType: TextInputType.numberWithOptions(),
+                            controller: totpController,
+                            onTapOutside:
+                                (event) => FocusScope.of(context).unfocus(),
+                            onSubmitted:
+                                (value) => validated ? onSubmit(context) : null,
+                            decoration: InputDecoration(
+                              labelText:
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.totpTextFieldHint,
+                            ),
+                          ),
+                          SizedBox(height: 20.0),
+                          OutlinedButton(
+                            onPressed:
+                                validated ? () => onSubmit(context) : null,
+                            child: Text(
+                              AppLocalizations.of(context)!.loginButtonLabel,
+                            ),
+                          ),
+                        ],
+                      ),
             ),
           ),
+          KeyboardSpaceWidget(withNavbar: false),
+        ],
+      ),
     );
   }
 

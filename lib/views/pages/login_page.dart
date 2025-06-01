@@ -14,6 +14,7 @@ import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'login_page');
@@ -70,131 +71,138 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: languageNotifier,
-      builder:
-          (context, language, child) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              title: Text(language.appName, style: TextStyle(fontSize: 22.0)),
-              actions: [DarkModeButtonWidget()],
-            ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: Center(
-                    child:
-                        loading
-                            ? LoadingWidget()
-                            : ListView(
-                              padding: const EdgeInsets.all(20.0),
-                              shrinkWrap: true,
-                              children: [
-                                Icon(Icons.forum_outlined, size: 70.0),
-                                SizedBox(height: 20.0),
-                                Center(
-                                  child: Text(
-                                    language.loginPageLabel,
-                                    style: TextStyle(fontSize: 20.0),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                TextField(
-                                  keyboardType: TextInputType.url,
-                                  controller: addressController,
-                                  focusNode: addressFocusNode,
-                                  onTapOutside: (event) {
-                                    validated = validate();
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  textInputAction: TextInputAction.next,
-                                  decoration: InputDecoration(
-                                    label: Row(
-                                      children: [
-                                        Text(language.addressTextFieldHint),
-                                        addressVerificationStatus ==
-                                                VerificationStatus.error
-                                            ? Text(
-                                              ' - ${language.mChatNotFound}',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                            : SizedBox.shrink(),
-                                      ],
-                                    ),
-                                    suffixIcon: VerificationIconWidget(
-                                      status: addressVerificationStatus,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                TextField(
-                                  controller: usernameController,
-                                  onTapOutside: (event) {
-                                    validated = validate();
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  textInputAction: TextInputAction.next,
-                                  decoration: InputDecoration(
-                                    label: Row(
-                                      children: [
-                                        Text(language.usernameTextFieldHint),
-                                        existingUser
-                                            ? Text(
-                                              ' - ${language.existingUserError}',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                            : SizedBox.shrink(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                TextField(
-                                  controller: passwordController,
-                                  onTapOutside: (event) {
-                                    validated = validate();
-                                    FocusScope.of(context).unfocus();
-                                  },
-                                  onSubmitted:
-                                      (value) =>
-                                          validated ? onLogin(context) : null,
-                                  obscureText: !showPassword,
-                                  enableSuggestions: false,
-                                  autocorrect: false,
-                                  decoration: InputDecoration(
-                                    labelText: language.passwordTextFieldHint,
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        HapticsUtil.vibrate();
-                                        setState(() {
-                                          showPassword = !showPassword;
-                                        });
-                                      },
-                                      icon:
-                                          showPassword
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 20.0),
-                                OutlinedButton(
-                                  onPressed:
-                                      validated ? () => onLogin(context) : null,
-                                  child: Text(language.loginButtonLabel),
-                                ),
-                              ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.appName,
+          style: TextStyle(fontSize: 22.0),
+        ),
+        actions: [DarkModeButtonWidget()],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child:
+                  loading
+                      ? LoadingWidget()
+                      : ListView(
+                        padding: const EdgeInsets.all(20.0),
+                        shrinkWrap: true,
+                        children: [
+                          Icon(Icons.forum_outlined, size: 70.0),
+                          SizedBox(height: 20.0),
+                          Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.loginPageLabel,
+                              style: TextStyle(fontSize: 20.0),
                             ),
-                  ),
-                ),
-                KeyboardSpaceWidget(withNavbar: false),
-              ],
+                          ),
+                          SizedBox(height: 20.0),
+                          TextField(
+                            keyboardType: TextInputType.url,
+                            controller: addressController,
+                            focusNode: addressFocusNode,
+                            onTapOutside: (event) {
+                              validated = validate();
+                              FocusScope.of(context).unfocus();
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                              label: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.addressTextFieldHint,
+                                  ),
+                                  addressVerificationStatus ==
+                                          VerificationStatus.error
+                                      ? Text(
+                                        ' - ${AppLocalizations.of(context)!.mChatNotFound}',
+                                        style: TextStyle(color: Colors.red),
+                                      )
+                                      : SizedBox.shrink(),
+                                ],
+                              ),
+                              suffixIcon: VerificationIconWidget(
+                                status: addressVerificationStatus,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20.0),
+                          TextField(
+                            controller: usernameController,
+                            onTapOutside: (event) {
+                              validated = validate();
+                              FocusScope.of(context).unfocus();
+                            },
+                            textInputAction: TextInputAction.next,
+                            decoration: InputDecoration(
+                              label: Row(
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.usernameTextFieldHint,
+                                  ),
+                                  existingUser
+                                      ? Text(
+                                        ' - ${AppLocalizations.of(context)!.existingUserError}',
+                                        style: TextStyle(color: Colors.red),
+                                      )
+                                      : SizedBox.shrink(),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20.0),
+                          TextField(
+                            controller: passwordController,
+                            onTapOutside: (event) {
+                              validated = validate();
+                              FocusScope.of(context).unfocus();
+                            },
+                            onSubmitted:
+                                (value) => validated ? onLogin(context) : null,
+                            obscureText: !showPassword,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            decoration: InputDecoration(
+                              labelText:
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.passwordTextFieldHint,
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  HapticsUtil.vibrate();
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },
+                                icon:
+                                    showPassword
+                                        ? Icon(Icons.visibility_off)
+                                        : Icon(Icons.visibility),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20.0),
+                          OutlinedButton(
+                            onPressed:
+                                validated ? () => onLogin(context) : null,
+                            child: Text(
+                              AppLocalizations.of(context)!.loginButtonLabel,
+                            ),
+                          ),
+                        ],
+                      ),
             ),
           ),
+          KeyboardSpaceWidget(withNavbar: false),
+        ],
+      ),
     );
   }
 

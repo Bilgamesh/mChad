@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/languages/dictionaries.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/services/github/github_update_service.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/views/widgets/color_picker_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({Key? key}) : super(key: key);
@@ -66,7 +66,9 @@ class SettingsTab extends StatelessWidget {
                                               left: 8.0,
                                             ),
                                             child: Text(
-                                              settings.language.updateAvailable,
+                                              AppLocalizations.of(
+                                                context,
+                                              )!.updateAvailable,
                                             ),
                                           ),
                                         ],
@@ -80,7 +82,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      settings.language.colorStyle,
+                      AppLocalizations.of(context)!.colorStyle,
                       style: KTextStyle.settingsLabelText,
                     ),
                   ],
@@ -90,7 +92,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      settings.language.notifications,
+                      AppLocalizations.of(context)!.notifications,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -123,7 +125,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      settings.language.haptics,
+                      AppLocalizations.of(context)!.haptics,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -140,7 +142,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      settings.language.transitionAnimations,
+                      AppLocalizations.of(context)!.transitionAnimations,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -157,19 +159,22 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      settings.language.language,
+                      AppLocalizations.of(context)!.languageLabel,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
                     DropdownButton(
                       value: settings.languageIndex,
-                      items: List.generate(
-                        Dictionaries.all.length,
-                        (index) => DropdownMenuItem(
-                          value: index,
-                          child: Text(Dictionaries.languageNames[index]),
+                      items: [
+                        DropdownMenuItem(
+                          value: 0,
+                          child: Text(AppLocalizations.of(context)!.english),
                         ),
-                      ),
+                        DropdownMenuItem(
+                          value: 1,
+                          child: Text(AppLocalizations.of(context)!.polish),
+                        ),
+                      ],
                       onTap: () {
                         HapticsUtil.vibrate();
                       },

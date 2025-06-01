@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mchad/data/languages/dictionaries.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/views/pages/init_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 void main() {
@@ -30,14 +30,15 @@ class MyApp extends StatelessWidget {
           (context, settings, child) => MaterialApp(
             navigatorKey: globals.navigatorKey,
             debugShowCheckedModeBanner: false,
-            title: settings.language.appName,
+            title: 'mChad',
             theme: ThemeData(colorScheme: settings.colorScheme),
             localizationsDelegates: [
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: Dictionaries.locales,
+            supportedLocales: AppLocalizations.supportedLocales,
             locale: settings.locale,
             home: InitPage(),
           ),

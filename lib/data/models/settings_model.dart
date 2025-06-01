@@ -4,10 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/languages/dictionaries.dart';
-import 'package:mchad/data/models/language_dictionary_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/stores/settings_store.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsModel {
   SettingsModel({
@@ -20,17 +19,13 @@ class SettingsModel {
   }) : colorScheme = ColorScheme.fromSeed(
          seedColor: KAppTheme.appColors.elementAt(colorIndex),
          brightness: isDark ? Brightness.dark : Brightness.light,
-       ),
-       language =
-           Dictionaries.all.elementAtOrNull(languageIndex) ??
-           Dictionaries.all[0];
+       );
   int colorIndex;
   bool isDark;
   bool notifications;
   bool haptics;
   bool transitionAnimations;
   int languageIndex;
-  LanguageDictionary language;
   ColorScheme colorScheme;
 
   static SettingsModel fromString(String strinfigiedTheme) {
@@ -45,25 +40,8 @@ class SettingsModel {
     );
   }
 
-  static LanguageDictionary resolveLanguageCode(String languageCode) {
-    for (var dictionary in Dictionaries.all) {
-      if (dictionary.code == languageCode) {
-        return dictionary;
-      }
-    }
-    throw 'Invalid language code';
-  }
-
   Locale get locale {
-    return Dictionaries.locales[languageIndex];
-  }
-
-  List<String> getLanguageNames() {
-    List<String> languageNames = [];
-    for (var dictionary in Dictionaries.all) {
-      languageNames.add(language.resolveCode(dictionary.code));
-    }
-    return languageNames;
+    return AppLocalizations.supportedLocales[languageIndex];
   }
 
   static SettingsModel getDefault() {
@@ -74,7 +52,9 @@ class SettingsModel {
           Brightness.dark,
       notifications: false,
       haptics: false,
-      languageIndex: Dictionaries.codes.indexOf(Platform.localeName),
+      languageIndex: AppLocalizations.supportedLocales.indexWhere(
+        (locale) => locale.languageCode == Platform.localeName.split('_').first,
+      ),
       transitionAnimations: true,
     );
   }
@@ -124,7 +104,6 @@ class SettingsModel {
 
   SettingsModel setLanguage(int languageIndex) {
     this.languageIndex = languageIndex;
-    language = Dictionaries.all[languageIndex];
     return this;
   }
 
@@ -139,7 +118,6 @@ class SettingsModel {
   }
 
   SettingsModel apply() {
-    languageNotifier.value = language;
     settingsNotifier.value = this;
     settingsNotifier.notifyListeners();
     return this;

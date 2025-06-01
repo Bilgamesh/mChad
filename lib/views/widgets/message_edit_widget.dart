@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/data/models/message_model.dart';
-import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MessageEditWidget extends StatefulWidget {
   const MessageEditWidget({Key? key, required this.selectedMessage})
@@ -46,60 +46,56 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: languageNotifier,
-      builder:
-          (context, language, child) => AlertDialog(
-            title: Text(language.editTitle),
-            content: SizedBox(
-              child: TextField(
-                controller: editController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                minLines: 4,
-                decoration: InputDecoration(
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
+    return AlertDialog(
+      title: Text(AppLocalizations.of(context)!.editTitle),
+      content: SizedBox(
+        child: TextField(
+          controller: editController,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
+          minLines: 4,
+          decoration: InputDecoration(
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              borderSide: BorderSide.none,
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  HapticsUtil.vibrate();
-                  Navigator.of(context).pop();
-                },
-                child: Text(language.cancel),
-              ),
-              TextButton(
-                onPressed:
-                    !validated
-                        ? null
-                        : () async {
-                          HapticsUtil.vibrate();
-                          Navigator.pop(context);
-                          if (widget.selectedMessage.message.text.trim() ==
-                              editController.text.trim()) {
-                            return;
-                          }
-                          globals.syncManager.sync.then(
-                            (sync) => sync
-                                .editOnServer(
-                                  widget.selectedMessage.id,
-                                  editController.text,
-                                )
-                                .onError(
-                                  (error, trace) => ModalUtil.showError(error),
-                                ),
-                          );
-                        },
-                child: Text(language.confirm),
-              ),
-            ],
           ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            HapticsUtil.vibrate();
+            Navigator.of(context).pop();
+          },
+          child: Text(AppLocalizations.of(context)!.cancel),
+        ),
+        TextButton(
+          onPressed:
+              !validated
+                  ? null
+                  : () async {
+                    HapticsUtil.vibrate();
+                    Navigator.pop(context);
+                    if (widget.selectedMessage.message.text.trim() ==
+                        editController.text.trim()) {
+                      return;
+                    }
+                    globals.syncManager.sync.then(
+                      (sync) => sync
+                          .editOnServer(
+                            widget.selectedMessage.id,
+                            editController.text,
+                          )
+                          .onError(
+                            (error, trace) => ModalUtil.showError(error),
+                          ),
+                    );
+                  },
+          child: Text(AppLocalizations.of(context)!.confirm),
+        ),
+      ],
     );
   }
 }

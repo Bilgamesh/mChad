@@ -65,7 +65,10 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat(null, languageNotifier.value.code);
+    final DateFormat formatter = DateFormat(
+      null,
+      settingsNotifier.value.locale.countryCode,
+    );
     var dateTime =
         '${formatter.format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.time) * 1000))} '
             .replaceAll(RegExp(r':\d{2} '), ' ')
