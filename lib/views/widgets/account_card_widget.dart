@@ -125,7 +125,8 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                         ),
                       ],
                     ),
-                    tileColor: settings.colorScheme.surfaceContainerHigh,
+                    selectedTileColor:
+                        settings.colorScheme.surfaceContainerHigh,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
                     ),
