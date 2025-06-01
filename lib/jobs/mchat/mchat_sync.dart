@@ -10,6 +10,7 @@ import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/services/mchat/mchat_chat_service.dart';
 import 'package:mchad/services/mchat/mchat_emoticons_service.dart';
 import 'package:mchad/services/mchat/mchat_users_service.dart';
+import 'package:mchad/utils/localization_util.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/utils/modal_util.dart';
@@ -40,7 +41,10 @@ class MchatSync {
         fetch the main page to get initial messages,
         formToken and creationTime */
       if (existingMessages.isEmpty) {
-        var chatService = MchatChatService(account: account);
+        var chatService = MchatChatService(
+          account: account,
+          onCloudFlare: onCloudFlare,
+        );
         var mainPage = await chatService.fetchMainPage();
         account.formToken = mainPage.formToken;
         account.creationTime = mainPage.creationTime;
@@ -61,7 +65,10 @@ class MchatSync {
       /* Check for new messages every tick
         after the initial messages have been fetched*/
       if (existingMessages.isNotEmpty) {
-        var chatService = MchatChatService(account: account);
+        var chatService = MchatChatService(
+          account: account,
+          onCloudFlare: onCloudFlare,
+        );
         var latestMessage = messageMapNotifier.value[account]!.first;
         var chatData = await chatService.refresh(
           latestMessage.id,
@@ -81,7 +88,10 @@ class MchatSync {
         has been in the foreground for a long time (every 100th request) */
       if ((index == 0 && existingMessages.isNotEmpty) ||
           (index % 100 == 0 && index != 0)) {
-        var chatService = MchatChatService(account: account);
+        var chatService = MchatChatService(
+          account: account,
+          onCloudFlare: onCloudFlare,
+        );
         var mainPage = await chatService.fetchMainPage();
         account.formToken = mainPage.formToken;
         account.creationTime = mainPage.creationTime;
@@ -98,14 +108,20 @@ class MchatSync {
       /* Periodically fetch user profile
         in case any user information has changed */
       if (index % 10 == 0) {
-        var profileService = MchatUsersService(account: account);
+        var profileService = MchatUsersService(
+          account: account,
+          onCloudFlare: onCloudFlare,
+        );
         var profile = await profileService.fetchUserProfile();
         await onUserProfile(profile);
       }
 
       /* Periodically check who is online */
       if (index % 10 == 0) {
-        var profileService = MchatUsersService(account: account);
+        var profileService = MchatUsersService(
+          account: account,
+          onCloudFlare: onCloudFlare,
+        );
         var onlineUsersData = await profileService.fetchOnlineUsers();
         onOnlineUsersUpdate(onlineUsersData);
       }
@@ -113,7 +129,10 @@ class MchatSync {
       /* Periodically fetch emoticons
         in case forum admin has changed them */
       if (index % 15 == 0) {
-        var emoticonsService = MchatEmoticonsService(account: account);
+        var emoticonsService = MchatEmoticonsService(
+          account: account,
+          onCloudFlare: onCloudFlare,
+        );
         bool next;
         var start = 0;
         List<Emoticon> emoticons = [];
@@ -260,7 +279,10 @@ class MchatSync {
       refreshStatusNotifier.notifyListeners();
 
       var lastMessage = messageMapNotifier.value[account]!.elementAtOrNull(0);
-      var response = await MchatChatService(account: account).add(
+      var response = await MchatChatService(
+        account: account,
+        onCloudFlare: onCloudFlare,
+      ).add(
         last: '${lastMessage?.id ?? 0}',
         text: text,
         formToken: account.formToken!,
@@ -289,7 +311,10 @@ class MchatSync {
       refreshStatusNotifier.value[account] = VerificationStatus.loading;
       refreshStatusNotifier.notifyListeners();
 
-      var response = await MchatChatService(account: account).del(
+      var response = await MchatChatService(
+        account: account,
+        onCloudFlare: onCloudFlare,
+      ).del(
         id: id,
         formToken: account.formToken!,
         creationTime: account.creationTime!,
@@ -317,7 +342,10 @@ class MchatSync {
       refreshStatusNotifier.value[account] = VerificationStatus.loading;
       refreshStatusNotifier.notifyListeners();
 
-      var response = await MchatChatService(account: account).edit(
+      var response = await MchatChatService(
+        account: account,
+        onCloudFlare: onCloudFlare,
+      ).edit(
         id: id,
         message: text,
         formToken: account.formToken!,
@@ -352,6 +380,7 @@ class MchatSync {
       }
       var response = await MchatChatService(
         account: account,
+        onCloudFlare: onCloudFlare,
       ).fetchArchive(startIndex);
       if (response.messages != null) onAddOld(response.messages!);
       loadingArchive = false;
@@ -366,5 +395,11 @@ class MchatSync {
     if (messages.isNotEmpty && messages[0].likeMessage != null) {
       globals.likeMessageMap[account] = messages[0].likeMessage!;
     }
+  }
+
+  void onCloudFlare() {
+    LocalizationUtil.currentLocalization.then((localization) {
+      ModalUtil.showMessage(localization.authorizingCloudflare);
+    });
   }
 }

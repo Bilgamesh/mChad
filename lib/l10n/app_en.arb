@@ -54,5 +54,6 @@
   "emoticons": "Emoticons",
   "bbcodes": "BBCodes",
   "hiddenUsers": "Hidden users",
-  "updateAvailable": "Update available"
+  "updateAvailable": "Update available",
+  "authorizingCloudflare": "Authorizing Cloudflare"
 }

@@ -11,6 +11,7 @@ List<MchatSync> syncs = [];
 bool appInitialized = false;
 Map<Account, String> logIdMap = {};
 Map<Account, String> chatBoxValueMap = {};
+Map<Account, TextSelection?> textSelectionMap = {};
 Map<Account, String> likeMessageMap = {};
 int focusLocksCount = 0;
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

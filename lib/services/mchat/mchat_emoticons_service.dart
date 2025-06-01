@@ -9,8 +9,9 @@ import 'package:mchad/utils/logging_util.dart';
 var logger = LoggingUtil(module: 'mchat_emoticons_service');
 
 class MchatEmoticonsService {
-  MchatEmoticonsService({required this.account});
+  MchatEmoticonsService({required this.account, this.onCloudFlare});
   final Account account;
+  final void Function()? onCloudFlare;
 
   Future<EmoticonsResponse> fetchEmoticons(int? start) async {
     try {
@@ -32,6 +33,7 @@ class MchatEmoticonsService {
         await account.updateCookies(cookies);
       }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
+        if (onCloudFlare != null) onCloudFlare!();
         var cloudflareAuthorization =
             await CloudflareService(
               baseUrl: account.forumUrl,

@@ -9,8 +9,9 @@ import 'package:mchad/utils/logging_util.dart';
 var logger = LoggingUtil(module: 'mchat_users_service');
 
 class MchatUsersService {
-  MchatUsersService({required this.account});
+  MchatUsersService({required this.account, this.onCloudFlare});
   final Account account;
+  final void Function()? onCloudFlare;
 
   Future<Account> fetchUserProfile() async {
     try {
@@ -82,6 +83,7 @@ class MchatUsersService {
         await account.updateCookies(cookies);
       }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
+        if (onCloudFlare != null) onCloudFlare!();
         var cloudflareAuthorization =
             await CloudflareService(
               baseUrl: account.forumUrl,

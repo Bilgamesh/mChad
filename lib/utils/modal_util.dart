@@ -5,12 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/data/notifiers.dart';
 
-var modalShown = false;
+var errorShown = false;
+var messageShown = false;
 
 class ModalUtil {
   static void showError(Object? error) {
-    if (globals.navigatorKey.currentContext == null || modalShown) return;
-    modalShown = true;
+    if (globals.navigatorKey.currentContext == null ||
+        errorShown ||
+        globals.background) {
+      return;
+    }
+    errorShown = true;
     Flushbar(
       message: error.toString(),
       margin: EdgeInsets.all(8),
@@ -23,13 +28,17 @@ class ModalUtil {
       titleColor: settingsNotifier.value.colorScheme.error,
     ).show(globals.navigatorKey.currentContext!);
     Timer(Duration(seconds: 5), () {
-      modalShown = false;
+      errorShown = false;
     });
   }
 
   static void showMessage(String message) {
-    if (globals.navigatorKey.currentContext == null || modalShown) return;
-    modalShown = true;
+    if (globals.navigatorKey.currentContext == null ||
+        messageShown ||
+        globals.background) {
+      return;
+    }
+    messageShown = true;
     Flushbar(
       message: message,
       margin: EdgeInsets.all(8),
@@ -42,7 +51,7 @@ class ModalUtil {
       titleColor: settingsNotifier.value.colorScheme.inverseSurface,
     ).show(globals.navigatorKey.currentContext!);
     Timer(Duration(seconds: 5), () {
-      modalShown = false;
+      messageShown = false;
     });
   }
 }

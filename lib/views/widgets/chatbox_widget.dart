@@ -34,7 +34,6 @@ class ChatboxWidget extends StatefulWidget {
 
 class _ChatboxWidgetState extends State<ChatboxWidget> {
   bool loaded = false;
-  TextSelection? lastTextSelection;
   String labelText = '';
 
   @override
@@ -108,14 +107,16 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
                                     IconButton(
                                       onPressed:
                                           () => widget.onCodePressed(
-                                            lastTextSelection,
+                                            globals.textSelectionMap[widget
+                                                .account],
                                           ),
                                       icon: Icon(Icons.code_outlined),
                                     ),
                                     IconButton(
                                       onPressed:
                                           () => widget.onEmojiPressed(
-                                            lastTextSelection,
+                                            globals.textSelectionMap[widget
+                                                .account],
                                           ),
                                       icon: Icon(Icons.emoji_emotions_outlined),
                                     ),
@@ -146,7 +147,7 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
   }
 
   void updateCachedInputText() {
-    lastTextSelection = widget.textController.selection;
+    globals.textSelectionMap[widget.account] = widget.textController.selection;
     var value = widget.textController.text;
     if (selectedAccountNotifier.value != null) {
       globals.chatBoxValueMap[selectedAccountNotifier.value!] = value;

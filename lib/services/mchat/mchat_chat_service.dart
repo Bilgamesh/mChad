@@ -14,8 +14,9 @@ import 'package:mchad/utils/url_util.dart';
 var logger = LoggingUtil(module: 'mchat_chat_service');
 
 class MchatChatService {
-  MchatChatService({required this.account});
+  MchatChatService({required this.account, this.onCloudFlare});
   final Account account;
+  final void Function()? onCloudFlare;
 
   Future<MchatChatModel> fetchMainPage() async {
     try {
@@ -408,6 +409,7 @@ class MchatChatService {
   }
 
   Future<void> updateCloudflare() async {
+    if (onCloudFlare != null) onCloudFlare!();
     var cloudflareAuthorization =
         await CloudflareService(baseUrl: account.forumUrl).authorizeHeadless();
     account.userAgent = cloudflareAuthorization.userAgent;

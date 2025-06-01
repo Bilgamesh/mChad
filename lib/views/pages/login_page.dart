@@ -5,6 +5,7 @@ import 'package:mchad/data/models/mchat_login_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/services/mchat/mchat_login_service.dart';
 import 'package:mchad/utils/haptics_util.dart';
+import 'package:mchad/utils/localization_util.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/utils/modal_util.dart';
 import 'package:mchad/utils/url_util.dart';
@@ -286,7 +287,10 @@ class _LoginPageState extends State<LoginPage> {
     for (var url in urls) {
       if (shouldAbort()) return null;
       try {
-        var loginService = MchatLoginService(baseUrl: url);
+        var loginService = MchatLoginService(
+          baseUrl: url,
+          onCloudFlare: onCloudFlare,
+        );
         await loginService.getLoginPageData();
         addressController.text = url;
         return true;
@@ -303,7 +307,10 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loading = true;
       });
-      var loginService = MchatLoginService(baseUrl: addressController.text);
+      var loginService = MchatLoginService(
+        baseUrl: addressController.text,
+        onCloudFlare: onCloudFlare,
+      );
       await loginService.init();
       await Future.delayed(Duration(seconds: 1));
       var loginData = await loginService.loginWithCredentials(
@@ -369,5 +376,11 @@ class _LoginPageState extends State<LoginPage> {
       MaterialPageRoute(builder: (context) => TabsPage()),
       (route) => false,
     );
+  }
+
+  void onCloudFlare() {
+    LocalizationUtil.currentLocalization.then((localization) {
+      ModalUtil.showMessage(localization.authorizingCloudflare);
+    });
   }
 }

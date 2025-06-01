@@ -8,11 +8,12 @@ import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/utils/url_util.dart';
 
 class MchatLoginService {
-  MchatLoginService({required this.baseUrl})
+  MchatLoginService({required this.baseUrl, this.onCloudFlare})
     : forumName = UrlUtil.convertUrlToName(baseUrl);
 
   final String baseUrl;
   final String forumName;
+  final void Function()? onCloudFlare;
 
   MchatLoginModel? loginPageData;
   MchatLoginModel? otpData;
@@ -37,6 +38,7 @@ class MchatLoginService {
     var response = await Response.fromStream(streamedResponse);
     if (DocumentUtil.isCloudflare(response.body, baseUrl) &&
         cloudflareAuthorization == null) {
+      if (onCloudFlare != null) onCloudFlare!();
       cloudflareAuthorization =
           await CloudflareService(baseUrl: baseUrl).authorizeHeadless();
       return await getLoginPageData();
