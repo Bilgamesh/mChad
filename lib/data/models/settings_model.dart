@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/stores/settings_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:mchad/utils/localization_util.dart';
+import 'package:mchad/utils/ui_util.dart';
 
 class SettingsModel {
   SettingsModel({
@@ -47,9 +47,7 @@ class SettingsModel {
   static SettingsModel getDefault() {
     return SettingsModel(
       colorIndex: 0,
-      isDark:
-          SchedulerBinding.instance.platformDispatcher.platformBrightness ==
-          Brightness.dark,
+      isDark: UiUtil.isSystemDarkMode,
       notifications: false,
       haptics: false,
       languageIndex: LocalizationUtil.systemLanguageIndex,

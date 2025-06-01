@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:mchad/data/constants.dart';
 
 class UiUtil {
@@ -10,5 +11,10 @@ class UiUtil {
         padding -
         (withNavbar ? KNavigationBarStyle.navigationBarHeight : 0);
     return height > 0 ? height : 0;
+  }
+
+  static bool get isSystemDarkMode {
+    return SchedulerBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark;
   }
 }
