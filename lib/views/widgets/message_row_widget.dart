@@ -10,6 +10,7 @@ import 'package:mchad/views/widgets/chat_bubble_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MessageRowWidget extends StatefulWidget {
   MessageRowWidget({
@@ -67,7 +68,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
   Widget build(BuildContext context) {
     final DateFormat formatter = DateFormat(
       null,
-      settingsNotifier.value.locale.countryCode,
+      AppLocalizations.of(context)!.localeName,
     );
     var dateTime =
         '${formatter.format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.time) * 1000))} '
