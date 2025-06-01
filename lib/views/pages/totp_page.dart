@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/mchat_login_model.dart';
 import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/jobs/mchat/mchat_sync_manager.dart';
 import 'package:mchad/services/mchat/mchat_login_service.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/utils/modal_util.dart';
@@ -10,6 +9,7 @@ import 'package:mchad/views/pages/tabs_page.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
+import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'login_page');
 
@@ -151,11 +151,11 @@ class _TotpPageState extends State<TotpPage> {
       userAgent: loginData.userAgent,
     );
     await account.setCookies(loginData.cookie!);
+    await account.save();
     account.select();
     await account.save();
-    Account.saveAll();
     account.updateNotifiers();
-    MchatSyncManager().restartAll();
+    globals.syncManager.restartAll();
     setState(() {
       loading = false;
     });

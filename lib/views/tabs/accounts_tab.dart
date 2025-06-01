@@ -117,6 +117,7 @@ class AccountsTab extends StatelessWidget {
         Account.saveAll();
       }
       globals.syncManager.startAll();
+      if (context.mounted) Navigator.of(context).pop();
       if (context.mounted && accountStore.getCount() == 0) {
         Navigator.pushAndRemoveUntil(
           context,
