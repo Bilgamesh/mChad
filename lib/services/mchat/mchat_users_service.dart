@@ -60,7 +60,7 @@ class MchatUsersService {
       );
     } catch (e) {
       logger.error('Failed to fetch user profile due to error: $e');
-      throw 'Could not connect fetch user profile from ${account.forumName}';
+      throw 'Could not fetch user profile from ${account.forumName}';
     }
   }
 
