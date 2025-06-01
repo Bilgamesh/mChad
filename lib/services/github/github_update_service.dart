@@ -55,35 +55,57 @@ class GithubUpdateService {
     return false;
   }
 
-  Future<String> get apkUrl async {
+  Future<dynamic> get assets async {
     var latest = await this.latest;
-    var assetsUrl = latest['assets_url'].toString();
+    var assetsUrl = latest['assets_url'];
     var streamedResponse = await (Client().send(
       Request('GET', Uri.parse(assetsUrl)),
     ));
     var response = await Response.fromStream(streamedResponse);
     var json = jsonDecode(response.body);
-    for (var element in json) {
-      if (element['name'].toString().toLowerCase().endsWith('.apk')) {
-        return element['browser_download_url'].toString();
+    return json;
+  }
+
+  Future<String> getApkUrl(dynamic assets) async {
+    for (var asset in assets) {
+      if (asset['name'].toString().toLowerCase().endsWith('.apk')) {
+        return asset['browser_download_url'].toString();
       }
     }
     throw 'apk not found';
   }
 
+  Future<String> getSha256checksum(dynamic assets) async {
+    for (var asset in assets) {
+      if (asset['name'].toString().toLowerCase().endsWith('sha256')) {
+        var url = asset['browser_download_url'].toString();
+        var streamedResponse = await (Client().send(
+          Request('GET', Uri.parse(url)),
+        ));
+        var response = await Response.fromStream(streamedResponse);
+        return response.body.split(' ').first;
+      }
+    }
+    throw 'sha256 not found';
+  }
+
   Future<void> downloadLatest() async {
     try {
       updateNotifier.value = UpdateStatus.inProgress;
-      var apkUrl = await this.apkUrl;
+      var assets = await this.assets;
+      var apkUrl = await getApkUrl(assets);
+      var sha256checksum = await getSha256checksum(assets);
       OtaUpdate()
-          .execute(apkUrl)
+          .execute(apkUrl, sha256checksum: sha256checksum)
           .listen(
             null,
-            cancelOnError: true,
+            cancelOnError: false,
             onDone: () {
               updateNotifier.value = UpdateStatus.available;
             },
             onError: (Object error) {
+              logger.error(error.toString());
+              ModalUtil.showError(error);
               updateNotifier.value = UpdateStatus.available;
             },
           );
