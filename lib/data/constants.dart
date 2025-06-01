@@ -75,7 +75,7 @@ class KUpdateConfig {
 
 class KNotificationsConfig {
   static const maxNotificationMessages = 5;
-  static const channelId = 'your channel id';
-  static const channelName = 'your channel name';
+  static const channelId = 'mChad-notifications-channel';
+  static const channelName = 'mChad-notifications-channel';
   static const icon = '@drawable/notif';
 }

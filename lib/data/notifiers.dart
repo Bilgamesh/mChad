@@ -17,13 +17,11 @@ class PropertyValueNotifier<T> extends ValueNotifier<T> {
 }
 
 ValueNotifier<int> selectedTabNotifier = ValueNotifier(0);
-
 PropertyValueNotifier<ScrollController?> chatScrollNotifier =
     PropertyValueNotifier(null);
 PropertyValueNotifier<List<Account>> accountsNotifier = PropertyValueNotifier(
   [],
 );
-
 PropertyValueNotifier<Map<Account, List<Message>>> messageMapNotifier =
     PropertyValueNotifier({});
 PropertyValueNotifier<Map<Account, List<BBTag>>> bbtagMapNotifier =
@@ -46,5 +44,4 @@ PropertyValueNotifier<Map<Account, VerificationStatus>> refreshStatusNotifier =
 PropertyValueNotifier<SettingsModel> settingsNotifier = PropertyValueNotifier(
   SettingsModel.getDefault(),
 );
-
 ValueNotifier<UpdateStatus> updateNotifier = ValueNotifier(UpdateStatus.none);

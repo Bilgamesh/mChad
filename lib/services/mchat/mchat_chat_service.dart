@@ -87,14 +87,14 @@ class MchatChatService {
         ..body = body,
     ));
     var response = await Response.fromStream(streamedResponse);
+    if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
+      await updateCloudflare();
+      return await refresh(last, log);
+    }
     if (response.statusCode >= 400) throw response.body;
     if (DocumentUtil.hasSessionCookie(response.headers)) {
       var cookies = DocumentUtil.extractCookie(response.headers)!;
       await account.updateCookies(cookies);
-    }
-    if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
-      await updateCloudflare();
-      return await refresh(last, log);
     }
     var json = jsonDecode(response.body) as Map<String, dynamic>;
     List<Message>? add, edit;
@@ -138,11 +138,6 @@ class MchatChatService {
           ..body = body,
       ));
       var response = await Response.fromStream(streamedResponse);
-      if (response.statusCode >= 400) throw response.body;
-      if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
-        await account.updateCookies(cookies);
-      }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await this.add(
@@ -151,6 +146,11 @@ class MchatChatService {
           last: last,
           text: text,
         );
+      }
+      if (response.statusCode >= 400) throw response.body;
+      if (DocumentUtil.hasSessionCookie(response.headers)) {
+        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        await account.updateCookies(cookies);
       }
       var json = jsonDecode(response.body) as Map<String, dynamic>;
       List<Message>? add, edit;
@@ -206,11 +206,6 @@ class MchatChatService {
           ..body = body,
       ));
       var response = await Response.fromStream(streamedResponse);
-      if (response.statusCode >= 400) throw response.body;
-      if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
-        await account.updateCookies(cookies);
-      }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await this.edit(
@@ -219,6 +214,11 @@ class MchatChatService {
           id: id,
           message: message,
         );
+      }
+      if (response.statusCode >= 400) throw response.body;
+      if (DocumentUtil.hasSessionCookie(response.headers)) {
+        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        await account.updateCookies(cookies);
       }
       var json = jsonDecode(response.body) as Map<String, dynamic>;
       List<Message>? add, edit;
@@ -271,11 +271,6 @@ class MchatChatService {
           ..body = body,
       ));
       var response = await Response.fromStream(streamedResponse);
-      if (response.statusCode >= 400) throw response.body;
-      if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
-        await account.updateCookies(cookies);
-      }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await del(
@@ -283,6 +278,11 @@ class MchatChatService {
           formToken: formToken,
           id: id,
         );
+      }
+      if (response.statusCode >= 400) throw response.body;
+      if (DocumentUtil.hasSessionCookie(response.headers)) {
+        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        await account.updateCookies(cookies);
       }
       var json = jsonDecode(response.body) as Map<String, dynamic>;
       List<Message>? add, edit;
