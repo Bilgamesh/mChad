@@ -87,7 +87,7 @@ class SettingsTab extends StatelessWidget {
                     ),
                   ],
                 ),
-                ColorPickerWidget(settings: settings),
+                FittedBox(child: ColorPickerWidget(settings: settings)),
                 SizedBox(height: 40.0),
                 Row(
                   children: [

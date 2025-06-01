@@ -36,8 +36,9 @@ class ChatImageWidget extends StatelessWidget {
           width: constraint,
           fit: BoxFit.cover,
           placeholder:
-              (context, url) =>
-                  CircularProgressIndicator(padding: EdgeInsets.all(100)),
+              (context, url) => FittedBox(
+                child: CircularProgressIndicator(padding: EdgeInsets.all(50)),
+              ),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
       ),
