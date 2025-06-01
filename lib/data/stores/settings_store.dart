@@ -17,9 +17,9 @@ class SettingsStore {
   }
 
   Future<SettingsModel> getSettings() async {
-    var strinfigiedTheme = prefs.getString(key);
-    if (strinfigiedTheme == null) return SettingsModel.getDefault();
-    var settings = SettingsModel.fromString(strinfigiedTheme);
+    var strinfigiedSettings = prefs.getString(key);
+    if (strinfigiedSettings == null) return SettingsModel.getDefault();
+    var settings = SettingsModel.fromString(strinfigiedSettings);
     if (settings.notifications) {
       settings.notifications = await NotificationsService.notificationsEnabled;
     }

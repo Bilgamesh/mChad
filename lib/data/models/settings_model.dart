@@ -28,8 +28,8 @@ class SettingsModel {
   int languageIndex;
   ColorScheme colorScheme;
 
-  static SettingsModel fromString(String strinfigiedTheme) {
-    var props = List<String>.from(jsonDecode(strinfigiedTheme));
+  static SettingsModel fromString(String strinfigiedSettings) {
+    var props = List<String>.from(jsonDecode(strinfigiedSettings));
     return SettingsModel(
       colorIndex: int.tryParse(props.elementAtOrNull(0) ?? '0') ?? 0,
       isDark: props.elementAtOrNull(1) == 'true',
@@ -63,11 +63,11 @@ class SettingsModel {
   String toString() {
     return jsonEncode(<String>[
       colorIndex.toString(),
-      isDark ? 'true' : 'false',
-      notifications ? 'true' : 'false',
-      haptics ? 'true' : 'false',
+      isDark.toString(),
+      notifications.toString(),
+      haptics.toString(),
       languageIndex.toString(),
-      transitionAnimations ? 'true' : 'false',
+      transitionAnimations.toString(),
     ]);
   }
 
