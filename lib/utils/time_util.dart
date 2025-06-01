@@ -8,7 +8,11 @@ class TimeUtil {
     var localization = await LocalizationUtil.currentLocalization;
 
     if (diff.inSeconds >= 1) {
-      return '${diff.inSeconds} ${diff.inSeconds == 1 ? localization.secondAgo : localization.secondsAgo}';
+      return '${diff.inSeconds} ${diff.inSeconds == 1
+          ? localization.secondAgo
+          : diff.inSeconds >= 2 && diff.inSeconds <= 4
+          ? localization.secondsAgo
+          : localization.secondsAgo2}';
     } else {
       return localization.justNow;
     }
@@ -19,7 +23,11 @@ class TimeUtil {
     var localization = AppLocalizations.of(context)!;
 
     if (diff.inSeconds >= 1) {
-      return '${diff.inSeconds} ${diff.inSeconds == 1 ? localization.secondAgo : localization.secondsAgo}';
+      return '${diff.inSeconds} ${diff.inSeconds == 1
+          ? localization.secondAgo
+          : diff.inSeconds >= 2 && diff.inSeconds <= 4
+          ? localization.secondsAgo
+          : localization.secondsAgo2}';
     } else {
       return localization.justNow;
     }
