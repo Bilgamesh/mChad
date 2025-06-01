@@ -30,48 +30,48 @@ class SettingsTab extends StatelessWidget {
                               ? SizedBox.shrink()
                               : Column(
                                 children: [
-                                  Stack(
-                                    children: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              settings
-                                                  .colorScheme
-                                                  .errorContainer,
+                                  Badge(
+                                    label: Text('!'),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            5.0,
+                                          ),
                                         ),
-                                        onPressed:
-                                            update == UpdateStatus.inProgress
-                                                ? null
-                                                : () async {
-                                                  await GithubUpdateService(
-                                                    endpoint:
-                                                        KUpdateConfig.endpoint,
-                                                  ).downloadLatest();
-                                                },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            update == UpdateStatus.inProgress
-                                                ? SizedBox(
-                                                  height: 20.0,
-                                                  child: LoadingWidget(),
-                                                )
-                                                : Icon(Icons.update),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                left: 8.0,
-                                              ),
-                                              child: Text(
-                                                settings
-                                                    .language
-                                                    .updateAvailable,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                        backgroundColor:
+                                            settings.colorScheme.errorContainer,
                                       ),
-                                    ],
+                                      onPressed:
+                                          update == UpdateStatus.inProgress
+                                              ? null
+                                              : () async {
+                                                await GithubUpdateService(
+                                                  endpoint:
+                                                      KUpdateConfig.endpoint,
+                                                ).downloadLatest();
+                                              },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          update == UpdateStatus.inProgress
+                                              ? SizedBox(
+                                                height: 20.0,
+                                                child: LoadingWidget(),
+                                              )
+                                              : Icon(Icons.update),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 8.0,
+                                            ),
+                                            child: Text(
+                                              settings.language.updateAvailable,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 20.0),
                                 ],
