@@ -222,6 +222,10 @@ class DocumentUtil {
         (element.attributes['class']?.contains('smilies') ?? false);
   }
 
+  static bool isEmojiSmilie(Element element) {
+    return element.className == 'emoji smilies';
+  }
+
   static bool isImageLink(Element element) {
     var isLink = element.attributes['class']?.contains('postlink') ?? false;
     if (!isLink) return false;

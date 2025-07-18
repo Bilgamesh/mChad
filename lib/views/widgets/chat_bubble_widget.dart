@@ -9,6 +9,7 @@ import 'package:mchad/views/widgets/chat_emoticon_widget.dart';
 import 'package:mchad/views/widgets/chat_image_widget.dart';
 import 'package:mchad/views/widgets/message_options_modal.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:flutter_svg/svg.dart';
 
 class ChatBubble extends StatelessWidget {
   final Message message;
@@ -121,6 +122,16 @@ class ChatBubble extends StatelessWidget {
                           return {'border-radius': '10px'};
                         },
                         customWidgetBuilder: (element) {
+                          if (DocumentUtil.isEmojiSmilie(element)) {
+                            return InlineCustomWidget(
+                              child:
+                                  element.attributes['alt']?.isNotEmpty == true
+                                      ? Text(element.attributes['alt']!)
+                                      : SvgPicture.network(
+                                        'https:${element.attributes['src']}',
+                                      ),
+                            );
+                          }
                           if (DocumentUtil.isSmilie(element)) {
                             return InlineCustomWidget(
                               child: ChatEmoticonWidget(
