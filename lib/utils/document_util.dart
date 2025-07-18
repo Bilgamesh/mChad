@@ -223,7 +223,9 @@ class DocumentUtil {
   }
 
   static bool isSystemSmilie(Element element) {
-    return element.className == 'emoji smilies';
+    return element.className == 'emoji smilies' &&
+        (element.attributes['alt'] != null ||
+            element.attributes['src'] != null);
   }
 
   static bool isImageLink(Element element) {
