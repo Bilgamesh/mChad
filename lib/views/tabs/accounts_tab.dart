@@ -7,7 +7,7 @@ import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/widgets/account_card_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'accounts_tab');

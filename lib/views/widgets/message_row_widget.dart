@@ -10,7 +10,7 @@ import 'package:mchad/views/widgets/chat_bubble_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class MessageRowWidget extends StatefulWidget {
   MessageRowWidget({

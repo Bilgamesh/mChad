@@ -6,7 +6,7 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/utils/modal_util.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 final offset1 = Tween(begin: const Offset(0, 1), end: const Offset(0, 0));
 final offset2 = Tween(begin: const Offset(0, 1), end: const Offset(0, 0));

@@ -3,7 +3,7 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/views/widgets/bbcodes_list_widget.dart';
 import 'package:mchad/views/widgets/emoticon_list_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 enum Tabs { emoticons, bbcodes }
 

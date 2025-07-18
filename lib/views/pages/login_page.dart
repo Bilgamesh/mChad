@@ -15,7 +15,7 @@ import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'login_page');

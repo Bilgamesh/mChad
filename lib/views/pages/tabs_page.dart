@@ -9,7 +9,7 @@ import 'package:mchad/views/tabs/chat_tab.dart';
 import 'package:mchad/views/tabs/settings_tab.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/floating_scroll_button_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 const tabs = [ChatTab(), AccountsTab(), SettingsTab()];
 

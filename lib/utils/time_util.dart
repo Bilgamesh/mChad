@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:mchad/utils/localization_util.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class TimeUtil {
   static Future<String> convertToAgo(DateTime input) async {

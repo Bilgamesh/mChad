@@ -8,7 +8,7 @@ import 'package:mchad/utils/modal_util.dart';
 import 'package:flutter/services.dart';
 import 'package:mchad/views/widgets/message_edit_widget.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class MessageOptionsModal extends StatelessWidget {
   const MessageOptionsModal({

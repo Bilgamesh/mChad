@@ -6,7 +6,7 @@ import 'package:mchad/services/github/github_update_service.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/views/widgets/color_picker_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({Key? key}) : super(key: key);

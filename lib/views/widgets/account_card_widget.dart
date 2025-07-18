@@ -11,7 +11,7 @@ import 'package:mchad/utils/time_util.dart';
 import 'package:mchad/views/widgets/online_users_modal.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class AccountCardWidget extends StatefulWidget {
   const AccountCardWidget({

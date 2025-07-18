@@ -3,7 +3,7 @@ import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class MessageEditWidget extends StatefulWidget {
   const MessageEditWidget({Key? key, required this.selectedMessage})
