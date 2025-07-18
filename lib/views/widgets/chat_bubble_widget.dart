@@ -10,6 +10,7 @@ import 'package:mchad/views/widgets/chat_image_widget.dart';
 import 'package:mchad/views/widgets/message_options_modal.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:html/dom.dart' as dom;
 
 class ChatBubble extends StatelessWidget {
   final Message message;
@@ -121,39 +122,7 @@ class ChatBubble extends StatelessWidget {
                           }
                           return {'border-radius': '10px'};
                         },
-                        customWidgetBuilder: (element) {
-                          if (DocumentUtil.isSystemSmilie(element)) {
-                            return InlineCustomWidget(
-                              child:
-                                  element.attributes['alt']?.isNotEmpty == true
-                                      ? Text(element.attributes['alt']!)
-                                      : SvgPicture.network(
-                                        'https:${element.attributes['src']}',
-                                      ),
-                            );
-                          }
-                          if (DocumentUtil.isSmilie(element)) {
-                            return InlineCustomWidget(
-                              child: ChatEmoticonWidget(
-                                attributes: element.attributes,
-                                account: account,
-                              ),
-                            );
-                          }
-                          if (DocumentUtil.isImage(element)) {
-                            return ChatImageWidget(
-                              src: element.attributes['src']!,
-                              account: account,
-                            );
-                          }
-                          if (DocumentUtil.isImageLink(element)) {
-                            return ChatImageWidget(
-                              src: element.attributes['href']!,
-                              account: account,
-                            );
-                          }
-                          return null;
-                        },
+                        customWidgetBuilder: buildHtmlWidget,
                       ),
                     ),
                   ),
@@ -162,6 +131,38 @@ class ChatBubble extends StatelessWidget {
             ),
       ),
     );
+  }
+
+  Widget? buildHtmlWidget(dom.Element element) {
+    if (element.outerHtml == '<br>') {
+      return SizedBox.shrink();
+    }
+    if (DocumentUtil.isSystemSmilie(element)) {
+      return InlineCustomWidget(
+        child:
+            element.attributes['alt']?.isNotEmpty == true
+                ? Text(element.attributes['alt']!)
+                : SvgPicture.network('https:${element.attributes['src']}'),
+      );
+    }
+    if (DocumentUtil.isSmilie(element)) {
+      return InlineCustomWidget(
+        child: ChatEmoticonWidget(
+          attributes: element.attributes,
+          account: account,
+        ),
+      );
+    }
+    if (DocumentUtil.isImage(element)) {
+      return ChatImageWidget(src: element.attributes['src']!, account: account);
+    }
+    if (DocumentUtil.isImageLink(element)) {
+      return ChatImageWidget(
+        src: element.attributes['href']!,
+        account: account,
+      );
+    }
+    return null;
   }
 
   void onLongPress(BuildContext context, Account account) {
