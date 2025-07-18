@@ -222,7 +222,7 @@ class DocumentUtil {
         (element.attributes['class']?.contains('smilies') ?? false);
   }
 
-  static bool isEmojiSmilie(Element element) {
+  static bool isSystemSmilie(Element element) {
     return element.className == 'emoji smilies';
   }
 

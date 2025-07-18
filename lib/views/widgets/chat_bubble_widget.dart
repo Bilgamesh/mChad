@@ -122,7 +122,7 @@ class ChatBubble extends StatelessWidget {
                           return {'border-radius': '10px'};
                         },
                         customWidgetBuilder: (element) {
-                          if (DocumentUtil.isEmojiSmilie(element)) {
+                          if (DocumentUtil.isSystemSmilie(element)) {
                             return InlineCustomWidget(
                               child:
                                   element.attributes['alt']?.isNotEmpty == true
