@@ -10,7 +10,7 @@ import 'package:mchad/views/widgets/chat_bubble_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class MessageRowWidget extends StatefulWidget {
   MessageRowWidget({
@@ -68,7 +68,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
   Widget build(BuildContext context) {
     final DateFormat formatter = DateFormat(
       null,
-      AppLocalizations.of(context)!.localeName,
+      AppLocalizations.of(context).localeName,
     );
     var dateTime =
         '${formatter.format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.time) * 1000))} '
@@ -116,6 +116,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                               ? SizedBox(width: 50.0)
                               : CircleAvatar(
                                 radius: 25.0,
+                                backgroundColor: Colors.transparent,
                                 foregroundImage: CachedNetworkImageProvider(
                                   widget.avatarSrc,
                                   headers:
@@ -127,9 +128,6 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                                   cacheKey: CryptoUtil.generateMd5(
                                     '$headers${widget.avatarSrc}',
                                   ),
-                                ),
-                                backgroundImage: AssetImage(
-                                  'assets/images/no_avatar.gif',
                                 ),
                               ),
                           widget.isOnline && !widget.hasFollowUp
@@ -168,10 +166,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                       : widget.isSender
                       ? CircleAvatar(
                         radius: 25.0,
-                        // backgroundImage: NetworkImage(widget.avatarSrc),
-                        backgroundImage: AssetImage(
-                          'assets/images/no_avatar.gif',
-                        ),
+                        backgroundColor: Colors.transparent,
                         foregroundImage: CachedNetworkImageProvider(
                           widget.avatarSrc,
                           headers:

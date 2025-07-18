@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:mchad/data/notifiers.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/logging_util.dart';
 
 final logger = LoggingUtil(module: 'localization_util');

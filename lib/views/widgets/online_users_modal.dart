@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class OnlineUsersModal extends StatelessWidget {
   const OnlineUsersModal({
@@ -22,7 +22,7 @@ class OnlineUsersModal extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context)!.onlineUsers,
+              AppLocalizations.of(context).onlineUsers,
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Expanded(
@@ -68,7 +68,7 @@ class OnlineUsersModal extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Text(
-                                  '${AppLocalizations.of(context)!.hiddenUsers}: $hiddenCount',
+                                  '${AppLocalizations.of(context).hiddenUsers}: $hiddenCount',
                                 ),
                               ),
                             ],

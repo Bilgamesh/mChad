@@ -8,7 +8,7 @@ import 'package:mchad/views/pages/tabs_page.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'login_page');
@@ -53,7 +53,7 @@ class _TotpPageState extends State<TotpPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.appName),
+        title: Text(AppLocalizations.of(context).appName),
         actions: [DarkModeButtonWidget()],
       ),
       body: Column(
@@ -71,7 +71,7 @@ class _TotpPageState extends State<TotpPage> {
                           SizedBox(height: 20.0),
                           Center(
                             child: Text(
-                              AppLocalizations.of(context)!.loginPageLabel,
+                              AppLocalizations.of(context).loginPageLabel,
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ),
@@ -87,7 +87,7 @@ class _TotpPageState extends State<TotpPage> {
                               labelText:
                                   AppLocalizations.of(
                                     context,
-                                  )!.totpTextFieldHint,
+                                  ).totpTextFieldHint,
                             ),
                           ),
                           SizedBox(height: 20.0),
@@ -95,7 +95,7 @@ class _TotpPageState extends State<TotpPage> {
                             onPressed:
                                 validated ? () => onSubmit(context) : null,
                             child: Text(
-                              AppLocalizations.of(context)!.loginButtonLabel,
+                              AppLocalizations.of(context).loginButtonLabel,
                             ),
                           ),
                         ],

@@ -8,7 +8,7 @@ import 'package:mchad/utils/modal_util.dart';
 import 'package:flutter/services.dart';
 import 'package:mchad/views/widgets/message_edit_widget.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class MessageOptionsModal extends StatelessWidget {
   const MessageOptionsModal({
@@ -31,31 +31,31 @@ class MessageOptionsModal extends StatelessWidget {
       children: [
         ListTile(
           leading: Icon(Icons.copy),
-          title: Text(AppLocalizations.of(context)!.copy),
+          title: Text(AppLocalizations.of(context).copy),
           onTap: () => copy(context, message),
         ),
         ListTile(
           leading: Icon(Icons.share),
-          title: Text(AppLocalizations.of(context)!.share),
+          title: Text(AppLocalizations.of(context).share),
           onTap: () => share(context, message),
         ),
         isSelf
             ? SizedBox.shrink()
             : ListTile(
               leading: Icon(Icons.alternate_email),
-              title: Text(AppLocalizations.of(context)!.reply),
+              title: Text(AppLocalizations.of(context).reply),
               onTap: () => reply(context, message),
             ),
         ListTile(
           leading: Icon(Icons.format_quote),
-          title: Text(AppLocalizations.of(context)!.quote),
+          title: Text(AppLocalizations.of(context).quote),
           onTap: () => quote(context, message),
         ),
         isSelf
             ? SizedBox.shrink()
             : ListTile(
               leading: Icon(Icons.thumb_up),
-              title: Text(AppLocalizations.of(context)!.like),
+              title: Text(AppLocalizations.of(context).like),
               onTap: () => like(context, message),
             ),
         ValueListenableBuilder(
@@ -68,7 +68,7 @@ class MessageOptionsModal extends StatelessWidget {
                               (editDeleteLimitMap[account] ?? 0)
                       ? ListTile(
                         leading: Icon(Icons.edit),
-                        title: Text(AppLocalizations.of(context)!.edit),
+                        title: Text(AppLocalizations.of(context).edit),
                         onTap: () => edit(context, message),
                       )
                       : SizedBox.shrink(),
@@ -85,7 +85,7 @@ class MessageOptionsModal extends StatelessWidget {
                         iconColor: Colors.red,
                         leading: Icon(Icons.delete),
                         title: Text(
-                          AppLocalizations.of(context)!.delete,
+                          AppLocalizations.of(context).delete,
                           style: TextStyle(color: Colors.red),
                         ),
                         onTap: () => delete(context, message),
@@ -132,7 +132,7 @@ class MessageOptionsModal extends StatelessWidget {
     Navigator.pop(context);
     var likeMessage =
         globals.likeMessageMap[account] ??
-        AppLocalizations.of(context)!.defaultLikeMessage;
+        AppLocalizations.of(context).defaultLikeMessage;
     textController.text =
         '${'${textController.text.trim()} [i]$likeMessage[/i][quote="${selectedMessage.user.name}" post_id=${selectedMessage.id} time=${selectedMessage.time} user_id=${selectedMessage.user.id}] ${selectedMessage.message.text.replaceAll('\n', ' ')} [/quote]'.trim()} ';
     chatboxFocusNode.requestFocus();
@@ -157,14 +157,14 @@ class MessageOptionsModal extends StatelessWidget {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.deleteMessageTitle),
+            title: Text(AppLocalizations.of(context).deleteMessageTitle),
             content: Text(
-              AppLocalizations.of(context)!.deleteMessageConfirmation,
+              AppLocalizations.of(context).deleteMessageConfirmation,
             ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(AppLocalizations.of(context)!.cancel),
+                child: Text(AppLocalizations.of(context).cancel),
               ),
               TextButton(
                 onPressed: () async {
@@ -176,7 +176,7 @@ class MessageOptionsModal extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  AppLocalizations.of(context)!.confirm,
+                  AppLocalizations.of(context).confirm,
                   style: TextStyle(color: Colors.red),
                 ),
               ),

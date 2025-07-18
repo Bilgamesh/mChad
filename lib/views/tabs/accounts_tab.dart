@@ -7,7 +7,7 @@ import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/widgets/account_card_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'accounts_tab');
@@ -51,10 +51,10 @@ class AccountsTab extends StatelessWidget {
                                 builder:
                                     (context) => AlertDialog(
                                       title: Text(
-                                        AppLocalizations.of(context)!.logout,
+                                        AppLocalizations.of(context).logout,
                                       ),
                                       content: Text(
-                                        '${AppLocalizations.of(context)!.logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context)!.account}?',
+                                        '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
                                       ),
                                       actions: [
                                         TextButton(
@@ -65,7 +65,7 @@ class AccountsTab extends StatelessWidget {
                                           child: Text(
                                             AppLocalizations.of(
                                               context,
-                                            )!.cancel,
+                                            ).cancel,
                                           ),
                                         ),
                                         TextButton(
@@ -77,7 +77,7 @@ class AccountsTab extends StatelessWidget {
                                           child: Text(
                                             AppLocalizations.of(
                                               context,
-                                            )!.confirm,
+                                            ).confirm,
                                           ),
                                         ),
                                       ],
@@ -107,6 +107,7 @@ class AccountsTab extends StatelessWidget {
   }
 
   logout(BuildContext context, Account account) async {
+    if (context.mounted) Navigator.of(context).pop();
     HapticsUtil.vibrate();
     var accountStore = await AccountStore.getInstance();
     var wasSelected = account.isSelected();
@@ -123,7 +124,6 @@ class AccountsTab extends StatelessWidget {
         Account.saveAll();
       }
       globals.syncManager.startAll();
-      if (context.mounted) Navigator.of(context).pop();
       if (context.mounted && accountStore.getCount() == 0) {
         Navigator.pushAndRemoveUntil(
           context,

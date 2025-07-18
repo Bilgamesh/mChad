@@ -9,7 +9,7 @@ import 'package:mchad/views/tabs/chat_tab.dart';
 import 'package:mchad/views/tabs/settings_tab.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/floating_scroll_button_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 const tabs = [ChatTab(), AccountsTab(), SettingsTab()];
 
@@ -36,7 +36,7 @@ class TabsPage extends StatelessWidget {
                               color: Colors.transparent,
                               child: Text(
                                 selectedAccount?.forumName ??
-                                    AppLocalizations.of(context)!.appName,
+                                    AppLocalizations.of(context).appName,
                                 style: TextStyle(fontSize: 22.0),
                               ),
                             ),
@@ -56,7 +56,7 @@ class TabsPage extends StatelessWidget {
                       selectedTab == 1
                           ? FloatingActionButton.extended(
                             icon: Icon(Icons.login),
-                            label: Text(AppLocalizations.of(context)!.loginButtonLabel),
+                            label: Text(AppLocalizations.of(context).loginButtonLabel),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
@@ -98,7 +98,7 @@ class TabsPage extends StatelessWidget {
                                 if (unreadMessages.isEmpty) {
                                   return NavigationDestination(
                                     icon: icon,
-                                    label: AppLocalizations.of(context)!.chatLabelValue,
+                                    label: AppLocalizations.of(context).chatLabelValue,
                                   );
                                 }
                                 return NavigationDestination(
@@ -106,7 +106,7 @@ class TabsPage extends StatelessWidget {
                                     label: Text('${unreadMessages.length}'),
                                     child: icon,
                                   ),
-                                  label: AppLocalizations.of(context)!.chatLabelValue,
+                                  label: AppLocalizations.of(context).chatLabelValue,
                                 );
                               },
                             ),
@@ -130,7 +130,7 @@ class TabsPage extends StatelessWidget {
                                 if (unreadMessages.isEmpty) {
                                   return NavigationDestination(
                                     icon: icon,
-                                    label: AppLocalizations.of(context)!.accountsLabelValue,
+                                    label: AppLocalizations.of(context).accountsLabelValue,
                                   );
                                 }
                                 return NavigationDestination(
@@ -138,7 +138,7 @@ class TabsPage extends StatelessWidget {
                                     label: Text('${unreadMessages.length}'),
                                     child: icon,
                                   ),
-                                  label: AppLocalizations.of(context)!.accountsLabelValue,
+                                  label: AppLocalizations.of(context).accountsLabelValue,
                                 );
                               },
                             ),
@@ -154,7 +154,7 @@ class TabsPage extends StatelessWidget {
                                       update == UpdateStatus.available
                                           ? Badge(label: Text('!'), child: icon)
                                           : icon,
-                                  label: AppLocalizations.of(context)!.settingsLabelValue,
+                                  label: AppLocalizations.of(context).settingsLabelValue,
                                 );
                               },
                             ),

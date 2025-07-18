@@ -10,7 +10,7 @@ import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class ImagePage extends StatefulWidget {
   const ImagePage({
@@ -155,7 +155,7 @@ class _ImagePageState extends State<ImagePage> {
       await file.writeAsBytes(res.bodyBytes);
       if (!context.mounted) return;
       ModalUtil.showMessage(
-        '${AppLocalizations.of(context)!.imageSaved} $fileName',
+        '${AppLocalizations.of(context).imageSaved} $fileName',
       );
     } catch (e) {
       ModalUtil.showError(e);
