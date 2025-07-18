@@ -1,1 +1,21 @@
+# --- Force Dart as the primary language ---
 *.dart linguist-language=Dart
+pubspec.yaml linguist-language=Dart
+
+# --- Ignore vendored/generated files from language stats ---
+# Flutter build outputs
+build/* linguist-vendored
+# Flutter web outputs
+web/build/* linguist-vendored
+# Old JS project artifacts (if any)
+node_modules/* linguist-vendored
+dist/* linguist-vendored
+# Android/iOS build outputs
+android/build/* linguist-vendored
+ios/Pods/* linguist-vendored
+# Dart/Flutter pub cache (if accidentally committed)
+.packages linguist-vendored
+.dart_tool/* linguist-vendored
+
+# --- Ignore assets (images, fonts, etc.) from stats ---
+assets/** linguist-vendored
