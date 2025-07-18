@@ -271,6 +271,7 @@ class MchatSync {
   void onOnlineUsersUpdate(OnlineUsersResponse onlineUsersData) {
     if (stopped) return;
     onlineUsersMapNotifer.value[account] = onlineUsersData;
+    onlineUsersMapNotifer.notifyListeners();
   }
 
   Future<void> sendToServer(String text) async {

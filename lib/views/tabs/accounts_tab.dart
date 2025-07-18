@@ -107,6 +107,7 @@ class AccountsTab extends StatelessWidget {
   }
 
   logout(BuildContext context, Account account) async {
+    if (context.mounted) Navigator.of(context).pop();
     HapticsUtil.vibrate();
     var accountStore = await AccountStore.getInstance();
     var wasSelected = account.isSelected();
@@ -123,7 +124,6 @@ class AccountsTab extends StatelessWidget {
         Account.saveAll();
       }
       globals.syncManager.startAll();
-      if (context.mounted) Navigator.of(context).pop();
       if (context.mounted && accountStore.getCount() == 0) {
         Navigator.pushAndRemoveUntil(
           context,
