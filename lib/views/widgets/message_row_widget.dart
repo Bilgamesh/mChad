@@ -116,6 +116,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                               ? SizedBox(width: 50.0)
                               : CircleAvatar(
                                 radius: 25.0,
+                                backgroundColor: Colors.transparent,
                                 foregroundImage: CachedNetworkImageProvider(
                                   widget.avatarSrc,
                                   headers:
@@ -127,9 +128,6 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                                   cacheKey: CryptoUtil.generateMd5(
                                     '$headers${widget.avatarSrc}',
                                   ),
-                                ),
-                                backgroundImage: AssetImage(
-                                  'assets/images/no_avatar.gif',
                                 ),
                               ),
                           widget.isOnline && !widget.hasFollowUp
@@ -168,10 +166,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                       : widget.isSender
                       ? CircleAvatar(
                         radius: 25.0,
-                        // backgroundImage: NetworkImage(widget.avatarSrc),
-                        backgroundImage: AssetImage(
-                          'assets/images/no_avatar.gif',
-                        ),
+                        backgroundColor: Colors.transparent,
                         foregroundImage: CachedNetworkImageProvider(
                           widget.avatarSrc,
                           headers:

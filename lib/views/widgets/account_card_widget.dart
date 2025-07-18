@@ -84,6 +84,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                     onTap: widget.onSelect,
                     leading: CircleAvatar(
                       radius: 25.0,
+                      backgroundColor: Colors.transparent,
                       foregroundImage:
                           widget.account.avatarUrl != null
                               ? CachedNetworkImageProvider(
@@ -99,9 +100,6 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                                 ),
                               )
                               : AssetImage('assets/images/no_avatar.gif'),
-                      backgroundImage: AssetImage(
-                        'assets/images/no_avatar.gif',
-                      ),
                     ),
                     titleAlignment: ListTileTitleAlignment.titleHeight,
                     onLongPress:
