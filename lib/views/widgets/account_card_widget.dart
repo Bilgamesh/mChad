@@ -135,7 +135,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                         FittedBox(
                           child: Text(
                             widget.isSelected
-                                ? '@${widget.account.forumName} - ${AppLocalizations.of(context)!.currentlySelected}'
+                                ? '@${widget.account.forumName} - ${AppLocalizations.of(context).currentlySelected}'
                                 : '@${widget.account.forumName}',
                           ),
                         ),
@@ -143,7 +143,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                           child: Row(
                             children: [
                               Text(
-                                '${AppLocalizations.of(context)!.numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
+                                '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
                               ),
                               IconButton(
                                 onPressed: () {
@@ -168,7 +168,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                                 return SizedBox(
                                   height: 30,
                                   child: Text(
-                                    '${AppLocalizations.of(context)!.unreadMessages}: ${unreadMessages.length}',
+                                    '${AppLocalizations.of(context).unreadMessages}: ${unreadMessages.length}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -192,11 +192,11 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                                               VerificationStatus.loading
                                           ? AppLocalizations.of(
                                             context,
-                                          )!.chatRefreshing
+                                          ).chatRefreshing
                                           : (refreshStatusMap[widget.account] ==
                                                   VerificationStatus.error
-                                              ? '${AppLocalizations.of(context)!.chatRefreshError} ${timeRelative ?? getTimeRelative(context)}'
-                                              : '${AppLocalizations.of(context)!.chatRefreshed} ${timeRelative ?? getTimeRelative(context)}'),
+                                              ? '${AppLocalizations.of(context).chatRefreshError} ${timeRelative ?? getTimeRelative(context)}'
+                                              : '${AppLocalizations.of(context).chatRefreshed} ${timeRelative ?? getTimeRelative(context)}'),
                                       style:
                                           refreshStatusMap[widget.account] ==
                                                   VerificationStatus.error
@@ -217,7 +217,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                                 children: [
                                   Icon(Icons.menu_open),
                                   Text(
-                                    ' ${AppLocalizations.of(context)!.open} ',
+                                    ' ${AppLocalizations.of(context).open} ',
                                   ),
                                 ],
                               ),
@@ -228,7 +228,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                               child: Row(
                                 children: [
                                   Icon(Icons.logout),
-                                  Text(AppLocalizations.of(context)!.logout),
+                                  Text(AppLocalizations.of(context).logout),
                                 ],
                               ),
                             ),

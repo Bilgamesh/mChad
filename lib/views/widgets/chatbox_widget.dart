@@ -124,7 +124,7 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
                                 ),
                               ),
                               hintText:
-                                  AppLocalizations.of(context)!.chatboxHint,
+                                  AppLocalizations.of(context).chatboxHint,
                               labelText:
                                   labelText.isNotEmpty ? labelText : null,
                               labelStyle: TextStyle(

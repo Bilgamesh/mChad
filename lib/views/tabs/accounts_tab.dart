@@ -51,10 +51,10 @@ class AccountsTab extends StatelessWidget {
                                 builder:
                                     (context) => AlertDialog(
                                       title: Text(
-                                        AppLocalizations.of(context)!.logout,
+                                        AppLocalizations.of(context).logout,
                                       ),
                                       content: Text(
-                                        '${AppLocalizations.of(context)!.logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context)!.account}?',
+                                        '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
                                       ),
                                       actions: [
                                         TextButton(
@@ -65,7 +65,7 @@ class AccountsTab extends StatelessWidget {
                                           child: Text(
                                             AppLocalizations.of(
                                               context,
-                                            )!.cancel,
+                                            ).cancel,
                                           ),
                                         ),
                                         TextButton(
@@ -77,7 +77,7 @@ class AccountsTab extends StatelessWidget {
                                           child: Text(
                                             AppLocalizations.of(
                                               context,
-                                            )!.confirm,
+                                            ).confirm,
                                           ),
                                         ),
                                       ],

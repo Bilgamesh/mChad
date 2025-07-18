@@ -68,7 +68,7 @@ class SettingsTab extends StatelessWidget {
                                             child: Text(
                                               AppLocalizations.of(
                                                 context,
-                                              )!.updateAvailable,
+                                              ).updateAvailable,
                                             ),
                                           ),
                                         ],
@@ -82,7 +82,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.colorStyle,
+                      AppLocalizations.of(context).colorStyle,
                       style: KTextStyle.settingsLabelText,
                     ),
                   ],
@@ -92,7 +92,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.notifications,
+                      AppLocalizations.of(context).notifications,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -125,7 +125,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.haptics,
+                      AppLocalizations.of(context).haptics,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -142,7 +142,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.transitionAnimations,
+                      AppLocalizations.of(context).transitionAnimations,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -159,7 +159,7 @@ class SettingsTab extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.languageLabel,
+                      AppLocalizations.of(context).languageLabel,
                       style: KTextStyle.settingsLabelText,
                     ),
                     Expanded(child: SizedBox.shrink()),
@@ -168,11 +168,11 @@ class SettingsTab extends StatelessWidget {
                       items: [
                         DropdownMenuItem(
                           value: 0,
-                          child: Text(AppLocalizations.of(context)!.english),
+                          child: Text(AppLocalizations.of(context).english),
                         ),
                         DropdownMenuItem(
                           value: 1,
-                          child: Text(AppLocalizations.of(context)!.polish),
+                          child: Text(AppLocalizations.of(context).polish),
                         ),
                       ],
                       onTap: () {

@@ -53,7 +53,7 @@ class _TotpPageState extends State<TotpPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.appName),
+        title: Text(AppLocalizations.of(context).appName),
         actions: [DarkModeButtonWidget()],
       ),
       body: Column(
@@ -71,7 +71,7 @@ class _TotpPageState extends State<TotpPage> {
                           SizedBox(height: 20.0),
                           Center(
                             child: Text(
-                              AppLocalizations.of(context)!.loginPageLabel,
+                              AppLocalizations.of(context).loginPageLabel,
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ),
@@ -87,7 +87,7 @@ class _TotpPageState extends State<TotpPage> {
                               labelText:
                                   AppLocalizations.of(
                                     context,
-                                  )!.totpTextFieldHint,
+                                  ).totpTextFieldHint,
                             ),
                           ),
                           SizedBox(height: 20.0),
@@ -95,7 +95,7 @@ class _TotpPageState extends State<TotpPage> {
                             onPressed:
                                 validated ? () => onSubmit(context) : null,
                             child: Text(
-                              AppLocalizations.of(context)!.loginButtonLabel,
+                              AppLocalizations.of(context).loginButtonLabel,
                             ),
                           ),
                         ],

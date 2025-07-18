@@ -155,7 +155,7 @@ class _ImagePageState extends State<ImagePage> {
       await file.writeAsBytes(res.bodyBytes);
       if (!context.mounted) return;
       ModalUtil.showMessage(
-        '${AppLocalizations.of(context)!.imageSaved} $fileName',
+        '${AppLocalizations.of(context).imageSaved} $fileName',
       );
     } catch (e) {
       ModalUtil.showError(e);

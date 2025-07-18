@@ -42,12 +42,12 @@ class _TextWidgetsModalWidgetState extends State<TextWidgetsModalWidget> {
             segments: [
               ButtonSegment(
                 value: Tabs.bbcodes,
-                label: Text(AppLocalizations.of(context)!.bbcodes),
+                label: Text(AppLocalizations.of(context).bbcodes),
                 icon: Icon(Icons.code),
               ),
               ButtonSegment(
                 value: Tabs.emoticons,
-                label: Text(AppLocalizations.of(context)!.emoticons),
+                label: Text(AppLocalizations.of(context).emoticons),
                 icon: Icon(Icons.emoji_emotions_outlined),
               ),
             ],

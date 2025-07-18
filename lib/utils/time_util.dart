@@ -20,7 +20,7 @@ class TimeUtil {
 
   static String convertToAgoSync(DateTime input, BuildContext context) {
     Duration diff = DateTime.now().difference(input);
-    var localization = AppLocalizations.of(context)!;
+    var localization = AppLocalizations.of(context);
 
     if (diff.inSeconds >= 1) {
       return '${diff.inSeconds} ${diff.inSeconds == 1

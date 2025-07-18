@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.appName,
+          AppLocalizations.of(context).appName,
           style: TextStyle(fontSize: 22.0),
         ),
         actions: [DarkModeButtonWidget()],
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(height: 20.0),
                           Center(
                             child: Text(
-                              AppLocalizations.of(context)!.loginPageLabel,
+                              AppLocalizations.of(context).loginPageLabel,
                               style: TextStyle(fontSize: 20.0),
                             ),
                           ),
@@ -116,12 +116,12 @@ class _LoginPageState extends State<LoginPage> {
                                   Text(
                                     AppLocalizations.of(
                                       context,
-                                    )!.addressTextFieldHint,
+                                    ).addressTextFieldHint,
                                   ),
                                   addressVerificationStatus ==
                                           VerificationStatus.error
                                       ? Text(
-                                        ' - ${AppLocalizations.of(context)!.mChatNotFound}',
+                                        ' - ${AppLocalizations.of(context).mChatNotFound}',
                                         style: TextStyle(color: Colors.red),
                                       )
                                       : SizedBox.shrink(),
@@ -146,11 +146,11 @@ class _LoginPageState extends State<LoginPage> {
                                   Text(
                                     AppLocalizations.of(
                                       context,
-                                    )!.usernameTextFieldHint,
+                                    ).usernameTextFieldHint,
                                   ),
                                   existingUser
                                       ? Text(
-                                        ' - ${AppLocalizations.of(context)!.existingUserError}',
+                                        ' - ${AppLocalizations.of(context).existingUserError}',
                                         style: TextStyle(color: Colors.red),
                                       )
                                       : SizedBox.shrink(),
@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                               labelText:
                                   AppLocalizations.of(
                                     context,
-                                  )!.passwordTextFieldHint,
+                                  ).passwordTextFieldHint,
                               suffixIcon: IconButton(
                                 onPressed: () {
                                   HapticsUtil.vibrate();
@@ -194,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed:
                                 validated ? () => onLogin(context) : null,
                             child: Text(
-                              AppLocalizations.of(context)!.loginButtonLabel,
+                              AppLocalizations.of(context).loginButtonLabel,
                             ),
                           ),
                         ],
