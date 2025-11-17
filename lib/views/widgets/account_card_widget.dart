@@ -39,14 +39,19 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   @override
   void initState() {
     timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
-      var timeRelativeNew = await TimeUtil.convertToAgo(
-        refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
-      );
-      setState(() {
-        timeRelative = timeRelativeNew;
-      });
+      updateTime();
     });
+    refreshTimeMapNotifer.addListener(updateTime);
     super.initState();
+  }
+
+  void updateTime() async {
+    var timeRelativeNew = await TimeUtil.convertToAgo(
+      refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
+    );
+    setState(() {
+      timeRelative = timeRelativeNew;
+    });
   }
 
   String getTimeRelative(BuildContext context) {
@@ -59,6 +64,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   @override
   void dispose() {
     timer?.cancel();
+    refreshTimeMapNotifer.removeListener(updateTime);
     super.dispose();
   }
 

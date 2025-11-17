@@ -429,6 +429,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.15.4"
+  gradient_icon:
+    dependency: "direct main"
+    description:
+      name: gradient_icon
+      sha256: "5852c1f44825e49d479c91602b5e9e17a4fbc49af69ac314b1f906b0c62c6193"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.9"
   html:
     dependency: "direct main"
     description:
@@ -882,6 +890,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  system_theme:
+    dependency: "direct main"
+    description:
+      name: system_theme
+      sha256: "5f93485401689601d4636a695f99f7c70a30873ee68c1d95025d908a3386be7e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.2"
+  system_theme_web:
+    dependency: transitive
+    description:
+      name: system_theme_web
+      sha256: "900c92c5c050ce58048f241ef9a17e5cd8629808325a05b473dc62a6e99bae77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   term_glyph:
     dependency: transitive
     description:

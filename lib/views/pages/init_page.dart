@@ -11,6 +11,7 @@ import 'package:mchad/views/pages/tabs_page.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:system_theme/system_theme.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'init_page');
@@ -20,7 +21,7 @@ class InitPage extends StatelessWidget {
 
   Future<void> initApp(BuildContext context) async {
     initializeDateFormatting();
-    initSettings();
+    await initSettings();
 
     var prefs = await SharedPreferences.getInstance();
     var accountStore = AccountStore(prefs: prefs);
@@ -62,6 +63,9 @@ class InitPage extends StatelessWidget {
   Future<void> initSettings() async {
     var settingsStore = await SettingsStore.getInstance();
     var settings = await settingsStore.getSettings();
+    SystemTheme.fallbackColor = settings.colors[0];
+    await SystemTheme.accentColor.load();
+    settings.updateAccentColor();
     settings.apply();
   }
 

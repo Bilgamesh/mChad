@@ -7,6 +7,7 @@ import 'package:mchad/data/stores/settings_store.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/localization_util.dart';
 import 'package:mchad/utils/ui_util.dart';
+import 'package:system_theme/system_theme.dart';
 
 class SettingsModel {
   SettingsModel({
@@ -19,13 +20,15 @@ class SettingsModel {
   }) : colorScheme = ColorScheme.fromSeed(
          seedColor: KAppTheme.appColors.elementAt(colorIndex),
          brightness: isDark ? Brightness.dark : Brightness.light,
-       );
+       ),
+       colors = [...KAppTheme.appColors];
   int colorIndex;
   bool isDark;
   bool notifications;
   bool haptics;
   bool transitionAnimations;
   int languageIndex;
+  List<Color> colors;
   ColorScheme colorScheme;
 
   static SettingsModel fromString(String strinfigiedSettings) {
@@ -73,9 +76,14 @@ class SettingsModel {
     return apply();
   }
 
+  SettingsModel updateAccentColor() {
+    colors[0] = SystemTheme.accentColor.accent;
+    return updateColorScheme();
+  }
+
   SettingsModel updateColorScheme() {
     colorScheme = ColorScheme.fromSeed(
-      seedColor: KAppTheme.appColors.elementAt(colorIndex),
+      seedColor: colors.elementAt(colorIndex),
       brightness: isDark ? Brightness.dark : Brightness.light,
     );
     return this;
