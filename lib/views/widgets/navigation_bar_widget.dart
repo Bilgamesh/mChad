@@ -26,7 +26,9 @@ class NavigationBarWidget extends StatelessWidget {
         final messageMap = values[2] as Map<Account, List<Message>>;
         final messages = messageMap[account] ?? [];
         final update = values[3] as UpdateStatus;
-        final unreadMessagesCurrent = messages.where((m) => !(m.isRead ?? false));
+        final unreadMessagesCurrent = messages.where(
+          (m) => !(m.isRead ?? false),
+        );
         final unreadMessagesRemaining = <Message>[];
         messageMap.forEach((key, messages) {
           if (key != account) {
@@ -44,6 +46,7 @@ class NavigationBarWidget extends StatelessWidget {
             HapticsUtil.vibrate();
             selectedTabNotifier.value = value;
           },
+
           destinations: [
             NavigationDestination(
               icon: UiUtil.wrapWithBadge(
@@ -56,6 +59,7 @@ class NavigationBarWidget extends StatelessWidget {
               ),
               label: AppLocalizations.of(context).chatLabelValue,
             ),
+
             NavigationDestination(
               icon: UiUtil.wrapWithBadge(
                 icon: switch (selectedTab) {
@@ -67,6 +71,7 @@ class NavigationBarWidget extends StatelessWidget {
               ),
               label: AppLocalizations.of(context).accountsLabelValue,
             ),
+
             NavigationDestination(
               icon: UiUtil.wrapWithBadge(
                 icon: switch (selectedTab) {

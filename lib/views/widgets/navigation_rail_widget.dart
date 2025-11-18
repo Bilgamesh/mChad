@@ -47,6 +47,7 @@ class NavigationRailWidget extends StatelessWidget {
             HapticsUtil.vibrate();
             selectedTabNotifier.value = value;
           },
+
           leading: Row(
             children: [
               Hero(
@@ -61,6 +62,7 @@ class NavigationRailWidget extends StatelessWidget {
               ),
             ],
           ),
+
           destinations: [
             NavigationRailDestination(
               icon: UiUtil.wrapWithBadge(
@@ -73,6 +75,7 @@ class NavigationRailWidget extends StatelessWidget {
               ),
               label: Text(AppLocalizations.of(context).chatLabelValue),
             ),
+
             NavigationRailDestination(
               icon: UiUtil.wrapWithBadge(
                 icon: switch (selectedTab) {
@@ -84,6 +87,7 @@ class NavigationRailWidget extends StatelessWidget {
               ),
               label: Text(AppLocalizations.of(context).accountsLabelValue),
             ),
+
             NavigationRailDestination(
               icon: UiUtil.wrapWithBadge(
                 icon: switch (selectedTab) {

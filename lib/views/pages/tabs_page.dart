@@ -64,7 +64,7 @@ class TabsPage extends StatelessWidget {
                         child: AnimatedSwitcher(
                           duration: Duration(
                             milliseconds:
-                                settings.transitionAnimations ? 500 : 0,
+                                settings.transitionAnimations ? 250 : 0,
                           ),
                           child: tabs[selectedTab](orientation),
                         ),
