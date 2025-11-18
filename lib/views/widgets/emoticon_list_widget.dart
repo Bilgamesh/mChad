@@ -93,8 +93,8 @@ class EmoticonListWidget extends StatelessWidget {
       textController.text += ' ${emoticon.code} ';
       return;
     }
-    var left = textController.text.substring(0, lastTextSelection!.start);
-    var right = textController.text.substring(lastTextSelection!.start);
+    final left = textController.text.substring(0, lastTextSelection!.start);
+    final right = textController.text.substring(lastTextSelection!.start);
     textController.value = TextEditingValue(
       text: '$left ${emoticon.code} $right',
       selection: TextSelection.fromPosition(

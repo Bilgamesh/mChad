@@ -5,9 +5,9 @@ import 'package:mchad/data/constants.dart';
 
 class UiUtil {
   static double getBottomSafeAreaHeight(BuildContext context, bool withNavbar) {
-    var inset = MediaQuery.of(context).viewInsets.bottom;
-    var padding = withNavbar ? MediaQuery.of(context).viewPadding.bottom : 0;
-    var height =
+    final inset = MediaQuery.of(context).viewInsets.bottom;
+    final padding = withNavbar ? MediaQuery.of(context).viewPadding.bottom : 0;
+    final height =
         inset -
         padding -
         (withNavbar ? KNavigationBarStyle.navigationBarHeight : 0);

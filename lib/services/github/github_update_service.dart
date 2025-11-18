@@ -16,7 +16,7 @@ class GithubUpdateService {
 
   Future<String> get latestVersion async {
     try {
-      var latest = await this.latest;
+      final latest = await this.latest;
       return latest['tag_name'].toString().substring(1);
     } catch (e) {
       logger.error(e.toString());
@@ -25,19 +25,19 @@ class GithubUpdateService {
   }
 
   Future<dynamic> get latest async {
-    var streamedResponse = await (Client().send(
+    final streamedResponse = await (Client().send(
       Request('GET', Uri.parse(endpoint)),
     ));
-    var response = await Response.fromStream(streamedResponse);
-    var json = jsonDecode(response.body);
-    var latest = json[0];
+    final response = await Response.fromStream(streamedResponse);
+    final json = jsonDecode(response.body);
+    final latest = json[0];
     return latest;
   }
 
   Future<bool> isNewVersionAvailable(String currentVersion) async {
-    var latest = await latestVersion;
-    var [latestMajor, latestMinor, latestPatch] = latest.split('.');
-    var [currentMajor, currentMinor, currentPatch] = currentVersion.split('.');
+    final latest = await latestVersion;
+    final [latestMajor, latestMinor, latestPatch] = latest.split('.');
+    final [currentMajor, currentMinor, currentPatch] = currentVersion.split('.');
 
     if (int.parse(latestMajor) > int.parse(currentMajor)) return true;
 
@@ -56,13 +56,13 @@ class GithubUpdateService {
   }
 
   Future<dynamic> get assets async {
-    var latest = await this.latest;
-    var assetsUrl = latest['assets_url'];
-    var streamedResponse = await (Client().send(
+    final latest = await this.latest;
+    final assetsUrl = latest['assets_url'];
+    final streamedResponse = await (Client().send(
       Request('GET', Uri.parse(assetsUrl)),
     ));
-    var response = await Response.fromStream(streamedResponse);
-    var json = jsonDecode(response.body);
+    final response = await Response.fromStream(streamedResponse);
+    final json = jsonDecode(response.body);
     return json;
   }
 
@@ -78,11 +78,11 @@ class GithubUpdateService {
   Future<String?> getSha256checksum(dynamic assets) async {
     for (var asset in assets) {
       if (asset['name'].toString().toLowerCase().endsWith('sha256')) {
-        var url = asset['browser_download_url'].toString();
-        var streamedResponse = await (Client().send(
+        final url = asset['browser_download_url'].toString();
+        final streamedResponse = await (Client().send(
           Request('GET', Uri.parse(url)),
         ));
-        var response = await Response.fromStream(streamedResponse);
+        final response = await Response.fromStream(streamedResponse);
         return response.body.split(' ').first;
       }
     }
@@ -92,9 +92,9 @@ class GithubUpdateService {
   Future<void> downloadLatest() async {
     try {
       updateNotifier.value = UpdateStatus.inProgress;
-      var assets = await this.assets;
-      var apkUrl = await getApkUrl(assets);
-      var sha256checksum = await getSha256checksum(assets);
+      final assets = await this.assets;
+      final apkUrl = await getApkUrl(assets);
+      final sha256checksum = await getSha256checksum(assets);
       OtaUpdate()
           .execute(apkUrl, sha256checksum: sha256checksum)
           .listen(

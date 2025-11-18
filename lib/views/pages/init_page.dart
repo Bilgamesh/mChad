@@ -23,9 +23,9 @@ class InitPage extends StatelessWidget {
     initializeDateFormatting();
     await initSettings();
 
-    var prefs = await SharedPreferences.getInstance();
-    var accountStore = AccountStore(prefs: prefs);
-    var accounts = accountStore.getAll();
+    final prefs = await SharedPreferences.getInstance();
+    final accountStore = AccountStore(prefs: prefs);
+    final accounts = accountStore.getAll();
 
     for (var account in accounts) {
       account.updateNotifiers();
@@ -64,8 +64,8 @@ class InitPage extends StatelessWidget {
   }
 
   Future<void> initSettings() async {
-    var settingsStore = await SettingsStore.getInstance();
-    var settings = await settingsStore.getSettings();
+    final settingsStore = await SettingsStore.getInstance();
+    final settings = await settingsStore.getSettings();
     SystemTheme.fallbackColor = settings.colors[0];
     await SystemTheme.accentColor.load();
     settings.updateAccentColor();

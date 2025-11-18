@@ -47,9 +47,9 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   Future<void> updateClipboardData() async {
-    var hasData = await Clipboard.hasStrings();
+    final hasData = await Clipboard.hasStrings();
     if (!hasData) return;
-    var data = await Clipboard.getData('text/plain');
+    final data = await Clipboard.getData('text/plain');
     setState(() {
       clipboardData = data;
     });
@@ -121,11 +121,11 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void addBbCodeToEmptyTextField(BBTag bbcode) {
-    var fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
       true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
       false => '${bbcode.start}${bbcode.end}',
     };
-    var cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
       true => '${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
       false => bbcode.start.length,
     };
@@ -138,18 +138,18 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void addBbCodeAtCursorPosition(BBTag bbcode) {
-    var left = widget.textController.text.substring(
+    final left = widget.textController.text.substring(
       0,
       widget.lastTextSelection!.start,
     );
-    var right = widget.textController.text.substring(
+    final right = widget.textController.text.substring(
       widget.lastTextSelection!.start,
     );
-    var fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
       true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
       false => '${bbcode.start}${bbcode.end}',
     };
-    var cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
       true => '$left${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
       false => '$left${bbcode.start}'.length,
     };
@@ -162,18 +162,18 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void wrapSelectedTextWithBbCode(BBTag bbcode) {
-    var left = widget.textController.text.substring(
+    final left = widget.textController.text.substring(
       0,
       widget.lastTextSelection!.start,
     );
-    var inside = widget.textController.text.substring(
+    final inside = widget.textController.text.substring(
       widget.lastTextSelection!.start,
       widget.lastTextSelection!.end,
     );
-    var right = widget.textController.text.substring(
+    final right = widget.textController.text.substring(
       widget.lastTextSelection!.end,
     );
-    var fullBbCodeValue = '${bbcode.start}$inside${bbcode.end}';
+    final fullBbCodeValue = '${bbcode.start}$inside${bbcode.end}';
     widget.textController.value = TextEditingValue(
       text: '$left$fullBbCodeValue$right',
       selection: TextSelection(

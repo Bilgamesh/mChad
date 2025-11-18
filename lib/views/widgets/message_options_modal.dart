@@ -122,7 +122,7 @@ class MessageOptionsModal extends StatelessWidget {
   void like(BuildContext context, Message selectedMessage) {
     HapticsUtil.vibrate();
     Navigator.pop(context);
-    var likeMessage =
+    final likeMessage =
         globals.likeMessageMap[account] ??
         AppLocalizations.of(context).defaultLikeMessage;
     textController.text =

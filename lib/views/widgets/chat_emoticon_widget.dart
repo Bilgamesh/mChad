@@ -16,7 +16,7 @@ class ChatEmoticonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cacheKey = CryptoUtil.generateMd5(
+    final cacheKey = CryptoUtil.generateMd5(
       '${account.getHeaders()}${attributes['src']}',
     );
     return ClipRRect(

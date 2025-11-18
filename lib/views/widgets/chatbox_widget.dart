@@ -141,15 +141,15 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
 
   void updateCachedInputText() {
     globals.textSelectionMap[widget.account] = widget.textController.selection;
-    var value = widget.textController.text;
+    final value = widget.textController.text;
     if (selectedAccountNotifier.value != null) {
       globals.chatBoxValueMap[selectedAccountNotifier.value!] = value;
     }
   }
 
   void updateMessageLengthLimitLabel() {
-    var messageLength = widget.textController.text.length;
-    var ratio = messageLength / widget.messageLimit;
+    final messageLength = widget.textController.text.length;
+    final ratio = messageLength / widget.messageLimit;
     if (widget.messageLimit == 0 || messageLength == 0 || ratio < 0.9) {
       setState(() {
         labelText = '';

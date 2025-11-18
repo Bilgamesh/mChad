@@ -98,11 +98,11 @@ class AccountsTab extends StatelessWidget {
   logout(BuildContext context, Account account) async {
     if (context.mounted) Navigator.of(context).pop();
     HapticsUtil.vibrate();
-    var accountStore = await AccountStore.getInstance();
-    var wasSelected = account.isSelected();
+    final accountStore = await AccountStore.getInstance();
+    final wasSelected = account.isSelected();
     globals.syncManager.stopAll();
     try {
-      var loginService = MchatLoginService(baseUrl: account.forumUrl);
+      final loginService = MchatLoginService(baseUrl: account.forumUrl);
       await loginService.logout(account);
       await account.delete();
     } catch (e) {

@@ -28,7 +28,7 @@ class TotpPage extends StatefulWidget {
 }
 
 class _TotpPageState extends State<TotpPage> {
-  var totpController = TextEditingController();
+  final totpController = TextEditingController();
   var validated = false;
   var loading = false;
 
@@ -117,7 +117,7 @@ class _TotpPageState extends State<TotpPage> {
       setState(() {
         loading = true;
       });
-      var loginData = await widget.loginService.loginWithOtp(
+      final loginData = await widget.loginService.loginWithOtp(
         totpController.text,
       );
       totpController.clear();
@@ -139,7 +139,7 @@ class _TotpPageState extends State<TotpPage> {
     MchatLoginModel loginData,
   ) async {
     totpController.clear();
-    var account = Account(
+    final account = Account(
       userName: widget.username,
       userId: loginData.userId!,
       forumName: loginData.forumName!,

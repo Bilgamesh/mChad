@@ -20,32 +20,32 @@ class MchatChatService {
 
   Future<MchatChatModel> fetchMainPage() async {
     try {
-      var targetUrl = '${account.forumUrl}/app.php/mchat';
+      final targetUrl = '${account.forumUrl}/app.php/mchat';
       final Map<String, String> headers = {
         'accept':
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var streamedResponse = await (Client().send(
+      final streamedResponse = await (Client().send(
         Request('GET', Uri.parse(targetUrl))..headers.addAll(headers),
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await fetchMainPage();
       }
-      var doc = parse(response.body);
-      var bbtags = DocumentUtil.extractBBTags(doc);
-      var editDeleteLimit = DocumentUtil.extractEditDeleteLimit(doc);
-      var messageLimit = DocumentUtil.extractMessageLimit(doc);
-      var messages = parseMessages(response.body, account.forumUrl);
-      var formToken = DocumentUtil.findInputData(doc, 'form_token', 'value');
-      var creationTime = DocumentUtil.findInputData(
+      final doc = parse(response.body);
+      final bbtags = DocumentUtil.extractBBTags(doc);
+      final editDeleteLimit = DocumentUtil.extractEditDeleteLimit(doc);
+      final messageLimit = DocumentUtil.extractMessageLimit(doc);
+      final messages = parseMessages(response.body, account.forumUrl);
+      final formToken = DocumentUtil.findInputData(doc, 'form_token', 'value');
+      final creationTime = DocumentUtil.findInputData(
         doc,
         'creation_time',
         'value',
@@ -69,34 +69,34 @@ class MchatChatService {
   }
 
   Future<MchatRefreshResponse> refresh(int last, String log) async {
-    var headers = {
+    final headers = {
       'x-requested-with': 'XMLHttpRequest',
       'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
       'cookie': await account.getCookies(),
     };
     if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-    var body = UrlUtil.mapToUrlEncoded({
+    final body = UrlUtil.mapToUrlEncoded({
       'last': '$last',
       'log': log,
       '_referer': '${account.forumUrl}/index.php',
     });
-    var targetUrl = '${account.forumUrl}/app.php/mchat/action/refresh';
-    var streamedResponse = await (Client().send(
+    final targetUrl = '${account.forumUrl}/app.php/mchat/action/refresh';
+    final streamedResponse = await (Client().send(
       Request('POST', Uri.parse(targetUrl))
         ..headers.addAll(headers)
         ..body = body,
     ));
-    var response = await Response.fromStream(streamedResponse);
+    final response = await Response.fromStream(streamedResponse);
     if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
       await updateCloudflare();
       return await refresh(last, log);
     }
     if (response.statusCode >= 400) throw response.body;
     if (DocumentUtil.hasSessionCookie(response.headers)) {
-      var cookies = DocumentUtil.extractCookie(response.headers)!;
+      final cookies = DocumentUtil.extractCookie(response.headers)!;
       await account.updateCookies(cookies);
     }
-    var json = jsonDecode(response.body) as Map<String, dynamic>;
+    final json = jsonDecode(response.body) as Map<String, dynamic>;
     List<Message>? add, edit;
     if (json['add'] != null) {
       add = parseMessages(json['add']!, account.forumUrl);
@@ -119,25 +119,25 @@ class MchatChatService {
     required String creationTime,
   }) async {
     try {
-      var headers = {
+      final headers = {
         'x-requested-with': 'XMLHttpRequest',
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var body = UrlUtil.mapToUrlEncoded({
+      final body = UrlUtil.mapToUrlEncoded({
         'last': last,
         'message': text,
         'creation_time': creationTime,
         'form_token': formToken,
       });
-      var targetUrl = '${account.forumUrl}/app.php/mchat/action/add';
-      var streamedResponse = await (Client().send(
+      final targetUrl = '${account.forumUrl}/app.php/mchat/action/add';
+      final streamedResponse = await (Client().send(
         Request('POST', Uri.parse(targetUrl))
           ..headers.addAll(headers)
           ..body = body,
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await this.add(
@@ -149,10 +149,10 @@ class MchatChatService {
       }
       if (response.statusCode >= 400) throw response.body;
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
-      var json = jsonDecode(response.body) as Map<String, dynamic>;
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
       List<Message>? add, edit;
       if (json['add'] != null) {
         add = parseMessages(json['add']!, account.forumUrl);
@@ -169,7 +169,7 @@ class MchatChatService {
     } catch (e) {
       logger.error('Error during add $e');
       if (DocumentUtil.isJson(e.toString())) {
-        var parsedError = jsonDecode(e.toString()) as Map<String, dynamic>;
+        final parsedError = jsonDecode(e.toString()) as Map<String, dynamic>;
         if (parsedError['message'] != null) {
           throw parsedError['message']!;
         }
@@ -185,13 +185,13 @@ class MchatChatService {
     required String formToken,
   }) async {
     try {
-      var headers = {
+      final headers = {
         'x-requested-with': 'XMLHttpRequest',
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var body = UrlUtil.mapToUrlEncoded({
+      final body = UrlUtil.mapToUrlEncoded({
         'message_id': '$id',
         'message': message,
         'page': 'index',
@@ -199,13 +199,13 @@ class MchatChatService {
         'form_token': formToken,
         '_referer': '${account.forumUrl}/index.php',
       });
-      var targetUrl = '${account.forumUrl}/app.php/mchat/action/edit';
-      var streamedResponse = await (Client().send(
+      final targetUrl = '${account.forumUrl}/app.php/mchat/action/edit';
+      final streamedResponse = await (Client().send(
         Request('POST', Uri.parse(targetUrl))
           ..headers.addAll(headers)
           ..body = body,
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await this.edit(
@@ -217,10 +217,10 @@ class MchatChatService {
       }
       if (response.statusCode >= 400) throw response.body;
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
-      var json = jsonDecode(response.body) as Map<String, dynamic>;
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
       List<Message>? add, edit;
       if (json['add'] != null) {
         add = parseMessages(json['add']!, account.forumUrl);
@@ -237,7 +237,7 @@ class MchatChatService {
     } catch (e) {
       logger.error('Error during edit $e');
       if (DocumentUtil.isJson(e.toString())) {
-        var parsedError = jsonDecode(e.toString()) as Map<String, dynamic>;
+        final parsedError = jsonDecode(e.toString()) as Map<String, dynamic>;
         if (parsedError['message'] != null) {
           throw parsedError['message']!;
         }
@@ -252,25 +252,25 @@ class MchatChatService {
     required String creationTime,
   }) async {
     try {
-      var headers = {
+      final headers = {
         'x-requested-with': 'XMLHttpRequest',
         'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var body = UrlUtil.mapToUrlEncoded({
+      final body = UrlUtil.mapToUrlEncoded({
         'message_id': '$id',
         'creation_time': creationTime,
         'form_token': formToken,
         '_referer': '${account.forumUrl}/index.php',
       });
-      var targetUrl = '${account.forumUrl}/app.php/mchat/action/del';
-      var streamedResponse = await (Client().send(
+      final targetUrl = '${account.forumUrl}/app.php/mchat/action/del';
+      final streamedResponse = await (Client().send(
         Request('POST', Uri.parse(targetUrl))
           ..headers.addAll(headers)
           ..body = body,
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await del(
@@ -281,10 +281,10 @@ class MchatChatService {
       }
       if (response.statusCode >= 400) throw response.body;
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
-      var json = jsonDecode(response.body) as Map<String, dynamic>;
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
       List<Message>? add, edit;
       if (json['add'] != null) {
         add = parseMessages(json['add']!, account.forumUrl);
@@ -301,7 +301,7 @@ class MchatChatService {
     } catch (e) {
       logger.error('Error during del: $e');
       if (DocumentUtil.isJson(e.toString())) {
-        var parsedError = jsonDecode(e.toString()) as Map<String, dynamic>;
+        final parsedError = jsonDecode(e.toString()) as Map<String, dynamic>;
         if (parsedError['message'] != null) {
           throw parsedError['message']!;
         }
@@ -312,27 +312,27 @@ class MchatChatService {
 
   Future<MchatChatModel> fetchArchive(int startIndex) async {
     try {
-      var headers = {
+      final headers = {
         'accept':
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var targetUrl =
+      final targetUrl =
           '${account.forumUrl}/app.php/mchat/archive?start=$startIndex';
-      var streamedResponse = await (Client().send(
+      final streamedResponse = await (Client().send(
         Request('GET', Uri.parse(targetUrl))..headers.addAll(headers),
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         await updateCloudflare();
         return await fetchArchive(startIndex);
       }
-      var messages = parseMessages(response.body, account.forumUrl);
+      final messages = parseMessages(response.body, account.forumUrl);
       for (var message in messages) {
         message.read();
       }
@@ -347,10 +347,10 @@ class MchatChatService {
   }
 
   List<Message> parseMessages(String html, String baseUrl) {
-    var doc = parse(html);
-    var messageElements = doc.getElementsByClassName('row mchat-message');
-    var likeMessage = DocumentUtil.extractLikeMessage(doc);
-    var logId = DocumentUtil.extractLogId(doc);
+    final doc = parse(html);
+    final messageElements = doc.getElementsByClassName('row mchat-message');
+    final likeMessage = DocumentUtil.extractLikeMessage(doc);
+    final logId = DocumentUtil.extractLogId(doc);
     List<Message> messages = [];
     for (var element in messageElements) {
       messages.add(
@@ -400,17 +400,17 @@ class MchatChatService {
   }
 
   String extractAvatarAttribute(Element element, String attributeName) {
-    var avatars = element.getElementsByClassName('avatar');
+    final avatars = element.getElementsByClassName('avatar');
     if (avatars.isNotEmpty) {
       return avatars.elementAt(0).attributes[attributeName] ?? '';
     }
-    var mchatAvatars = element.getElementsByClassName('mchat-avatar');
+    final mchatAvatars = element.getElementsByClassName('mchat-avatar');
     return mchatAvatars.elementAt(1).attributes[attributeName] ?? '';
   }
 
   Future<void> updateCloudflare() async {
     if (onCloudFlare != null) onCloudFlare!();
-    var cloudflareAuthorization =
+    final cloudflareAuthorization =
         await CloudflareService(baseUrl: account.forumUrl).authorizeHeadless();
     account.userAgent = cloudflareAuthorization.userAgent;
     await account.updateCookie(cloudflareAuthorization.cookie);

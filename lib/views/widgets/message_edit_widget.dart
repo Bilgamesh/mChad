@@ -15,7 +15,7 @@ class MessageEditWidget extends StatefulWidget {
 }
 
 class _MessageEditWidgetState extends State<MessageEditWidget> {
-  var editController = TextEditingController();
+  final editController = TextEditingController();
   var validated = false;
 
   @override

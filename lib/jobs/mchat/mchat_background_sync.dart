@@ -27,17 +27,17 @@ class BackgroundSync {
     logger.info('[BackgroundFetch] Headless event received.');
 
     try {
-      var prefs = await SharedPreferences.getInstance();
-      var accountStore = AccountStore(prefs: prefs);
-      var accounts = accountStore.getAll();
-      var settings = await SettingsStore(prefs: prefs).getSettings();
+      final prefs = await SharedPreferences.getInstance();
+      final accountStore = AccountStore(prefs: prefs);
+      final accounts = accountStore.getAll();
+      final settings = await SettingsStore(prefs: prefs).getSettings();
 
       for (var account in accounts) {
         try {
-          var chatService = MchatChatService(account: account);
-          var mainPage = await chatService.fetchMainPage();
-          var latestSavedMessageId = await Message.getLatestId(account);
-          var newMessages =
+          final chatService = MchatChatService(account: account);
+          final mainPage = await chatService.fetchMainPage();
+          final latestSavedMessageId = await Message.getLatestId(account);
+          final newMessages =
               mainPage.messages
                   ?.where((message) => message.id > latestSavedMessageId)
                   .toList();
@@ -63,9 +63,9 @@ class BackgroundSync {
   static Future<void> notificationTapBackground(
     flutter_local_notifications.NotificationResponse notificationResponse,
   ) async {
-    var accountIndex = int.parse(notificationResponse.payload ?? '0');
-    var accountStore = await AccountStore.getInstance();
-    var account = accountStore.get(accountIndex);
+    final accountIndex = int.parse(notificationResponse.payload ?? '0');
+    final accountStore = await AccountStore.getInstance();
+    final account = accountStore.get(accountIndex);
     account.select();
     await account.save();
   }
@@ -75,18 +75,18 @@ class BackgroundSync {
       logger.info('[BackgroundFetch] Event received $taskId');
 
       if (globals.background) {
-        var prefs = await SharedPreferences.getInstance();
-        var accountStore = AccountStore(prefs: prefs);
-        var accounts = accountStore.getAll();
-        var settings = await SettingsStore(prefs: prefs).getSettings();
+        final prefs = await SharedPreferences.getInstance();
+        final accountStore = AccountStore(prefs: prefs);
+        final accounts = accountStore.getAll();
+        final settings = await SettingsStore(prefs: prefs).getSettings();
 
         for (var account in accounts) {
           try {
-            var chatService = MchatChatService(account: account);
-            var mainPage = await chatService.fetchMainPage();
-            var existingMessages =
+            final chatService = MchatChatService(account: account);
+            final mainPage = await chatService.fetchMainPage();
+            final existingMessages =
                 messageMapNotifier.value[account] ?? <Message>[];
-            var newMessages =
+            final newMessages =
                 mainPage.messages
                     ?.where((message) => !existingMessages.contains(message))
                     .toList();

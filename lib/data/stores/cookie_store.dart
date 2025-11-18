@@ -10,7 +10,7 @@ class CookieStore {
   final String key;
 
   Future<String> get() async {
-    var cookie = await secureStorage.read(key: key);
+    final cookie = await secureStorage.read(key: key);
     if (cookie == null) throw 'Cookie does not exist';
     return cookie;
   }

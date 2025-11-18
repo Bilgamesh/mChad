@@ -5,7 +5,7 @@ import 'package:mchad/l10n/generated/app_localizations.dart';
 class TimeUtil {
   static Future<String> convertToAgo(DateTime input) async {
     Duration diff = DateTime.now().difference(input);
-    var localization = await LocalizationUtil.currentLocalization;
+    final localization = await LocalizationUtil.currentLocalization;
 
     if (diff.inSeconds >= 1) {
       return '${diff.inSeconds} ${diff.inSeconds == 1
@@ -20,7 +20,7 @@ class TimeUtil {
 
   static String convertToAgoSync(DateTime input, BuildContext context) {
     Duration diff = DateTime.now().difference(input);
-    var localization = AppLocalizations.of(context);
+    final localization = AppLocalizations.of(context);
 
     if (diff.inSeconds >= 1) {
       return '${diff.inSeconds} ${diff.inSeconds == 1

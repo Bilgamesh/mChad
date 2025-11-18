@@ -8,7 +8,7 @@ class SettingsStore {
   SharedPreferences prefs;
 
   static Future<SettingsStore> getInstance() async {
-    var prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     return SettingsStore(prefs: prefs);
   }
 
@@ -17,9 +17,9 @@ class SettingsStore {
   }
 
   Future<SettingsModel> getSettings() async {
-    var strinfigiedSettings = prefs.getString(key);
+    final strinfigiedSettings = prefs.getString(key);
     if (strinfigiedSettings == null) return SettingsModel.getDefault();
-    var settings = SettingsModel.fromString(strinfigiedSettings);
+    final settings = SettingsModel.fromString(strinfigiedSettings);
     if (settings.notifications) {
       settings.notifications = await NotificationsService.notificationsEnabled;
     }

@@ -14,11 +14,11 @@ class ChatImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var constraint = min(
+    final constraint = min(
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
-    var cacheKey = CryptoUtil.generateMd5('${account.getHeaders()}$src');
+    final cacheKey = CryptoUtil.generateMd5('${account.getHeaders()}$src');
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: GestureDetector(

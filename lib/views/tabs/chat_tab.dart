@@ -197,17 +197,17 @@ class _ChatTabState extends State<ChatTab> {
 
   bool hasFollowUpMessage(int index, List<Message> messages) {
     if (index == 0) return false;
-    var currentMessage = messages.elementAtOrNull(index);
-    var nextMessage = messages.elementAtOrNull(index - 1);
+    final currentMessage = messages.elementAtOrNull(index);
+    final nextMessage = messages.elementAtOrNull(index - 1);
     if (currentMessage == null || nextMessage == null) return false;
     if (currentMessage.user.id != nextMessage.user.id) return false;
-    var currentMessageTime = DateTime.fromMillisecondsSinceEpoch(
+    final currentMessageTime = DateTime.fromMillisecondsSinceEpoch(
       int.parse(currentMessage.time) * 1000,
     );
-    var nextMessageTime = DateTime.fromMillisecondsSinceEpoch(
+    final nextMessageTime = DateTime.fromMillisecondsSinceEpoch(
       int.parse(nextMessage.time) * 1000,
     );
-    var diff = nextMessageTime.difference(currentMessageTime);
+    final diff = nextMessageTime.difference(currentMessageTime);
     return diff.inMinutes < 1;
   }
 

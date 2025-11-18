@@ -49,7 +49,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   }
 
   void updateTime() async {
-    var timeRelativeNew = await TimeUtil.convertToAgo(
+    final timeRelativeNew = await TimeUtil.convertToAgo(
       refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
     );
     setState(() {

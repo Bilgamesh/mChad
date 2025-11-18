@@ -26,8 +26,10 @@ class NavigationRailWidget extends StatelessWidget {
         final messageMap = values[2] as Map<Account, List<Message>>;
         final messages = messageMap[account] ?? [];
         final update = values[3] as UpdateStatus;
-        var unreadMessagesCurrent = messages.where((m) => !(m.isRead ?? false));
-        var unreadMessagesRemaining = <Message>[];
+        final unreadMessagesCurrent = messages.where(
+          (m) => !(m.isRead ?? false),
+        );
+        final unreadMessagesRemaining = <Message>[];
         messageMap.forEach((key, messages) {
           if (key != account) {
             unreadMessagesRemaining.addAll(

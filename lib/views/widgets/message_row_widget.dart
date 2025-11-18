@@ -70,7 +70,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
       null,
       AppLocalizations.of(context).localeName,
     );
-    var dateTime =
+    final dateTime =
         '${formatter.format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.time) * 1000))} '
             .replaceAll(RegExp(r':\d{2} '), ' ')
             .trim();

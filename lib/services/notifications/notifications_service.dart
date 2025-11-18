@@ -43,7 +43,7 @@ class NotificationsService {
       );
       return;
     }
-    var lastMessages =
+    final lastMessages =
         messages.reversed
             .take(KNotificationsConfig.maxNotificationMessages)
             .toList();
@@ -55,7 +55,7 @@ class NotificationsService {
       message.notify();
     }
 
-    var accountIndex = await account.getIndex();
+    final accountIndex = await account.getIndex();
 
     await flutterLocalNotificationsPlugin.show(
       accountIndex,

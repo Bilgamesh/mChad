@@ -29,10 +29,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var validated = false;
-  var addressController = TextEditingController();
-  var usernameController = TextEditingController();
-  var passwordController = TextEditingController();
-  var addressFocusNode = FocusNode();
+  final addressController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final addressFocusNode = FocusNode();
   var addressFocusCount = 0;
   var pageActive = true;
   var loading = false;
@@ -217,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool isAccountAlreadyAdded() {
-    var accounts = accountsNotifier.value;
+    final accounts = accountsNotifier.value;
     return accounts
         .where(
           (account) =>
@@ -252,12 +252,12 @@ class _LoginPageState extends State<LoginPage> {
       });
       return;
     }
-    var urls = UrlUtil.getAllUrlPermutations(addressController.text);
-    var addressFocusCountOld = addressFocusCount;
+    final urls = UrlUtil.getAllUrlPermutations(addressController.text);
+    final addressFocusCountOld = addressFocusCount;
     setState(() {
       addressVerificationStatus = VerificationStatus.loading;
     });
-    var discoverySuccess = await discoverUrl(
+    final discoverySuccess = await discoverUrl(
       urls,
       () => !pageActive || addressFocusCountOld != addressFocusCount,
     );
@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
     for (var url in urls) {
       if (shouldAbort()) return null;
       try {
-        var loginService = MchatLoginService(
+        final loginService = MchatLoginService(
           baseUrl: url,
           onCloudFlare: onCloudFlare,
         );
@@ -304,13 +304,13 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loading = true;
       });
-      var loginService = MchatLoginService(
+      final loginService = MchatLoginService(
         baseUrl: addressController.text,
         onCloudFlare: onCloudFlare,
       );
       await loginService.init();
       await Future.delayed(Duration(seconds: 1));
-      var loginData = await loginService.loginWithCredentials(
+      final loginData = await loginService.loginWithCredentials(
         usernameController.text,
         passwordController.text,
       );
@@ -351,7 +351,7 @@ class _LoginPageState extends State<LoginPage> {
     BuildContext context,
     MchatLoginModel loginData,
   ) async {
-    var account = Account(
+    final account = Account(
       userName: usernameController.text,
       userId: loginData.userId!,
       forumName: loginData.forumName!,

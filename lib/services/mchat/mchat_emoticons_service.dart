@@ -16,25 +16,25 @@ class MchatEmoticonsService {
   Future<EmoticonsResponse> fetchEmoticons(int? start) async {
     try {
       start ??= 0;
-      var headers = {
+      final headers = {
         'accept':
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var targetUrl =
+      final targetUrl =
           '${account.forumUrl}/posting.php?mode=smilies&f=0&start=$start';
-      var streamedResponse = await (Client().send(
+      final streamedResponse = await (Client().send(
         Request('GET', Uri.parse(targetUrl))..headers.addAll(headers),
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         if (onCloudFlare != null) onCloudFlare!();
-        var cloudflareAuthorization =
+        final cloudflareAuthorization =
             await CloudflareService(
               baseUrl: account.forumUrl,
             ).authorizeHeadless();
@@ -43,16 +43,16 @@ class MchatEmoticonsService {
         await account.save();
         return await fetchEmoticons(start);
       }
-      var doc = parse(response.body);
-      var hasNextPage = doc.getElementsByClassName('arrow next').isNotEmpty;
-      var result = EmoticonsResponse(hasNextPage: hasNextPage);
-      var imgs = doc.querySelectorAll('.inner > a > img');
+      final doc = parse(response.body);
+      final hasNextPage = doc.getElementsByClassName('arrow next').isNotEmpty;
+      final result = EmoticonsResponse(hasNextPage: hasNextPage);
+      final imgs = doc.querySelectorAll('.inner > a > img');
       for (var img in imgs) {
-        var pictureUrl = account.forumUrl + img.attributes['src']!.substring(1);
-        var width = img.attributes['width']!;
-        var height = img.attributes['height']!;
-        var code = img.attributes['alt']!;
-        var title = img.attributes['title']!;
+        final pictureUrl = account.forumUrl + img.attributes['src']!.substring(1);
+        final width = img.attributes['width']!;
+        final height = img.attributes['height']!;
+        final code = img.attributes['alt']!;
+        final title = img.attributes['title']!;
         result.addEmoticon(
           pictureUrl: pictureUrl,
           width: int.parse(width),

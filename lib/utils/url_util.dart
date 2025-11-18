@@ -11,7 +11,7 @@ class UrlUtil {
         .replaceFirst('https://', '')
         .replaceFirst('http://', '');
     if (core.startsWith('www.')) core = core.replaceFirst('www.', '');
-    var permutations = [
+    final permutations = [
       'https://$core',
       'https://www.$core',
       'http://$core',

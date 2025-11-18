@@ -13,7 +13,7 @@ class MchatSyncManager {
     if (isRunning) throw 'All syncs are already running';
     logger.info('Startinc all syncs');
     for (var account in accountsNotifier.value) {
-      var sync = MchatSync(account: account);
+      final sync = MchatSync(account: account);
       globals.syncs.add(sync);
       sync.startAll();
     }
@@ -45,11 +45,11 @@ class MchatSyncManager {
   }
 
   Future<MchatSync> get sync async {
-    var accountIndex = await selectedAccountNotifier.value?.getIndex();
+    final accountIndex = await selectedAccountNotifier.value?.getIndex();
     if (accountIndex == null) {
       throw 'Failed to get synchronizer due to missing account';
     }
-    var sync = globals.syncs.elementAtOrNull(accountIndex);
+    final sync = globals.syncs.elementAtOrNull(accountIndex);
     if (sync == null) {
       throw 'No synchronizers found';
     }

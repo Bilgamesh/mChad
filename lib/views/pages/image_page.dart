@@ -40,7 +40,7 @@ class _ImagePageState extends State<ImagePage> {
 
   @override
   Widget build(BuildContext context) {
-    var fileName = urlToName(widget.src);
+    final fileName = urlToName(widget.src);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -101,7 +101,7 @@ class _ImagePageState extends State<ImagePage> {
   }
 
   String urlToName(String url) {
-    var fileName = url.split('/').last;
+    final fileName = url.split('/').last;
     if (!fileName.contains('/') &&
         KImageConfig.imageExtensions.contains(
           '.${fileName.split('.').last.toLowerCase()}',
@@ -149,7 +149,7 @@ class _ImagePageState extends State<ImagePage> {
       if (index > 0) {
         fileName = path.replaceFirst('/storage/emulated/0/Download/', '');
       }
-      var res = await get(Uri.parse(url));
+      final res = await get(Uri.parse(url));
       await file.writeAsBytes(res.bodyBytes);
       if (!context.mounted) return;
       ModalUtil.showMessage(

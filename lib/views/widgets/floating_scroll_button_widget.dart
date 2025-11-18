@@ -15,7 +15,7 @@ class FloatingScrollButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var space = switch (orientation) {
+    final space = switch (orientation) {
       Orientation.portrait => 70,
       _ => 35,
     };

@@ -94,9 +94,9 @@ class SettingsTab extends StatelessWidget {
                         settings.setNotifications(value).save();
                         return;
                       }
-                      var flutterLocalNotificationsPlugin =
+                      final flutterLocalNotificationsPlugin =
                           FlutterLocalNotificationsPlugin();
-                      var hasPermission =
+                      final hasPermission =
                           await flutterLocalNotificationsPlugin
                               .resolvePlatformSpecificImplementation<
                                 AndroidFlutterLocalNotificationsPlugin

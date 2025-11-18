@@ -32,7 +32,7 @@ class SettingsModel {
   ColorScheme colorScheme;
 
   static SettingsModel fromString(String strinfigiedSettings) {
-    var props = List<String>.from(jsonDecode(strinfigiedSettings));
+    final props = List<String>.from(jsonDecode(strinfigiedSettings));
     return SettingsModel(
       colorIndex: int.tryParse(props.elementAtOrNull(0) ?? '0') ?? 0,
       isDark: props.elementAtOrNull(1) == 'true',
@@ -71,7 +71,7 @@ class SettingsModel {
   }
 
   Future<SettingsModel> save() async {
-    var store = await SettingsStore.getInstance();
+    final store = await SettingsStore.getInstance();
     store.setSettings(this);
     return apply();
   }
