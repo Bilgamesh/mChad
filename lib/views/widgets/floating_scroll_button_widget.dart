@@ -15,7 +15,10 @@ class FloatingScrollButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var space = orientation == Orientation.portrait ? 70 : 35;
+    var space = switch (orientation) {
+      Orientation.portrait => 70,
+      _ => 35,
+    };
     return ValueListenableBuilder(
       valueListenable: chatScrollNotifier,
       builder: (context, scrollController, child) {

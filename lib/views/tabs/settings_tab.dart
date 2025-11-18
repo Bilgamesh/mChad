@@ -26,9 +26,8 @@ class SettingsTab extends StatelessWidget {
             padding: EdgeInsets.all(10.0),
             children: [
               SizedBox(height: 20.0),
-              switch (update) {
-                UpdateStatus.none => SizedBox.shrink(),
-                _ => Column(
+              if (update != UpdateStatus.none)
+                Column(
                   children: [
                     Badge(
                       label: Text('!'),
@@ -70,7 +69,6 @@ class SettingsTab extends StatelessWidget {
                     SizedBox(height: 20.0),
                   ],
                 ),
-              },
               Row(
                 children: [
                   Text(

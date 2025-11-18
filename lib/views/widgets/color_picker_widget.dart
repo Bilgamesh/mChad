@@ -37,8 +37,10 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                           widget.settings.setColorIndex(colorIndex).save();
                         },
                         icon: UiUtil.wrapWithGradient(
-                          icon:
-                              isSelected ? Icons.circle : Icons.circle_outlined,
+                          icon: switch (isSelected) {
+                            true => Icons.circle,
+                            false => Icons.circle_outlined,
+                          },
                           condition: colorIndex == 0,
                           gradientColors: [Colors.redAccent, Colors.blueAccent],
                           size: 40.0,

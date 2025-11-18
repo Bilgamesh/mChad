@@ -51,8 +51,10 @@ class ChatBubble extends StatelessWidget {
         valueListenable: settingsNotifier,
         builder:
             (context, settings, child) => Align(
-              alignment:
-                  isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
+              alignment: switch (isSentByMe) {
+                true => Alignment.centerRight,
+                false => Alignment.centerLeft,
+              },
               child: Container(
                 margin: EdgeInsets.only(
                   top: isFollowUp ? 0 : 4,
@@ -62,21 +64,21 @@ class ChatBubble extends StatelessWidget {
                 ),
                 constraints: BoxConstraints(maxWidth: constraint),
                 decoration: BoxDecoration(
-                  color:
-                      isSentByMe
-                          ? settings.colorScheme.primaryContainer
-                          : settings.colorScheme.surfaceContainerHighest,
+                  color: switch (isSentByMe) {
+                    true => settings.colorScheme.primaryContainer,
+                    false => settings.colorScheme.surfaceContainerHighest,
+                  },
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
-                    bottomLeft:
-                        isSentByMe
-                            ? Radius.circular(15)
-                            : Radius.circular(hasFollowUp ? 15 : 3),
-                    bottomRight:
-                        isSentByMe
-                            ? Radius.circular(hasFollowUp ? 15 : 3)
-                            : Radius.circular(15),
+                    bottomLeft: switch (isSentByMe) {
+                      true => Radius.circular(15),
+                      false => Radius.circular(hasFollowUp ? 15 : 3),
+                    },
+                    bottomRight: switch (isSentByMe) {
+                      true => Radius.circular(hasFollowUp ? 15 : 3),
+                      false => Radius.circular(15),
+                    },
                   ),
                 ),
                 child: Material(
@@ -84,28 +86,28 @@ class ChatBubble extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
-                    bottomLeft:
-                        isSentByMe
-                            ? Radius.circular(15)
-                            : Radius.circular(hasFollowUp ? 15 : 3),
-                    bottomRight:
-                        isSentByMe
-                            ? Radius.circular(hasFollowUp ? 15 : 3)
-                            : Radius.circular(15),
+                    bottomLeft: switch (isSentByMe) {
+                      true => Radius.circular(15),
+                      false => Radius.circular(hasFollowUp ? 15 : 3),
+                    },
+                    bottomRight: switch (isSentByMe) {
+                      true => Radius.circular(hasFollowUp ? 15 : 3),
+                      false => Radius.circular(15),
+                    },
                   ),
                   child: InkWell(
                     onLongPress: () => onLongPress(context, account),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(15),
                       topRight: Radius.circular(15),
-                      bottomLeft:
-                          isSentByMe
-                              ? Radius.circular(15)
-                              : Radius.circular(hasFollowUp ? 15 : 3),
-                      bottomRight:
-                          isSentByMe
-                              ? Radius.circular(hasFollowUp ? 15 : 3)
-                              : Radius.circular(15),
+                      bottomLeft: switch (isSentByMe) {
+                        true => Radius.circular(15),
+                        false => Radius.circular(hasFollowUp ? 15 : 3),
+                      },
+                      bottomRight: switch (isSentByMe) {
+                        true => Radius.circular(hasFollowUp ? 15 : 3),
+                        false => Radius.circular(15),
+                      },
                     ),
                     child: Container(
                       padding: EdgeInsets.all(10),
@@ -139,10 +141,10 @@ class ChatBubble extends StatelessWidget {
     }
     if (DocumentUtil.isSystemSmilie(element)) {
       return InlineCustomWidget(
-        child:
-            element.attributes['alt']?.isNotEmpty == true
-                ? Text(element.attributes['alt']!)
-                : SvgPicture.network('https:${element.attributes['src']}'),
+        child: switch (element.attributes['alt']?.isNotEmpty) {
+          true => Text(element.attributes['alt']!),
+          _ => SvgPicture.network('https:${element.attributes['src']}'),
+        },
       );
     }
     if (DocumentUtil.isSmilie(element)) {

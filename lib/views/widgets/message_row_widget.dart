@@ -96,10 +96,10 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment:
-                    widget.isSender
-                        ? MainAxisAlignment.end
-                        : MainAxisAlignment.start,
+                mainAxisAlignment: switch (widget.isSender) {
+                  true => MainAxisAlignment.end,
+                  false => MainAxisAlignment.start,
+                },
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (!widget.isSender)
@@ -170,10 +170,10 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
               if (!widget.hasFollowUp)
                 Material(
                   child: Row(
-                    mainAxisAlignment:
-                        widget.isSender
-                            ? MainAxisAlignment.end
-                            : MainAxisAlignment.start,
+                    mainAxisAlignment: switch (widget.isSender) {
+                      true => MainAxisAlignment.end,
+                      false => MainAxisAlignment.start,
+                    },
                     children: [
                       if (widget.isSender)
                         Text(

@@ -43,51 +43,47 @@ class MessageOptionsModal extends StatelessWidget {
                 title: Text(AppLocalizations.of(context).share),
                 onTap: () => share(context, message),
               ),
-              isSelf
-                  ? SizedBox.shrink()
-                  : ListTile(
-                    leading: Icon(Icons.alternate_email),
-                    title: Text(AppLocalizations.of(context).reply),
-                    onTap: () => reply(context, message),
-                  ),
+              if (!isSelf)
+                ListTile(
+                  leading: Icon(Icons.alternate_email),
+                  title: Text(AppLocalizations.of(context).reply),
+                  onTap: () => reply(context, message),
+                ),
               ListTile(
                 leading: Icon(Icons.format_quote),
                 title: Text(AppLocalizations.of(context).quote),
                 onTap: () => quote(context, message),
               ),
-              isSelf
-                  ? SizedBox.shrink()
-                  : ListTile(
-                    leading: Icon(Icons.thumb_up),
-                    title: Text(AppLocalizations.of(context).like),
-                    onTap: () => like(context, message),
+              if (!isSelf)
+                ListTile(
+                  leading: Icon(Icons.thumb_up),
+                  title: Text(AppLocalizations.of(context).like),
+                  onTap: () => like(context, message),
+                ),
+              if (isSelf &&
+                  !TimeUtil.isTimeLimitExceeded(
+                    timeMs: int.parse(message.time) * 1000,
+                    limitMs: editDeleteLimitMap[account] ?? 0,
+                  ))
+                ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text(AppLocalizations.of(context).edit),
+                  onTap: () => edit(context, message),
+                ),
+              if (isSelf &&
+                  !TimeUtil.isTimeLimitExceeded(
+                    timeMs: int.parse(message.time) * 1000,
+                    limitMs: editDeleteLimitMap[account] ?? 0,
+                  ))
+                ListTile(
+                  iconColor: Colors.red,
+                  leading: Icon(Icons.delete),
+                  title: Text(
+                    AppLocalizations.of(context).delete,
+                    style: TextStyle(color: Colors.red),
                   ),
-              isSelf &&
-                      !TimeUtil.isTimeLimitExceeded(
-                        timeMs: int.parse(message.time) * 1000,
-                        limitMs: editDeleteLimitMap[account] ?? 0,
-                      )
-                  ? ListTile(
-                    leading: Icon(Icons.edit),
-                    title: Text(AppLocalizations.of(context).edit),
-                    onTap: () => edit(context, message),
-                  )
-                  : SizedBox.shrink(),
-              isSelf &&
-                      !TimeUtil.isTimeLimitExceeded(
-                        timeMs: int.parse(message.time) * 1000,
-                        limitMs: editDeleteLimitMap[account] ?? 0,
-                      )
-                  ? ListTile(
-                    iconColor: Colors.red,
-                    leading: Icon(Icons.delete),
-                    title: Text(
-                      AppLocalizations.of(context).delete,
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onTap: () => delete(context, message),
-                  )
-                  : SizedBox.shrink(),
+                  onTap: () => delete(context, message),
+                ),
             ],
           ),
     );

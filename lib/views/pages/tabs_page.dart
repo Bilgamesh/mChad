@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/value_listenables_builder.dart';
-import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/tabs/accounts_tab.dart';
 import 'package:mchad/views/tabs/chat_tab.dart';
 import 'package:mchad/views/tabs/settings_tab.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 import 'package:mchad/views/widgets/floating_scroll_button_widget.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
+import 'package:mchad/views/widgets/login_button_widget.dart';
 import 'package:mchad/views/widgets/navigation_bar_widget.dart';
 import 'package:mchad/views/widgets/navigation_rail_widget.dart';
 
@@ -74,24 +73,11 @@ class TabsPage extends StatelessWidget {
                   ),
                 ),
                 floatingActionButton: switch (selectedTab) {
-                  1 => FloatingActionButton.extended(
-                    icon: Icon(Icons.login),
-                    label: Text(AppLocalizations.of(context).loginButtonLabel),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    onPressed: () {
-                      HapticsUtil.vibrate();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                  ),
                   0 => FloatingScrollButtonWidget(
                     settings: settings,
                     orientation: orientation,
                   ),
+                  1 => LoginButtonWidget(),
                   _ => null,
                 },
                 bottomNavigationBar: switch (orientation) {

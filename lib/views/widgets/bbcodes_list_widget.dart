@@ -124,14 +124,14 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void addBbCodeToEmptyTextField(BBTag bbcode) {
-    var fullBbCodeValue =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '${bbcode.start}${clipboardData?.text}${bbcode.end} '
-            : '${bbcode.start}${bbcode.end}';
-    var cursorPosition =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '${bbcode.start}${clipboardData?.text}${bbcode.end} '.length
-            : bbcode.start.length;
+    var fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
+      false => '${bbcode.start}${bbcode.end}',
+    };
+    var cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
+      false => bbcode.start.length,
+    };
     widget.textController.value = TextEditingValue(
       text: fullBbCodeValue,
       selection: TextSelection.fromPosition(
@@ -148,14 +148,14 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
     var right = widget.textController.text.substring(
       widget.lastTextSelection!.start,
     );
-    var fullBbCodeValue =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '${bbcode.start}${clipboardData?.text}${bbcode.end} '
-            : '${bbcode.start}${bbcode.end}';
-    var cursorPosition =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '$left${bbcode.start}${clipboardData?.text}${bbcode.end} '.length
-            : '$left${bbcode.start}'.length;
+    var fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
+      false => '${bbcode.start}${bbcode.end}',
+    };
+    var cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '$left${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
+      false => '$left${bbcode.start}'.length,
+    };
     widget.textController.value = TextEditingValue(
       text: '$left$fullBbCodeValue$right',
       selection: TextSelection.fromPosition(

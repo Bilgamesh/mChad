@@ -59,22 +59,21 @@ class OnlineUsersModal extends StatelessWidget {
                         ),
                       ),
                     ),
-                    hiddenCount > 0
-                        ? Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.public_off_outlined),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Text(
-                                  '${AppLocalizations.of(context).hiddenUsers}: $hiddenCount',
-                                ),
+                    if (hiddenCount > 0)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.public_off_outlined),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                '${AppLocalizations.of(context).hiddenUsers}: $hiddenCount',
                               ),
-                            ],
-                          ),
-                        )
-                        : SizedBox.shrink(),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),

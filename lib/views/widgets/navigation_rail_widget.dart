@@ -63,10 +63,10 @@ class NavigationRailWidget extends StatelessWidget {
           destinations: [
             NavigationRailDestination(
               icon: UiUtil.wrapWithBadge(
-                icon:
-                    selectedTab == 0
-                        ? Icon(Icons.chat)
-                        : Icon(Icons.chat_outlined),
+                icon: switch (selectedTab) {
+                  0 => Icon(Icons.chat),
+                  _ => Icon(Icons.chat_outlined),
+                },
                 condition: unreadMessagesCurrent.isNotEmpty,
                 label: unreadMessagesCurrent.length.toString(),
               ),
@@ -74,10 +74,10 @@ class NavigationRailWidget extends StatelessWidget {
             ),
             NavigationRailDestination(
               icon: UiUtil.wrapWithBadge(
-                icon:
-                    selectedTab == 1
-                        ? Icon(Icons.people)
-                        : Icon(Icons.people_outline),
+                icon: switch (selectedTab) {
+                  1 => Icon(Icons.people),
+                  _ => Icon(Icons.people_outline),
+                },
                 condition: unreadMessagesRemaining.isNotEmpty,
                 label: unreadMessagesRemaining.length.toString(),
               ),
@@ -85,10 +85,10 @@ class NavigationRailWidget extends StatelessWidget {
             ),
             NavigationRailDestination(
               icon: UiUtil.wrapWithBadge(
-                icon:
-                    selectedTab == 2
-                        ? Icon(Icons.settings)
-                        : Icon(Icons.settings_outlined),
+                icon: switch (selectedTab) {
+                  2 => Icon(Icons.settings),
+                  _ => Icon(Icons.settings_outlined),
+                },
                 condition: update == UpdateStatus.available,
                 label: '!',
               ),

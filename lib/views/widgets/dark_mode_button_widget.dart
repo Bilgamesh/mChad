@@ -17,10 +17,10 @@ class DarkModeButtonWidget extends StatelessWidget {
                 HapticsUtil.vibrate();
                 await settings.setDarkMode(!settings.isDark).save();
               },
-              icon:
-                  settings.isDark
-                      ? Icon(Icons.light_mode)
-                      : Icon(Icons.dark_mode),
+              icon: switch (settings.isDark) {
+                true => Icon(Icons.light_mode),
+                false => Icon(Icons.dark_mode),
+              },
             ),
           ),
     );

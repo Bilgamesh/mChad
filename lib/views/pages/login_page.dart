@@ -115,13 +115,12 @@ class _LoginPageState extends State<LoginPage> {
                             Text(
                               AppLocalizations.of(context).addressTextFieldHint,
                             ),
-                            switch (addressVerificationStatus) {
-                              VerificationStatus.error => Text(
+                            if (addressVerificationStatus ==
+                                VerificationStatus.error)
+                              Text(
                                 ' - ${AppLocalizations.of(context).mChatNotFound}',
                                 style: TextStyle(color: Colors.red),
                               ),
-                              _ => SizedBox.shrink(),
-                            },
                           ],
                         ),
                         suffixIcon: VerificationIconWidget(
