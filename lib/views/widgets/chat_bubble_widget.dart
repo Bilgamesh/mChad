@@ -114,16 +114,7 @@ class ChatBubble extends StatelessWidget {
                       child: HtmlWidget(
                         message.message.shortHtml,
                         renderMode: RenderMode.column,
-                        customStylesBuilder: (element) {
-                          if (element.innerHtml.contains('cite') ||
-                              (element.attributes['href']?.contains(
-                                    'memberlist.php',
-                                  ) ??
-                                  false)) {
-                            return {};
-                          }
-                          return {'border-radius': '10px'};
-                        },
+                        customStylesBuilder: buildStyles,
                         customWidgetBuilder: buildHtmlWidget,
                       ),
                     ),
@@ -133,6 +124,14 @@ class ChatBubble extends StatelessWidget {
             ),
       ),
     );
+  }
+
+  Map<String, String> buildStyles(dom.Element element) {
+    if (element.innerHtml.contains('cite') ||
+        (element.attributes['href']?.contains('memberlist.php') ?? false)) {
+      return {};
+    }
+    return {'border-radius': '10px'};
   }
 
   Widget? buildHtmlWidget(dom.Element element) {
