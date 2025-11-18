@@ -5,6 +5,7 @@ import 'package:mchad/data/stores/account_store.dart';
 import 'package:mchad/services/mchat/mchat_login_service.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/logging_util.dart';
+import 'package:mchad/utils/value_listenables_builder.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/widgets/account_card_widget.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
@@ -19,78 +20,66 @@ class AccountsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0),
-      child: ValueListenableBuilder(
-        valueListenable: accountsNotifier,
-        builder:
-            (context, accounts, child) => ListView(
-              // physics: AlwaysScrollableScrollPhysics(),
-              children: [
-                ...List.generate(
-                  accounts.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: ValueListenableBuilder(
-                      valueListenable: selectedAccountNotifier,
-                      builder:
-                          (
-                            context,
-                            selectedAccount,
-                            child,
-                          ) => AccountCardWidget(
-                            account: accounts.elementAt(index),
-                            isSelected: accounts[index] == selectedAccount,
-                            onOpen: () => open(accounts[index]),
-                            onSelect:
-                                accounts[index] == selectedAccount
-                                    ? null
-                                    : () => select(accounts[index]),
-                            onLogout: () {
-                              HapticsUtil.vibrate();
-                              showDialog(
-                                context: context,
-                                builder:
-                                    (context) => AlertDialog(
-                                      title: Text(
-                                        AppLocalizations.of(context).logout,
+      child: ValueListenablesBuilder(
+        listenables: [accountsNotifier, selectedAccountNotifier],
+        builder: (context, values, child) {
+          final accounts = values[0] as List<Account>;
+          final selectedAccount = values[1] as Account?;
+          return ListView(
+            children: [
+              ...List.generate(
+                accounts.length,
+                (index) => Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: AccountCardWidget(
+                    account: accounts.elementAt(index),
+                    isSelected: accounts[index] == selectedAccount,
+                    onOpen: () => open(accounts[index]),
+                    onSelect:
+                        accounts[index] == selectedAccount
+                            ? null
+                            : () => select(accounts[index]),
+                    onLogout: () {
+                      HapticsUtil.vibrate();
+                      showDialog(
+                        context: context,
+                        builder:
+                            (context) => AlertDialog(
+                              title: Text(AppLocalizations.of(context).logout),
+                              content: Text(
+                                '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    HapticsUtil.vibrate();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    AppLocalizations.of(context).cancel,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed:
+                                      () => logout(
+                                        context,
+                                        accounts.elementAt(index),
                                       ),
-                                      content: Text(
-                                        '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            HapticsUtil.vibrate();
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text(
-                                            AppLocalizations.of(
-                                              context,
-                                            ).cancel,
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed:
-                                              () => logout(
-                                                context,
-                                                accounts.elementAt(index),
-                                              ),
-                                          child: Text(
-                                            AppLocalizations.of(
-                                              context,
-                                            ).confirm,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                              );
-                            },
-                          ),
-                    ),
+                                  child: Text(
+                                    AppLocalizations.of(context).confirm,
+                                  ),
+                                ),
+                              ],
+                            ),
+                      );
+                    },
                   ),
                 ),
-                SizedBox(height: 200.0),
-              ],
-            ),
+              ),
+              SizedBox(height: 200.0),
+            ],
+          );
+        },
       ),
     );
   }

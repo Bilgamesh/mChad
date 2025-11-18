@@ -46,26 +46,25 @@ class _ImagePageState extends State<ImagePage> {
       appBar: AppBar(
         automaticallyImplyLeading: uiVisible,
         title: FittedBox(
-          child:
-              uiVisible
-                  ? Text(fileName, style: TextStyle(color: Colors.white))
-                  : null,
+          child: switch (uiVisible) {
+            true => Text(fileName, style: TextStyle(color: Colors.white)),
+            false => null,
+          },
         ),
         backgroundColor: uiVisible ? Colors.black54 : Colors.transparent,
         iconTheme: IconThemeData(color: Colors.white),
-        actions:
-            uiVisible
-                ? [
-                  IconButton(
-                    onPressed: () => download(widget.src, fileName, context),
-                    icon: Icon(Icons.download),
-                  ),
-                  IconButton(
-                    onPressed: () => share(widget.src),
-                    icon: Icon(Icons.share),
-                  ),
-                ]
-                : [],
+        actions: [
+          if (uiVisible)
+            IconButton(
+              onPressed: () => download(widget.src, fileName, context),
+              icon: Icon(Icons.download),
+            ),
+          if (uiVisible)
+            IconButton(
+              onPressed: () => share(widget.src),
+              icon: Icon(Icons.share),
+            ),
+        ],
       ),
       body: GestureDetector(
         onTap: () {

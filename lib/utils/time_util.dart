@@ -32,4 +32,8 @@ class TimeUtil {
       return localization.justNow;
     }
   }
+
+  static bool isTimeLimitExceeded({required int timeMs, required int limitMs}) {
+    return (DateTime.now().millisecondsSinceEpoch - timeMs) >= limitMs;
+  }
 }

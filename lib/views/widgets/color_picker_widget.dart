@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_icon/gradient_icon.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
+import 'package:mchad/utils/ui_util.dart';
 
 class ColorPickerWidget extends StatefulWidget {
   const ColorPickerWidget({Key? key, required this.settings}) : super(key: key);
@@ -27,6 +27,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                   children: [
                     ...List.generate(6, (iconIndex) {
                       int colorIndex = wrapIndex * 6 + iconIndex;
+                      bool isSelected = (colorIndex) == settings.colorIndex;
                       return IconButton(
                         onPressed: () async {
                           HapticsUtil.vibrate();
@@ -35,33 +36,16 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                           });
                           widget.settings.setColorIndex(colorIndex).save();
                         },
-                        icon:
-                            colorIndex == 0
-                                ? GradientIcon(
-                                  icon:
-                                      (colorIndex) == settings.colorIndex
-                                          ? Icons.circle
-                                          : Icons.circle_outlined,
-                                  size: 40.0,
-                                  offset: Offset(0, 0),
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Colors.redAccent,
-                                      Colors.blueAccent,
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
-                                )
-                                : Icon(
-                                  (colorIndex) == settings.colorIndex
-                                      ? Icons.circle
-                                      : Icons.circle_outlined,
-                                  size: 40.0,
-                                  color: settings.colors
-                                      .elementAt(colorIndex)
-                                      .withAlpha(255),
-                                ),
+                        icon: UiUtil.wrapWithGradient(
+                          icon:
+                              isSelected ? Icons.circle : Icons.circle_outlined,
+                          condition: colorIndex == 0,
+                          gradientColors: [Colors.redAccent, Colors.blueAccent],
+                          size: 40.0,
+                          color: settings.colors
+                              .elementAt(colorIndex)
+                              .withAlpha(255),
+                        ),
                       );
                     }),
                   ],

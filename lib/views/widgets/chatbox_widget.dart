@@ -71,77 +71,68 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
                   ),
                   child: child,
                 ),
-            child:
-                !loaded
-                    ? SizedBox(height: 61.0)
-                    : Container(
-                      color: settings.colorScheme.surfaceContainer,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 45.0,
-                          width: double.infinity,
-                          child: TextField(
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(
-                                widget.messageLimit > 0
-                                    ? widget.messageLimit
-                                    : -1,
+            child: switch (loaded) {
+              false => SizedBox(height: 61.0),
+              true => Container(
+                color: settings.colorScheme.surfaceContainer,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: 45.0,
+                    width: double.infinity,
+                    child: TextField(
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(
+                          widget.messageLimit > 0 ? widget.messageLimit : -1,
+                        ),
+                      ],
+                      onTapOutside:
+                          (event) =>
+                              FocusManager.instance.primaryFocus?.unfocus(),
+                      controller: widget.textController,
+                      focusNode: widget.chatboxFocusNode,
+                      style: TextStyle(fontSize: 16.0),
+                      onSubmitted: onSubmitted,
+                      decoration: InputDecoration(
+                        filled: true,
+                        suffixIcon: SizedBox(
+                          width: 100,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed:
+                                    () => widget.onCodePressed(
+                                      globals.textSelectionMap[widget.account],
+                                    ),
+                                icon: Icon(Icons.code_outlined),
+                              ),
+                              IconButton(
+                                onPressed:
+                                    () => widget.onEmojiPressed(
+                                      globals.textSelectionMap[widget.account],
+                                    ),
+                                icon: Icon(Icons.emoji_emotions_outlined),
                               ),
                             ],
-                            onTapOutside:
-                                (event) =>
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus(),
-                            controller: widget.textController,
-                            focusNode: widget.chatboxFocusNode,
-                            style: TextStyle(fontSize: 16.0),
-                            onSubmitted: onSubmitted,
-                            decoration: InputDecoration(
-                              filled: true,
-                              suffixIcon: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    IconButton(
-                                      onPressed:
-                                          () => widget.onCodePressed(
-                                            globals.textSelectionMap[widget
-                                                .account],
-                                          ),
-                                      icon: Icon(Icons.code_outlined),
-                                    ),
-                                    IconButton(
-                                      onPressed:
-                                          () => widget.onEmojiPressed(
-                                            globals.textSelectionMap[widget
-                                                .account],
-                                          ),
-                                      icon: Icon(Icons.emoji_emotions_outlined),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              hintText:
-                                  AppLocalizations.of(context).chatboxHint,
-                              labelText:
-                                  labelText.isNotEmpty ? labelText : null,
-                              labelStyle: TextStyle(
-                                color: settings.colorScheme.error,
-                              ),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20.0,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
                           ),
+                        ),
+                        hintText: AppLocalizations.of(context).chatboxHint,
+                        labelText: labelText.isNotEmpty ? labelText : null,
+                        labelStyle: TextStyle(
+                          color: settings.colorScheme.error,
+                        ),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
+                  ),
+                ),
+              ),
+            },
           ),
     );
   }

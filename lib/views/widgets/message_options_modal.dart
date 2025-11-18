@@ -6,6 +6,7 @@ import 'package:mchad/data/globals.dart' as globals;
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
 import 'package:flutter/services.dart';
+import 'package:mchad/utils/time_util.dart';
 import 'package:mchad/views/widgets/message_edit_widget.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
@@ -27,72 +28,68 @@ class MessageOptionsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        ListTile(
-          leading: Icon(Icons.copy),
-          title: Text(AppLocalizations.of(context).copy),
-          onTap: () => copy(context, message),
-        ),
-        ListTile(
-          leading: Icon(Icons.share),
-          title: Text(AppLocalizations.of(context).share),
-          onTap: () => share(context, message),
-        ),
-        isSelf
-            ? SizedBox.shrink()
-            : ListTile(
-              leading: Icon(Icons.alternate_email),
-              title: Text(AppLocalizations.of(context).reply),
-              onTap: () => reply(context, message),
-            ),
-        ListTile(
-          leading: Icon(Icons.format_quote),
-          title: Text(AppLocalizations.of(context).quote),
-          onTap: () => quote(context, message),
-        ),
-        isSelf
-            ? SizedBox.shrink()
-            : ListTile(
-              leading: Icon(Icons.thumb_up),
-              title: Text(AppLocalizations.of(context).like),
-              onTap: () => like(context, message),
-            ),
-        ValueListenableBuilder(
-          valueListenable: editDeleteLimitMapNotifier,
-          builder:
-              (context, editDeleteLimitMap, child) =>
-                  isSelf &&
-                          DateTime.now().millisecondsSinceEpoch -
-                                  int.parse(message.time) * 1000 <
-                              (editDeleteLimitMap[account] ?? 0)
-                      ? ListTile(
-                        leading: Icon(Icons.edit),
-                        title: Text(AppLocalizations.of(context).edit),
-                        onTap: () => edit(context, message),
+    return ValueListenableBuilder(
+      valueListenable: editDeleteLimitMapNotifier,
+      builder:
+          (context, editDeleteLimitMap, child) => Wrap(
+            children: [
+              ListTile(
+                leading: Icon(Icons.copy),
+                title: Text(AppLocalizations.of(context).copy),
+                onTap: () => copy(context, message),
+              ),
+              ListTile(
+                leading: Icon(Icons.share),
+                title: Text(AppLocalizations.of(context).share),
+                onTap: () => share(context, message),
+              ),
+              isSelf
+                  ? SizedBox.shrink()
+                  : ListTile(
+                    leading: Icon(Icons.alternate_email),
+                    title: Text(AppLocalizations.of(context).reply),
+                    onTap: () => reply(context, message),
+                  ),
+              ListTile(
+                leading: Icon(Icons.format_quote),
+                title: Text(AppLocalizations.of(context).quote),
+                onTap: () => quote(context, message),
+              ),
+              isSelf
+                  ? SizedBox.shrink()
+                  : ListTile(
+                    leading: Icon(Icons.thumb_up),
+                    title: Text(AppLocalizations.of(context).like),
+                    onTap: () => like(context, message),
+                  ),
+              isSelf &&
+                      !TimeUtil.isTimeLimitExceeded(
+                        timeMs: int.parse(message.time) * 1000,
+                        limitMs: editDeleteLimitMap[account] ?? 0,
                       )
-                      : SizedBox.shrink(),
-        ),
-        ValueListenableBuilder(
-          valueListenable: editDeleteLimitMapNotifier,
-          builder:
-              (context, editDeleteLimitMap, child) =>
-                  isSelf &&
-                          DateTime.now().millisecondsSinceEpoch -
-                                  int.parse(message.time) * 1000 <
-                              (editDeleteLimitMap[account] ?? 0)
-                      ? ListTile(
-                        iconColor: Colors.red,
-                        leading: Icon(Icons.delete),
-                        title: Text(
-                          AppLocalizations.of(context).delete,
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onTap: () => delete(context, message),
+                  ? ListTile(
+                    leading: Icon(Icons.edit),
+                    title: Text(AppLocalizations.of(context).edit),
+                    onTap: () => edit(context, message),
+                  )
+                  : SizedBox.shrink(),
+              isSelf &&
+                      !TimeUtil.isTimeLimitExceeded(
+                        timeMs: int.parse(message.time) * 1000,
+                        limitMs: editDeleteLimitMap[account] ?? 0,
                       )
-                      : SizedBox.shrink(),
-        ),
-      ],
+                  ? ListTile(
+                    iconColor: Colors.red,
+                    leading: Icon(Icons.delete),
+                    title: Text(
+                      AppLocalizations.of(context).delete,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onTap: () => delete(context, message),
+                  )
+                  : SizedBox.shrink(),
+            ],
+          ),
     );
   }
 
@@ -124,10 +121,7 @@ class MessageOptionsModal extends StatelessWidget {
     chatboxFocusNode.requestFocus();
   }
 
-  void like(
-    BuildContext context,
-    Message selectedMessage,
-  ) {
+  void like(BuildContext context, Message selectedMessage) {
     HapticsUtil.vibrate();
     Navigator.pop(context);
     var likeMessage =
@@ -147,10 +141,7 @@ class MessageOptionsModal extends StatelessWidget {
     );
   }
 
-  void delete(
-    BuildContext context,
-    Message selectedMessage,
-  ) {
+  void delete(BuildContext context, Message selectedMessage) {
     HapticsUtil.vibrate();
     Navigator.pop(context);
     showDialog(
