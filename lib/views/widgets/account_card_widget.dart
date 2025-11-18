@@ -87,9 +87,8 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
       final refreshStatus =
           refreshStatusMap[widget.account] ?? VerificationStatus.none;
       final messageMap = values[3] as Map<Account, List<Message>>;
-      final unreadMessages = messageMap[widget.account]!.where(
-        (m) => !(m.isRead ?? false),
-      );
+      final messages = messageMap[widget.account] ?? [];
+      final unreadMessages = messages.where((m) => !(m.isRead ?? false));
       return Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
