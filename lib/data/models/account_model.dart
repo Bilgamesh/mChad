@@ -162,4 +162,15 @@ class Account {
   void select() {
     selectedAccountNotifier.value = this;
   }
+
+  Map<String, String> getHeaders({String? src}) {
+    if (src == null || src.startsWith(forumUrl)) {
+      return {
+        'x-requested-with': 'XMLHttpRequest',
+        'cookie': cachedCookies ?? '',
+        'user-agent': userAgent ?? '',
+      };
+    }
+    return {};
+  }
 }

@@ -83,7 +83,6 @@ class _ImagePageState extends State<ImagePage> {
             headers: widget.headers,
             cacheKey: widget.cacheKey,
           ),
-          // onTapDown: (context, details, controllerValue) => onTap(),
           gaplessPlayback: true,
         ),
       ),

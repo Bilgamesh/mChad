@@ -27,7 +27,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                   children: [
                     ...List.generate(6, (iconIndex) {
                       int colorIndex = wrapIndex * 6 + iconIndex;
-                      bool isSelected = (colorIndex) == settings.colorIndex;
+                      bool isSelected = colorIndex == settings.colorIndex;
                       return IconButton(
                         onPressed: () async {
                           HapticsUtil.vibrate();

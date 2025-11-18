@@ -372,6 +372,7 @@ class MchatSync {
 
   Future<void> fetchArchiveMessages() async {
     if (loadingArchive) return;
+    logger.info('Fetching archive');
     loadingArchive = true;
     try {
       var startIndex = messageMapNotifier.value[account]?.length;

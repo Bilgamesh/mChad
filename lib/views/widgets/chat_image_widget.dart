@@ -12,31 +12,20 @@ class ChatImageWidget extends StatelessWidget {
   final String src;
   final Account account;
 
-  Map<String, String> getHeaders({bool? force}) {
-    if (src.startsWith(account.forumUrl) || force == true) {
-      return {
-        'x-requested-with': 'XMLHttpRequest',
-        'cookie': account.cachedCookies ?? '',
-        'user-agent': account.userAgent ?? '',
-      };
-    }
-    return {};
-  }
-
   @override
   Widget build(BuildContext context) {
     var constraint = min(
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
-    var cacheKey = CryptoUtil.generateMd5('${getHeaders(force: true)}$src');
+    var cacheKey = CryptoUtil.generateMd5('${account.getHeaders()}$src');
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: GestureDetector(
-        onTap: () => open(context, getHeaders(force: true), cacheKey),
+        onTap: () => open(context, account.getHeaders(), cacheKey),
         child: CachedNetworkImage(
           imageUrl: src,
-          httpHeaders: getHeaders(),
+          httpHeaders: account.getHeaders(src: src),
           cacheKey: cacheKey,
           height: constraint,
           width: constraint,
@@ -60,8 +49,11 @@ class ChatImageWidget extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder:
-            (context) =>
-                ImagePage(src: src, cacheKey: cacheKey, headers: getHeaders()),
+            (context) => ImagePage(
+              src: src,
+              cacheKey: cacheKey,
+              headers: account.getHeaders(src: src),
+            ),
       ),
     );
   }

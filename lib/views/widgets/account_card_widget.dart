@@ -71,167 +71,150 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
     super.dispose();
   }
 
-  Map<String, String> getHeaders() {
-    if (widget.account.avatarUrl!.startsWith(widget.account.forumUrl)) {
-      return {
-        'x-requested-with': 'XMLHttpRequest',
-        'cookie': widget.account.cachedCookies ?? '',
-        'user-agent': widget.account.userAgent ?? '',
-      };
-    }
-    return {};
-  }
-
   @override
-  Widget build(BuildContext context) {
-    var headers = {
-      'x-requested-with': 'XMLHttpRequest',
-      'cookie': widget.account.cachedCookies ?? '',
-      'user-agent': widget.account.userAgent ?? '',
-    };
-    return ValueListenablesBuilder(
-      listenables: [
-        settingsNotifier,
-        onlineUsersMapNotifer,
-        refreshStatusNotifier,
-        messageMapNotifier,
-      ],
-      builder: (context, values, child) {
-        final settings = values[0] as SettingsModel;
-        final onlineUsersMap = values[1] as Map<Account, OnlineUsersResponse>;
-        final refreshStatusMap = values[2] as Map<Account, VerificationStatus>;
-        final messageMap = values[3] as Map<Account, List<Message>>;
-        final unreadMessages = messageMap[widget.account]!.where(
-          (m) => !(m.isRead ?? false),
-        );
-        return Card(
+  Widget build(BuildContext context) => ValueListenablesBuilder(
+    listenables: [
+      settingsNotifier,
+      onlineUsersMapNotifer,
+      refreshStatusNotifier,
+      messageMapNotifier,
+    ],
+    builder: (context, values, child) {
+      final settings = values[0] as SettingsModel;
+      final onlineUsersMap = values[1] as Map<Account, OnlineUsersResponse>;
+      final refreshStatusMap = values[2] as Map<Account, VerificationStatus>;
+      final messageMap = values[3] as Map<Account, List<Message>>;
+      final unreadMessages = messageMap[widget.account]!.where(
+        (m) => !(m.isRead ?? false),
+      );
+      return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: ListTile(
+          selected: widget.isSelected,
+          onTap: widget.onSelect,
+          leading: CircleAvatar(
+            radius: 25.0,
+            backgroundColor: Colors.transparent,
+            foregroundImage: switch (widget.account.avatarUrl) {
+              null => AssetImage('assets/images/no_avatar.gif'),
+              _ => CachedNetworkImageProvider(
+                widget.account.avatarUrl!,
+                headers: widget.account.getHeaders(
+                  src: widget.account.avatarUrl,
+                ),
+                cacheKey: CryptoUtil.generateMd5(
+                  '${widget.account.getHeaders(src: widget.account.avatarUrl)}${widget.account.avatarUrl!}',
+                ),
+              ),
+            },
+          ),
+          titleAlignment: ListTileTitleAlignment.titleHeight,
+          onLongPress: () => showOnlineUsersModal(context, onlineUsersMap),
+          title: Row(
+            children: [
+              Text(
+                widget.account.userName,
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+              Expanded(child: SizedBox.shrink()),
+              VerificationIconWidget(
+                status:
+                    refreshStatusMap[widget.account] ?? VerificationStatus.none,
+              ),
+            ],
+          ),
+          selectedTileColor: settings.colorScheme.surfaceContainerHigh,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          child: ListTile(
-            selected: widget.isSelected,
-            onTap: widget.onSelect,
-            leading: CircleAvatar(
-              radius: 25.0,
-              backgroundColor: Colors.transparent,
-              foregroundImage: switch (widget.account.avatarUrl) {
-                null => AssetImage('assets/images/no_avatar.gif'),
-                _ => CachedNetworkImageProvider(
-                  widget.account.avatarUrl!,
-                  headers: getHeaders(),
-                  cacheKey: CryptoUtil.generateMd5(
-                    '$headers${widget.account.avatarUrl!}',
+          minTileHeight: 200.0,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                child: switch (widget.isSelected) {
+                  true => Text(
+                    '@${widget.account.forumName} - ${AppLocalizations.of(context).currentlySelected}',
                   ),
-                ),
-              },
-            ),
-            titleAlignment: ListTileTitleAlignment.titleHeight,
-            onLongPress: () => showOnlineUsersModal(context, onlineUsersMap),
-            title: Row(
-              children: [
-                Text(
-                  widget.account.userName,
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-                Expanded(child: SizedBox.shrink()),
-                VerificationIconWidget(
-                  status:
-                      refreshStatusMap[widget.account] ??
-                      VerificationStatus.none,
-                ),
-              ],
-            ),
-            selectedTileColor: settings.colorScheme.surfaceContainerHigh,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            minTileHeight: 200.0,
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FittedBox(
-                  child: switch (widget.isSelected) {
-                    true => Text(
-                      '@${widget.account.forumName} - ${AppLocalizations.of(context).currentlySelected}',
-                    ),
-                    false => Text('@${widget.account.forumName}'),
-                  },
-                ),
-                FittedBox(
-                  child: Row(
-                    children: [
-                      Text(
-                        '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          HapticsUtil.vibrate();
-                          showOnlineUsersModal(context, onlineUsersMap);
-                        },
-                        icon: Icon(Icons.info_outline),
-                      ),
-                    ],
-                  ),
-                ),
-                if (!widget.isSelected && unreadMessages.isNotEmpty)
-                  SizedBox(
-                    height: 30,
-                    child: Text(
-                      '${AppLocalizations.of(context).unreadMessages}: ${unreadMessages.length}',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                Row(
+                  false => Text('@${widget.account.forumName}'),
+                },
+              ),
+              FittedBox(
+                child: Row(
                   children: [
-                    SizedBox(
-                      height: 38,
-                      child: switch (refreshStatusMap[widget.account]) {
-                        VerificationStatus.loading => Text(
-                          AppLocalizations.of(context).chatRefreshing,
-                        ),
-                        VerificationStatus.error => Text(
-                          '${AppLocalizations.of(context).chatRefreshError} ${timeRelative ?? getTimeRelative(context)}',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        _ => Text(
-                          '${AppLocalizations.of(context).chatRefreshed} ${timeRelative ?? getTimeRelative(context)}',
-                        ),
+                    Text(
+                      '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        HapticsUtil.vibrate();
+                        showOnlineUsersModal(context, onlineUsersMap);
                       },
+                      icon: Icon(Icons.info_outline),
                     ),
                   ],
                 ),
-                SizedBox(height: 10.0),
-                Row(
-                  children: [
-                    Expanded(child: SizedBox.shrink()),
-                    OutlinedButton(
-                      onPressed: widget.onOpen,
-                      child: Row(
-                        children: [
-                          Icon(Icons.menu_open),
-                          Text(' ${AppLocalizations.of(context).open} '),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 10.0),
-                    OutlinedButton(
-                      onPressed: widget.onLogout,
-                      child: Row(
-                        children: [
-                          Icon(Icons.logout),
-                          Text(AppLocalizations.of(context).logout),
-                        ],
-                      ),
-                    ),
-                  ],
+              ),
+              if (!widget.isSelected && unreadMessages.isNotEmpty)
+                SizedBox(
+                  height: 30,
+                  child: Text(
+                    '${AppLocalizations.of(context).unreadMessages}: ${unreadMessages.length}',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ],
-            ),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 38,
+                    child: switch (refreshStatusMap[widget.account]) {
+                      VerificationStatus.loading => Text(
+                        AppLocalizations.of(context).chatRefreshing,
+                      ),
+                      VerificationStatus.error => Text(
+                        '${AppLocalizations.of(context).chatRefreshError} ${timeRelative ?? getTimeRelative(context)}',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      _ => Text(
+                        '${AppLocalizations.of(context).chatRefreshed} ${timeRelative ?? getTimeRelative(context)}',
+                      ),
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.0),
+              Row(
+                children: [
+                  Expanded(child: SizedBox.shrink()),
+                  OutlinedButton(
+                    onPressed: widget.onOpen,
+                    child: Row(
+                      children: [
+                        Icon(Icons.menu_open),
+                        Text(' ${AppLocalizations.of(context).open} '),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  OutlinedButton(
+                    onPressed: widget.onLogout,
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout),
+                        Text(AppLocalizations.of(context).logout),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
 
   void showOnlineUsersModal(
     BuildContext context,

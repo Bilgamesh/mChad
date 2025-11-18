@@ -16,17 +16,14 @@ class ChatEmoticonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var headers = {
-      'x-requested-with': 'XMLHttpRequest',
-      'cookie': account.cachedCookies ?? '',
-      'user-agent': account.userAgent ?? '',
-    };
-    var cacheKey = CryptoUtil.generateMd5('$headers${attributes['src']}');
+    var cacheKey = CryptoUtil.generateMd5(
+      '${account.getHeaders()}${attributes['src']}',
+    );
     return ClipRRect(
       borderRadius: BorderRadius.circular(12.0),
       child: CachedNetworkImage(
         imageUrl: attributes['src']!,
-        httpHeaders: headers,
+        httpHeaders: account.getHeaders(),
         cacheKey: cacheKey,
         fit: BoxFit.cover,
         height: double.tryParse(attributes['height'] ?? ''),

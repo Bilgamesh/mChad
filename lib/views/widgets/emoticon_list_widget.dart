@@ -23,15 +23,6 @@ class EmoticonListWidget extends StatelessWidget {
   final FocusNode chatboxFocusNode;
   final ScrollController scrollController;
 
-  Map<String, String> getHeaders({required bool condition}) {
-    if (!condition) return {};
-    return {
-      'x-requested-with': 'XMLHttpRequest',
-      'cookie': account.cachedCookies ?? '',
-      'user-agent': account.userAgent ?? '',
-    };
-  }
-
   @override
   Widget build(BuildContext context) => Expanded(
     child: Padding(
@@ -73,13 +64,12 @@ class EmoticonListWidget extends StatelessWidget {
                                 child: CachedNetworkImage(
                                   imageUrl:
                                       emoticonMap[account]![index].pictureUrl,
-                                  httpHeaders: getHeaders(
-                                    condition: emoticonMap[account]![index]
-                                        .pictureUrl
-                                        .startsWith(account.forumUrl),
+                                  httpHeaders: account.getHeaders(
+                                    src:
+                                        emoticonMap[account]![index].pictureUrl,
                                   ),
                                   cacheKey: CryptoUtil.generateMd5(
-                                    '${getHeaders(condition: true)}${emoticonMap[account]![index].pictureUrl}',
+                                    '${account.getHeaders()}${emoticonMap[account]![index].pictureUrl}',
                                   ),
                                 ),
                               ),

@@ -75,12 +75,6 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
             .replaceAll(RegExp(r':\d{2} '), ' ')
             .trim();
 
-    var headers = {
-      'x-requested-with': 'XMLHttpRequest',
-      'cookie': widget.account.cachedCookies ?? '',
-      'user-agent': widget.account.userAgent ?? '',
-    };
-
     return AnimatedOpacity(
       opacity: (loaded! && !widget.message.isDeleting) ? 1.0 : 0.0,
       duration: Duration(
@@ -119,14 +113,11 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                                 backgroundColor: Colors.transparent,
                                 foregroundImage: CachedNetworkImageProvider(
                                   widget.avatarSrc,
-                                  headers:
-                                      widget.avatarSrc.startsWith(
-                                            widget.account.forumUrl,
-                                          )
-                                          ? headers
-                                          : {},
+                                  headers: widget.account.getHeaders(
+                                    src: widget.avatarSrc,
+                                  ),
                                   cacheKey: CryptoUtil.generateMd5(
-                                    '$headers${widget.avatarSrc}',
+                                    '${widget.account.getHeaders()}${widget.avatarSrc}',
                                   ),
                                 ),
                               ),
@@ -158,29 +149,22 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                         hasFollowUp: widget.hasFollowUp,
                         isFollowUp: widget.isFollowUp,
                       ),
-                      // SizedBox(height: 20,);
                     ],
                   ),
-                  widget.hasFollowUp
-                      ? SizedBox(width: 50.0)
-                      : widget.isSender
-                      ? CircleAvatar(
-                        radius: 25.0,
-                        backgroundColor: Colors.transparent,
-                        foregroundImage: CachedNetworkImageProvider(
-                          widget.avatarSrc,
-                          headers:
-                              widget.avatarSrc.startsWith(
-                                    widget.account.forumUrl,
-                                  )
-                                  ? headers
-                                  : {},
-                          cacheKey: CryptoUtil.generateMd5(
-                            '$headers${widget.avatarSrc}',
-                          ),
+                  if (!widget.hasFollowUp && widget.isSender)
+                    CircleAvatar(
+                      radius: 25.0,
+                      backgroundColor: Colors.transparent,
+                      foregroundImage: CachedNetworkImageProvider(
+                        widget.avatarSrc,
+                        headers: widget.account.getHeaders(
+                          src: widget.avatarSrc,
                         ),
-                      )
-                      : SizedBox.shrink(),
+                        cacheKey: CryptoUtil.generateMd5(
+                          '${widget.account.getHeaders()}${widget.avatarSrc}',
+                        ),
+                      ),
+                    ),
                 ],
               ),
               widget.hasFollowUp
