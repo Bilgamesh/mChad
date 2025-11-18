@@ -102,40 +102,39 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                         : MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  widget.isSender
-                      ? SizedBox.shrink()
-                      : Stack(
-                        children: [
-                          widget.hasFollowUp
-                              ? SizedBox(width: 50.0)
-                              : CircleAvatar(
-                                radius: 25.0,
-                                backgroundColor: Colors.transparent,
-                                foregroundImage: CachedNetworkImageProvider(
-                                  widget.avatarSrc,
-                                  headers: widget.account.getHeaders(
-                                    src: widget.avatarSrc,
-                                  ),
-                                  cacheKey: CryptoUtil.generateMd5(
-                                    '${widget.account.getHeaders()}${widget.avatarSrc}',
-                                  ),
-                                ),
+                  if (!widget.isSender)
+                    Stack(
+                      children: [
+                        if (widget.hasFollowUp)
+                          SizedBox(width: 50.0)
+                        else
+                          CircleAvatar(
+                            radius: 25.0,
+                            backgroundColor: Colors.transparent,
+                            foregroundImage: CachedNetworkImageProvider(
+                              widget.avatarSrc,
+                              headers: widget.account.getHeaders(
+                                src: widget.avatarSrc,
                               ),
-                          widget.isOnline && !widget.hasFollowUp
-                              ? Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 35.0,
-                                  top: 35.0,
-                                ),
-                                child: Icon(
-                                  Icons.circle,
-                                  color: Colors.green,
-                                  size: 15,
-                                ),
-                              )
-                              : SizedBox.shrink(),
-                        ],
-                      ),
+                              cacheKey: CryptoUtil.generateMd5(
+                                '${widget.account.getHeaders()}${widget.avatarSrc}',
+                              ),
+                            ),
+                          ),
+                        if (widget.isOnline && !widget.hasFollowUp)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 35.0,
+                              top: 35.0,
+                            ),
+                            child: Icon(
+                              Icons.circle,
+                              color: Colors.green,
+                              size: 15,
+                            ),
+                          ),
+                      ],
+                    ),
                   Column(
                     children: [
                       ChatBubble(
@@ -168,27 +167,27 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                     ),
                 ],
               ),
-              widget.hasFollowUp
-                  ? SizedBox.shrink()
-                  : Material(
-                    child: Row(
-                      mainAxisAlignment:
-                          widget.isSender
-                              ? MainAxisAlignment.end
-                              : MainAxisAlignment.start,
-                      children: [
+              if (!widget.hasFollowUp)
+                Material(
+                  child: Row(
+                    mainAxisAlignment:
                         widget.isSender
-                            ? Text(
-                              '$dateTime • ${widget.message.user.name}',
-                              style: TextStyle(fontSize: 10.0),
-                            )
-                            : Text(
-                              '${widget.message.user.name} • $dateTime',
-                              style: TextStyle(fontSize: 10.0),
-                            ),
-                      ],
-                    ),
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                    children: [
+                      if (widget.isSender)
+                        Text(
+                          '$dateTime • ${widget.message.user.name}',
+                          style: TextStyle(fontSize: 10.0),
+                        )
+                      else
+                        Text(
+                          '${widget.message.user.name} • $dateTime',
+                          style: TextStyle(fontSize: 10.0),
+                        ),
+                    ],
                   ),
+                ),
             ],
           ),
         ),
