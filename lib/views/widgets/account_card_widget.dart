@@ -82,7 +82,10 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
     builder: (context, values, child) {
       final settings = values[0] as SettingsModel;
       final onlineUsersMap = values[1] as Map<Account, OnlineUsersResponse>;
+      final onlineUsers = onlineUsersMap[widget.account];
       final refreshStatusMap = values[2] as Map<Account, VerificationStatus>;
+      final refreshStatus =
+          refreshStatusMap[widget.account] ?? VerificationStatus.none;
       final messageMap = values[3] as Map<Account, List<Message>>;
       final unreadMessages = messageMap[widget.account]!.where(
         (m) => !(m.isRead ?? false),
@@ -111,7 +114,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
             },
           ),
           titleAlignment: ListTileTitleAlignment.titleHeight,
-          onLongPress: () => showOnlineUsersModal(context, onlineUsersMap),
+          onLongPress: () => showOnlineUsersModal(context, onlineUsers),
           title: Row(
             children: [
               Text(
@@ -119,10 +122,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                 style: TextStyle(fontWeight: FontWeight.w500),
               ),
               Expanded(child: SizedBox.shrink()),
-              VerificationIconWidget(
-                status:
-                    refreshStatusMap[widget.account] ?? VerificationStatus.none,
-              ),
+              VerificationIconWidget(status: refreshStatus),
             ],
           ),
           selectedTileColor: settings.colorScheme.surfaceContainerHigh,
@@ -145,12 +145,12 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                 child: Row(
                   children: [
                     Text(
-                      '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
+                      '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsers?.totalCount ?? 0}',
                     ),
                     IconButton(
                       onPressed: () {
                         HapticsUtil.vibrate();
-                        showOnlineUsersModal(context, onlineUsersMap);
+                        showOnlineUsersModal(context, onlineUsers);
                       },
                       icon: Icon(Icons.info_outline),
                     ),
@@ -169,7 +169,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                 children: [
                   SizedBox(
                     height: 38,
-                    child: switch (refreshStatusMap[widget.account]) {
+                    child: switch (refreshStatus) {
                       VerificationStatus.loading => Text(
                         AppLocalizations.of(context).chatRefreshing,
                       ),
@@ -218,7 +218,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
 
   void showOnlineUsersModal(
     BuildContext context,
-    Map<Account, OnlineUsersResponse> onlineUsersMap,
+    OnlineUsersResponse? onlineUsers,
   ) {
     showModalBottomSheet(
       showDragHandle: true,
@@ -226,9 +226,9 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
       builder:
           (context) => SafeArea(
             child: OnlineUsersModal(
-              onlineUsers: onlineUsersMap[widget.account]?.users ?? [],
-              onlineBots: onlineUsersMap[widget.account]?.bots ?? [],
-              hiddenCount: onlineUsersMap[widget.account]?.hiddenCount ?? 0,
+              onlineUsers: onlineUsers?.users ?? [],
+              onlineBots: onlineUsers?.bots ?? [],
+              hiddenCount: onlineUsers?.hiddenCount ?? 0,
             ),
           ),
     );

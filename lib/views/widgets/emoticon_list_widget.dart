@@ -33,11 +33,12 @@ class EmoticonListWidget extends StatelessWidget {
           listenables: [emoticonMapNotifer, settingsNotifier],
           builder: (context, values, child) {
             final emoticonMap = values[0] as Map<Account, List<Emoticon>>;
+            final emoticons = emoticonMap[account] ?? [];
             final settings = values[1] as SettingsModel;
             return SafeArea(
               child: Wrap(
                 children: List.generate(
-                  emoticonMap[account]?.length ?? 0,
+                  emoticons.length,
                   (index) => Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: ClipRRect(
@@ -52,24 +53,20 @@ class EmoticonListWidget extends StatelessWidget {
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(12.0),
                           child: Tooltip(
-                            message: emoticonMap[account]![index].title,
+                            message: emoticons[index].title,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(12.0),
                               onTap:
-                                  () => onEmoticonTap(
-                                    context,
-                                    emoticonMap[account]![index],
-                                  ),
+                                  () =>
+                                      onEmoticonTap(context, emoticons[index]),
                               child: FittedBox(
                                 child: CachedNetworkImage(
-                                  imageUrl:
-                                      emoticonMap[account]![index].pictureUrl,
+                                  imageUrl: emoticons[index].pictureUrl,
                                   httpHeaders: account.getHeaders(
-                                    src:
-                                        emoticonMap[account]![index].pictureUrl,
+                                    src: emoticons[index].pictureUrl,
                                   ),
                                   cacheKey: CryptoUtil.generateMd5(
-                                    '${account.getHeaders()}${emoticonMap[account]![index].pictureUrl}',
+                                    '${account.getHeaders()}${emoticons[index].pictureUrl}',
                                   ),
                                 ),
                               ),

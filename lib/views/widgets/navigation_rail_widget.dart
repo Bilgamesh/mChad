@@ -24,10 +24,9 @@ class NavigationRailWidget extends StatelessWidget {
         final account = values[0] as Account?;
         final selectedTab = values[1] as int;
         final messageMap = values[2] as Map<Account, List<Message>>;
+        final messages = messageMap[account] ?? [];
         final update = values[3] as UpdateStatus;
-        var unreadMessagesCurrent = messageMap[account]!.where(
-          (m) => !(m.isRead ?? false),
-        );
+        var unreadMessagesCurrent = messages.where((m) => !(m.isRead ?? false));
         var unreadMessagesRemaining = <Message>[];
         messageMap.forEach((key, messages) {
           if (key != account) {

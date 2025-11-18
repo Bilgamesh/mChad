@@ -101,17 +101,19 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               IconButton(
-                                onPressed:
-                                    () => widget.onCodePressed(
-                                      globals.textSelectionMap[widget.account],
-                                    ),
+                                onPressed: () {
+                                  final textSelection =
+                                      globals.textSelectionMap[widget.account];
+                                  widget.onCodePressed(textSelection);
+                                },
                                 icon: Icon(Icons.code_outlined),
                               ),
                               IconButton(
-                                onPressed:
-                                    () => widget.onEmojiPressed(
-                                      globals.textSelectionMap[widget.account],
-                                    ),
+                                onPressed: () {
+                                  final textSelection =
+                                      globals.textSelectionMap[widget.account];
+                                  widget.onEmojiPressed(textSelection);
+                                },
                                 icon: Icon(Icons.emoji_emotions_outlined),
                               ),
                             ],

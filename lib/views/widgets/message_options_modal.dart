@@ -30,62 +30,64 @@ class MessageOptionsModal extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: editDeleteLimitMapNotifier,
-      builder:
-          (context, editDeleteLimitMap, child) => Wrap(
-            children: [
+      builder: (context, editDeleteLimitMap, child) {
+        final editDeleteLimit = editDeleteLimitMap[account] ?? 0;
+        return Wrap(
+          children: [
+            ListTile(
+              leading: Icon(Icons.copy),
+              title: Text(AppLocalizations.of(context).copy),
+              onTap: () => copy(context, message),
+            ),
+            ListTile(
+              leading: Icon(Icons.share),
+              title: Text(AppLocalizations.of(context).share),
+              onTap: () => share(context, message),
+            ),
+            if (!isSelf)
               ListTile(
-                leading: Icon(Icons.copy),
-                title: Text(AppLocalizations.of(context).copy),
-                onTap: () => copy(context, message),
+                leading: Icon(Icons.alternate_email),
+                title: Text(AppLocalizations.of(context).reply),
+                onTap: () => reply(context, message),
               ),
+            ListTile(
+              leading: Icon(Icons.format_quote),
+              title: Text(AppLocalizations.of(context).quote),
+              onTap: () => quote(context, message),
+            ),
+            if (!isSelf)
               ListTile(
-                leading: Icon(Icons.share),
-                title: Text(AppLocalizations.of(context).share),
-                onTap: () => share(context, message),
+                leading: Icon(Icons.thumb_up),
+                title: Text(AppLocalizations.of(context).like),
+                onTap: () => like(context, message),
               ),
-              if (!isSelf)
-                ListTile(
-                  leading: Icon(Icons.alternate_email),
-                  title: Text(AppLocalizations.of(context).reply),
-                  onTap: () => reply(context, message),
-                ),
+            if (isSelf &&
+                !TimeUtil.isTimeLimitExceeded(
+                  timeMs: int.parse(message.time) * 1000,
+                  limitMs: editDeleteLimit,
+                ))
               ListTile(
-                leading: Icon(Icons.format_quote),
-                title: Text(AppLocalizations.of(context).quote),
-                onTap: () => quote(context, message),
+                leading: Icon(Icons.edit),
+                title: Text(AppLocalizations.of(context).edit),
+                onTap: () => edit(context, message),
               ),
-              if (!isSelf)
-                ListTile(
-                  leading: Icon(Icons.thumb_up),
-                  title: Text(AppLocalizations.of(context).like),
-                  onTap: () => like(context, message),
+            if (isSelf &&
+                !TimeUtil.isTimeLimitExceeded(
+                  timeMs: int.parse(message.time) * 1000,
+                  limitMs: editDeleteLimit,
+                ))
+              ListTile(
+                iconColor: Colors.red,
+                leading: Icon(Icons.delete),
+                title: Text(
+                  AppLocalizations.of(context).delete,
+                  style: TextStyle(color: Colors.red),
                 ),
-              if (isSelf &&
-                  !TimeUtil.isTimeLimitExceeded(
-                    timeMs: int.parse(message.time) * 1000,
-                    limitMs: editDeleteLimitMap[account] ?? 0,
-                  ))
-                ListTile(
-                  leading: Icon(Icons.edit),
-                  title: Text(AppLocalizations.of(context).edit),
-                  onTap: () => edit(context, message),
-                ),
-              if (isSelf &&
-                  !TimeUtil.isTimeLimitExceeded(
-                    timeMs: int.parse(message.time) * 1000,
-                    limitMs: editDeleteLimitMap[account] ?? 0,
-                  ))
-                ListTile(
-                  iconColor: Colors.red,
-                  leading: Icon(Icons.delete),
-                  title: Text(
-                    AppLocalizations.of(context).delete,
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  onTap: () => delete(context, message),
-                ),
-            ],
-          ),
+                onTap: () => delete(context, message),
+              ),
+          ],
+        );
+      },
     );
   }
 
