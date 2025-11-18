@@ -151,6 +151,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                       ),
                     ],
                   ),
+                  if (widget.hasFollowUp) SizedBox(width: 50.0),
                   if (!widget.hasFollowUp && widget.isSender)
                     CircleAvatar(
                       radius: 25.0,
