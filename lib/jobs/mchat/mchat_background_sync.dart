@@ -29,7 +29,7 @@ class BackgroundSync {
     try {
       final prefs = await SharedPreferences.getInstance();
       final accountStore = AccountStore(prefs: prefs);
-      final accounts = accountStore.getAll();
+      final accounts = accountStore.all;
       final settings = await SettingsStore(prefs: prefs).getSettings();
 
       for (var account in accounts) {
@@ -77,7 +77,7 @@ class BackgroundSync {
       if (globals.background) {
         final prefs = await SharedPreferences.getInstance();
         final accountStore = AccountStore(prefs: prefs);
-        final accounts = accountStore.getAll();
+        final accounts = accountStore.all;
         final settings = await SettingsStore(prefs: prefs).getSettings();
 
         for (var account in accounts) {

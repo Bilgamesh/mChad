@@ -25,7 +25,7 @@ class InitPage extends StatelessWidget {
 
     final prefs = await SharedPreferences.getInstance();
     final accountStore = AccountStore(prefs: prefs);
-    final accounts = accountStore.getAll();
+    final accounts = accountStore.all;
 
     for (var account in accounts) {
       account.updateNotifiers();

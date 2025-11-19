@@ -18,7 +18,7 @@ class SettingsStore {
 
   Future<SettingsModel> getSettings() async {
     final strinfigiedSettings = prefs.getString(key);
-    if (strinfigiedSettings == null) return SettingsModel.getDefault();
+    if (strinfigiedSettings == null) return SettingsModel.defaultSettings;
     final settings = SettingsModel.fromString(strinfigiedSettings);
     if (settings.notifications) {
       settings.notifications = await NotificationsService.notificationsEnabled;

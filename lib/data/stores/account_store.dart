@@ -19,8 +19,7 @@ class AccountStore {
   }
 
   Future<int> update(Account account) async {
-    final existing = getAll();
-    final index = existing.indexOf(account);
+    final index = all.indexOf(account);
     if (index == -1) throw 'Account does not exist';
     final existingStr = prefs.getStringList(key) ?? [];
     existingStr[index] = account.toString();
@@ -28,7 +27,7 @@ class AccountStore {
     return index;
   }
 
-  List<Account> getAll() {
+  List<Account> get all {
     final values = prefs.getStringList(key) ?? [];
     final allAccounts = <Account>[];
     for (var value in values) {
@@ -53,9 +52,8 @@ class AccountStore {
   }
 
   int indexOf(Account account) {
-    final accounts = getAll();
-    for (var i = 0; i < accounts.length; i++) {
-      if (accounts.elementAt(i) == account) {
+    for (var i = 0; i < all.length; i++) {
+      if (all.elementAt(i) == account) {
         return i;
       }
     }
@@ -63,14 +61,13 @@ class AccountStore {
   }
 
   Account? find(bool Function(Account account) predicate) {
-    final accounts = getAll();
-    for (var account in accounts) {
+    for (var account in all) {
       if (predicate(account)) return account;
     }
     return null;
   }
 
-  int getCount() {
+  int get count {
     final values = prefs.getStringList(key) ?? [];
     return values.length;
   }

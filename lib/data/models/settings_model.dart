@@ -47,7 +47,7 @@ class SettingsModel {
     return AppLocalizations.supportedLocales[languageIndex];
   }
 
-  static SettingsModel getDefault() {
+  static SettingsModel get defaultSettings {
     return SettingsModel(
       colorIndex: 0,
       isDark: UiUtil.isSystemDarkMode,

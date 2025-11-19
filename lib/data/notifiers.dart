@@ -42,6 +42,6 @@ PropertyValueNotifier<Map<Account, DateTime>> refreshTimeMapNotifer =
 PropertyValueNotifier<Map<Account, VerificationStatus>> refreshStatusNotifier =
     PropertyValueNotifier({});
 PropertyValueNotifier<SettingsModel> settingsNotifier = PropertyValueNotifier(
-  SettingsModel.getDefault(),
+  SettingsModel.defaultSettings,
 );
 ValueNotifier<UpdateStatus> updateNotifier = ValueNotifier(UpdateStatus.none);

@@ -35,10 +35,12 @@ class AccountsTab extends StatelessWidget {
                     account: accounts.elementAt(index),
                     isSelected: accounts[index] == selectedAccount,
                     onOpen: () => open(accounts[index]),
-                    onSelect:
-                        accounts[index] == selectedAccount
-                            ? null
-                            : () => select(accounts[index]),
+                    onSelect: switch (accounts[index] == selectedAccount) {
+                      true => null,
+                      false => () {
+                        return select(accounts[index]);
+                      },
+                    },
                     onLogout: () {
                       HapticsUtil.vibrate();
                       showDialog(
@@ -113,7 +115,7 @@ class AccountsTab extends StatelessWidget {
         Account.saveAll();
       }
       globals.syncManager.startAll();
-      if (context.mounted && accountStore.getCount() == 0) {
+      if (context.mounted && accountStore.count == 0) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => LoginPage()),

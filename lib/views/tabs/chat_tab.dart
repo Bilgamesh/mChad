@@ -25,10 +25,10 @@ class _ChatTabState extends State<ChatTab> {
   final scrollController = ScrollController();
   final chatboxFocusNode = FocusNode();
   final textController = TextEditingController(
-    text:
-        selectedAccountNotifier.value != null
-            ? globals.chatBoxValueMap[selectedAccountNotifier.value]
-            : '',
+    text: switch (selectedAccountNotifier.value) {
+      null => '',
+      _ => globals.chatBoxValueMap[selectedAccountNotifier.value],
+    },
   );
 
   @override
@@ -73,19 +73,22 @@ class _ChatTabState extends State<ChatTab> {
       builder: (context, values, child) {
         final account = values[0] as Account?;
         final messageMap = values[1] as Map<Account, List<Message>>;
+        final messages = messageMap[account!] ?? [];
         final settings = values[2] as SettingsModel;
         final onlineUsersMap = values[3] as Map<Account, OnlineUsersResponse>;
+        final onlineUsers = onlineUsersMap[account];
         final messageLimitMap = values[4] as Map<Account, int>;
+        final messageLimit = messageLimitMap[account] ?? 0;
         return Column(
           children: [
             Expanded(
               child: Align(
-                alignment:
-                    (messageMap[account!]?.length ?? 0) > 0
-                        ? Alignment.topCenter
-                        : Alignment.center,
+                alignment: switch (messages.isNotEmpty) {
+                  true => Alignment.topCenter,
+                  false => Alignment.center,
+                },
                 child: ListView.builder(
-                  itemCount: ((messageMap[account]?.length ?? 0) + 2),
+                  itemCount: (messages.length + 2),
                   reverse: true,
                   controller: scrollController,
                   shrinkWrap: true,
@@ -93,25 +96,19 @@ class _ChatTabState extends State<ChatTab> {
                     if (index == 0) {
                       return SizedBox(height: 100.0);
                     }
-                    if (index - 1 < (messageMap[account]?.length ?? 0)) {
+                    if (index - 1 < messages.length) {
                       return MessageRowWidget(
-                        key: Key('${messageMap[account]![index - 1].id}'),
+                        key: Key('${messages[index - 1].id}'),
                         index: index - 1,
                         account: account,
                         messageMap: messageMap,
                         chatboxFocusNode: chatboxFocusNode,
                         textController: textController,
-                        hasFollowUp: hasFollowUpMessage(
-                          index - 1,
-                          messageMap[account]!,
-                        ),
-                        isFollowUp: hasFollowUpMessage(
-                          index,
-                          messageMap[account]!,
-                        ),
+                        hasFollowUp: hasFollowUpMessage(index - 1, messages),
+                        isFollowUp: hasFollowUpMessage(index, messages),
                         isOnline: isOnline(
-                          onlineUsersMap[account],
-                          messageMap[account]![index - 1].user.id,
+                          onlineUsers,
+                          messages[index - 1].user.id,
                         ),
                         settings: settings,
                       );
@@ -134,7 +131,7 @@ class _ChatTabState extends State<ChatTab> {
               chatboxFocusNode: chatboxFocusNode,
               textController: textController,
               account: account,
-              messageLimit: messageLimitMap[account] ?? 0,
+              messageLimit: messageLimit,
               onCodePressed: (TextSelection? lastTextSelection) {
                 HapticsUtil.vibrate();
                 openTextWidgetsModal(

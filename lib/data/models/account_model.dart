@@ -76,7 +76,7 @@ class Account {
 
   static Future<List<Account>> getAll() async {
     final store = await AccountStore.getInstance();
-    return store.getAll();
+    return store.all;
   }
 
   static Future<void> saveAll() async {
