@@ -5,11 +5,10 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/utils/crypto_util.dart';
+import 'package:mchad/views/widgets/avatar_widget.dart';
 import 'package:mchad/views/widgets/chat_bubble_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class MessageRowWidget extends StatefulWidget {
@@ -108,18 +107,9 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                         if (widget.hasFollowUp)
                           SizedBox(width: 50.0)
                         else
-                          CircleAvatar(
-                            radius: 25.0,
-                            backgroundColor: Colors.transparent,
-                            foregroundImage: CachedNetworkImageProvider(
-                              widget.avatarSrc,
-                              headers: widget.account.getHeaders(
-                                src: widget.avatarSrc,
-                              ),
-                              cacheKey: CryptoUtil.generateMd5(
-                                '${widget.account.getHeaders()}${widget.avatarSrc}',
-                              ),
-                            ),
+                          AvatarWidget(
+                            avatarSrc: widget.avatarSrc,
+                            account: widget.account,
                           ),
                         if (widget.isOnline && !widget.hasFollowUp)
                           Padding(
@@ -152,18 +142,9 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                   ),
                   if (widget.hasFollowUp) SizedBox(width: 50.0),
                   if (!widget.hasFollowUp && widget.isSender)
-                    CircleAvatar(
-                      radius: 25.0,
-                      backgroundColor: Colors.transparent,
-                      foregroundImage: CachedNetworkImageProvider(
-                        widget.avatarSrc,
-                        headers: widget.account.getHeaders(
-                          src: widget.avatarSrc,
-                        ),
-                        cacheKey: CryptoUtil.generateMd5(
-                          '${widget.account.getHeaders()}${widget.avatarSrc}',
-                        ),
-                      ),
+                    AvatarWidget(
+                      avatarSrc: widget.avatarSrc,
+                      account: widget.account,
                     ),
                 ],
               ),

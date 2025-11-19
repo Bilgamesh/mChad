@@ -7,13 +7,12 @@ import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/time_util.dart';
 import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/views/widgets/avatar_widget.dart';
 import 'package:mchad/views/widgets/online_users_modal.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class AccountCardWidget extends StatefulWidget {
@@ -96,21 +95,9 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
         child: ListTile(
           selected: widget.isSelected,
           onTap: widget.onSelect,
-          leading: CircleAvatar(
-            radius: 25.0,
-            backgroundColor: Colors.transparent,
-            foregroundImage: switch (widget.account.avatarUrl) {
-              null => AssetImage('assets/images/no_avatar.gif'),
-              _ => CachedNetworkImageProvider(
-                widget.account.avatarUrl!,
-                headers: widget.account.getHeaders(
-                  src: widget.account.avatarUrl,
-                ),
-                cacheKey: CryptoUtil.generateMd5(
-                  '${widget.account.getHeaders(src: widget.account.avatarUrl)}${widget.account.avatarUrl!}',
-                ),
-              ),
-            },
+          leading: AvatarWidget(
+            avatarSrc: widget.account.avatarUrl,
+            account: widget.account,
           ),
           titleAlignment: ListTileTitleAlignment.titleHeight,
           onLongPress: () => showOnlineUsersModal(context, onlineUsers),
