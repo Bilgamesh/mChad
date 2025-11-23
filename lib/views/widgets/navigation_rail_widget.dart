@@ -7,6 +7,7 @@ import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/ui_util.dart';
 import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 
 class NavigationRailWidget extends StatelessWidget {
   const NavigationRailWidget({Key? key}) : super(key: key);
@@ -50,13 +51,17 @@ class NavigationRailWidget extends StatelessWidget {
 
           leading: Row(
             children: [
-              Hero(
-                tag: 'appBarTitle',
-                child: Material(
-                  color: Colors.transparent,
-                  child: Text(
-                    account?.forumName ?? AppLocalizations.of(context).appName,
-                    style: TextStyle(fontSize: 22.0),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Hero(
+                  tag: 'appBarTitle',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(
+                      account?.forumName ??
+                          AppLocalizations.of(context).appName,
+                      style: TextStyle(fontSize: 22.0),
+                    ),
                   ),
                 ),
               ),
@@ -100,6 +105,12 @@ class NavigationRailWidget extends StatelessWidget {
               label: Text(AppLocalizations.of(context).settingsLabelValue),
             ),
           ],
+
+          trailing: Padding(
+            padding: const EdgeInsets.all(20),
+            child: DarkModeButtonWidget(hero: false),
+          ),
+          trailingAtBottom: true,
         );
       },
     );

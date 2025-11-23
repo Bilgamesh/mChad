@@ -153,7 +153,15 @@ class ChatBubble extends StatelessWidget {
       );
     }
     if (DocumentUtil.isImage(element)) {
-      return ChatImageWidget(src: element.attributes['src']!, account: account);
+      return FittedBox(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 300),
+          child: ChatImageWidget(
+            src: element.attributes['src']!,
+            account: account,
+          ),
+        ),
+      );
     }
     if (DocumentUtil.isImageLink(element)) {
       return ChatImageWidget(

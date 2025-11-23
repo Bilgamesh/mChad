@@ -3,15 +3,15 @@ import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 
 class DarkModeButtonWidget extends StatelessWidget {
-  const DarkModeButtonWidget({Key? key}) : super(key: key);
-
+  const DarkModeButtonWidget({Key? key, this.hero}) : super(key: key);
+  final bool? hero;
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: settingsNotifier,
       builder:
           (context, settings, child) => Hero(
-            tag: DarkModeButtonWidget,
+            tag: hero == false ? '' : DarkModeButtonWidget,
             child: IconButton(
               onPressed: () async {
                 HapticsUtil.vibrate();

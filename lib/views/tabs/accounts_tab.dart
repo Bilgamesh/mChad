@@ -25,61 +25,66 @@ class AccountsTab extends StatelessWidget {
         builder: (context, values, child) {
           final accounts = values[0] as List<Account>;
           final selectedAccount = values[1] as Account?;
-          return ListView(
-            children: [
-              ...List.generate(
-                accounts.length,
-                (index) => Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: AccountCardWidget(
-                    account: accounts.elementAt(index),
-                    isSelected: accounts[index] == selectedAccount,
-                    onOpen: () => open(accounts[index]),
-                    onSelect: switch (accounts[index] == selectedAccount) {
-                      true => null,
-                      false => () {
-                        return select(accounts[index]);
+          return ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 800),
+            child: ListView(
+              children: [
+                ...List.generate(
+                  accounts.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: AccountCardWidget(
+                      account: accounts.elementAt(index),
+                      isSelected: accounts[index] == selectedAccount,
+                      onOpen: () => open(accounts[index]),
+                      onSelect: switch (accounts[index] == selectedAccount) {
+                        true => null,
+                        false => () {
+                          return select(accounts[index]);
+                        },
                       },
-                    },
-                    onLogout: () {
-                      HapticsUtil.vibrate();
-                      showDialog(
-                        context: context,
-                        builder:
-                            (context) => AlertDialog(
-                              title: Text(AppLocalizations.of(context).logout),
-                              content: Text(
-                                '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
+                      onLogout: () {
+                        HapticsUtil.vibrate();
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => AlertDialog(
+                                title: Text(
+                                  AppLocalizations.of(context).logout,
+                                ),
+                                content: Text(
+                                  '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      HapticsUtil.vibrate();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context).cancel,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed:
+                                        () => logout(
+                                          context,
+                                          accounts.elementAt(index),
+                                        ),
+                                    child: Text(
+                                      AppLocalizations.of(context).confirm,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    HapticsUtil.vibrate();
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context).cancel,
-                                  ),
-                                ),
-                                TextButton(
-                                  onPressed:
-                                      () => logout(
-                                        context,
-                                        accounts.elementAt(index),
-                                      ),
-                                  child: Text(
-                                    AppLocalizations.of(context).confirm,
-                                  ),
-                                ),
-                              ],
-                            ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 200.0),
-            ],
+                SizedBox(height: 200.0),
+              ],
+            ),
           );
         },
       ),
