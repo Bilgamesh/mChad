@@ -86,18 +86,18 @@ class AccountsTab extends StatelessWidget {
     );
   }
 
-  open(Account account) {
+  void open(Account account) {
     select(account);
     selectedTabNotifier.value = 0;
   }
 
-  select(Account account) {
+  void select(Account account) {
     HapticsUtil.vibrate();
     account.select();
     Account.saveAll();
   }
 
-  logout(BuildContext context, Account account) async {
+  void logout(BuildContext context, Account account) async {
     if (context.mounted) Navigator.of(context).pop();
     HapticsUtil.vibrate();
     final accountStore = await AccountStore.getInstance();

@@ -18,7 +18,6 @@ class ChatBubble extends StatelessWidget {
   final int index;
   final Account account;
   final FocusNode chatboxFocusNode;
-  final Map<Account, List<Message>> messageMap;
   final TextEditingController textController;
   final bool hasFollowUp;
   final bool isFollowUp;
@@ -29,7 +28,6 @@ class ChatBubble extends StatelessWidget {
     required this.isSentByMe,
     required this.index,
     required this.account,
-    required this.messageMap,
     required this.chatboxFocusNode,
     required this.textController,
     required this.hasFollowUp,

@@ -7,9 +7,10 @@ import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/views/widgets/chat_placeholder_widget.dart';
+import 'package:mchad/views/widgets/chat_widget.dart';
 import 'package:mchad/views/widgets/chatbox_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
-import 'package:mchad/views/widgets/message_row_widget.dart';
 import 'package:mchad/views/widgets/text_widgets_modal_widget.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -22,7 +23,6 @@ class ChatTab extends StatefulWidget {
 }
 
 class _ChatTabState extends State<ChatTab> {
-  final scrollController = ScrollController();
   final chatboxFocusNode = FocusNode();
   final textController = TextEditingController(
     text: switch (selectedAccountNotifier.value) {
@@ -32,23 +32,7 @@ class _ChatTabState extends State<ChatTab> {
   );
 
   @override
-  void initState() {
-    chatScrollNotifier.value = scrollController;
-    chatScrollNotifier.notifyListeners();
-
-    scrollController.addListener(() {
-      chatScrollNotifier.value = scrollController;
-      chatScrollNotifier.notifyListeners();
-    });
-
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    chatScrollNotifier.value = null;
-    chatScrollNotifier.notifyListeners();
-    scrollController.dispose();
     chatboxFocusNode.dispose();
     textController.dispose();
     super.dispose();
@@ -83,48 +67,19 @@ class _ChatTabState extends State<ChatTab> {
           children: [
             Expanded(
               child: Align(
-                alignment: switch (messages.isNotEmpty) {
-                  true => Alignment.topCenter,
-                  false => Alignment.center,
+                alignment: Alignment.topCenter,
+                child: switch (messages.length) {
+                  0 => ChatPlaceholderWidget(),
+                  _ => ChatWidget(
+                    account: account,
+                    chatboxFocusNode: chatboxFocusNode,
+                    messages: messages,
+                    textController: textController,
+                    onlineUsers: onlineUsers,
+                    transitionAnimations: settings.transitionAnimations,
+                    infiniteScrollEnabled: true,
+                  ),
                 },
-                child: ListView.builder(
-                  itemCount: (messages.length + 2),
-                  reverse: true,
-                  controller: scrollController,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return SizedBox(height: 100.0);
-                    }
-                    if (index - 1 < messages.length) {
-                      return MessageRowWidget(
-                        key: Key('${messages[index - 1].id}'),
-                        index: index - 1,
-                        account: account,
-                        messageMap: messageMap,
-                        chatboxFocusNode: chatboxFocusNode,
-                        textController: textController,
-                        hasFollowUp: hasFollowUpMessage(index - 1, messages),
-                        isFollowUp: hasFollowUpMessage(index, messages),
-                        isOnline: isOnline(
-                          onlineUsers,
-                          messages[index - 1].user.id,
-                        ),
-                        settings: settings,
-                      );
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 32.0),
-                      child: Center(
-                        child: VisibilityDetector(
-                          key: Key('archive-fetch-indicator'),
-                          onVisibilityChanged: onArchiveFetch,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    );
-                  },
-                ),
               ),
             ),
             ChatboxWidget(
@@ -190,26 +145,5 @@ class _ChatTabState extends State<ChatTab> {
                 ),
           ),
     );
-  }
-
-  bool hasFollowUpMessage(int index, List<Message> messages) {
-    if (index == 0) return false;
-    final currentMessage = messages.elementAtOrNull(index);
-    final nextMessage = messages.elementAtOrNull(index - 1);
-    if (currentMessage == null || nextMessage == null) return false;
-    if (currentMessage.user.id != nextMessage.user.id) return false;
-    final currentMessageTime = DateTime.fromMillisecondsSinceEpoch(
-      int.parse(currentMessage.time) * 1000,
-    );
-    final nextMessageTime = DateTime.fromMillisecondsSinceEpoch(
-      int.parse(nextMessage.time) * 1000,
-    );
-    final diff = nextMessageTime.difference(currentMessageTime);
-    return diff.inMinutes < 1;
-  }
-
-  bool isOnline(OnlineUsersResponse? onlineUsersData, String userId) {
-    if (onlineUsersData == null) return false;
-    return onlineUsersData.userIds.contains(userId);
   }
 }

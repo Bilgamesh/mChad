@@ -7,6 +7,7 @@ import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class EmoticonListWidget extends StatelessWidget {
   const EmoticonListWidget({
@@ -23,6 +24,78 @@ class EmoticonListWidget extends StatelessWidget {
   final FocusNode chatboxFocusNode;
   final ScrollController scrollController;
 
+  Widget getEmoticonsWrapPlaceholder({
+    required BuildContext context,
+    required SettingsModel settings,
+  }) => Skeletonizer(
+    enabled: true,
+    child: getEmoticonsWrap(
+      context: context,
+      settings: settings,
+      emoticons: List<Emoticon>.generate(
+        10,
+        (index) =>
+            Emoticon(pictureUrl: '', width: 1, height: 1, code: '', title: ''),
+      ),
+    ),
+  );
+
+  Widget getEmoticonsWrap({
+    required BuildContext context,
+    required SettingsModel settings,
+    required List<Emoticon> emoticons,
+  }) => Wrap(
+    children: List.generate(
+      emoticons.length,
+      (index) => Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: settings.colorScheme.surfaceContainerHighest,
+            ),
+            height: 65,
+            width: 65,
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12.0),
+              child: Tooltip(
+                message: emoticons[index].title,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12.0),
+                  onTap: () => onEmoticonTap(context, emoticons[index]),
+                  child: FittedBox(
+                    child: CachedNetworkImage(
+                      fadeInDuration: Duration.zero,
+                      placeholderFadeInDuration: Duration.zero,
+                      fadeOutDuration: Duration.zero,
+                      imageUrl: emoticons[index].pictureUrl,
+                      httpHeaders: account.getHeaders(
+                        src: emoticons[index].pictureUrl,
+                      ),
+                      placeholder:
+                          (context, url) =>
+                              url.isEmpty
+                                  ? Image.asset(
+                                    'assets/images/no_avatar.gif',
+                                    fit: BoxFit.cover,
+                                  )
+                                  : SizedBox.shrink(),
+                      cacheKey: CryptoUtil.generateMd5(
+                        '${account.getHeaders()}${emoticons[index].pictureUrl}',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) => Expanded(
     child: Padding(
@@ -36,48 +109,17 @@ class EmoticonListWidget extends StatelessWidget {
             final emoticons = emoticonMap[account] ?? [];
             final settings = values[1] as SettingsModel;
             return SafeArea(
-              child: Wrap(
-                children: List.generate(
-                  emoticons.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.all(6.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: settings.colorScheme.surfaceContainerHighest,
-                        ),
-                        height: 65,
-                        width: 65,
-                        child: Material(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Tooltip(
-                            message: emoticons[index].title,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(12.0),
-                              onTap:
-                                  () =>
-                                      onEmoticonTap(context, emoticons[index]),
-                              child: FittedBox(
-                                child: CachedNetworkImage(
-                                  imageUrl: emoticons[index].pictureUrl,
-                                  httpHeaders: account.getHeaders(
-                                    src: emoticons[index].pictureUrl,
-                                  ),
-                                  cacheKey: CryptoUtil.generateMd5(
-                                    '${account.getHeaders()}${emoticons[index].pictureUrl}',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+              child: switch (emoticons.length) {
+                0 => getEmoticonsWrapPlaceholder(
+                  context: context,
+                  settings: settings,
                 ),
-              ),
+                _ => getEmoticonsWrap(
+                  context: context,
+                  emoticons: emoticons,
+                  settings: settings,
+                ),
+              },
             );
           },
         ),

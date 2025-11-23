@@ -22,6 +22,9 @@ class ChatEmoticonWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12.0),
       child: CachedNetworkImage(
+        fadeInDuration: Duration.zero,
+        placeholderFadeInDuration: Duration.zero,
+        fadeOutDuration: Duration.zero,
         imageUrl: attributes['src']!,
         httpHeaders: account.getHeaders(),
         cacheKey: cacheKey,

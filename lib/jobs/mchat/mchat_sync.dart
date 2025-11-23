@@ -167,7 +167,7 @@ class MchatSync {
     }
   }
 
-  startAll() async {
+  void startAll() async {
     if (index != 0) throw 'Can\'t start sync which has already started';
     logger.info('Starting sync');
     if (index == 0) await onTick();
@@ -238,6 +238,7 @@ class MchatSync {
   void onEmoticons(List<Emoticon> emoticons) {
     if (stopped) return;
     emoticonMapNotifer.value[account] = emoticons;
+    emoticonMapNotifer.notifyListeners();
   }
 
   void onBBTags(List<BBTag> bbtags) {

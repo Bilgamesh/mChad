@@ -55,10 +55,7 @@ class InitPage extends StatelessWidget {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) {
-          if (accounts.isNotEmpty) return TabsPage();
-          return LoginPage();
-        },
+        builder: (context) => accounts.isEmpty ? LoginPage() : TabsPage(),
       ),
     );
   }

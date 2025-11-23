@@ -11,12 +11,23 @@ class AvatarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (avatarSrc == null || avatarSrc!.isEmpty) {
+      return CircleAvatar(
+        radius: 25.0,
+        backgroundColor: Colors.transparent,
+        foregroundImage: AssetImage('assets/images/no_avatar.gif'),
+      );
+    }
+
     return CircleAvatar(
       radius: 25.0,
       backgroundColor: Colors.transparent,
       child: ClipOval(
         child: CachedNetworkImage(
-          imageUrl: avatarSrc ?? '',
+          fadeInDuration: Duration.zero,
+          placeholderFadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
+          imageUrl: avatarSrc!,
           httpHeaders: account.getHeaders(src: avatarSrc),
           cacheKey: CryptoUtil.generateMd5('${account.getHeaders()}$avatarSrc'),
           placeholder:
