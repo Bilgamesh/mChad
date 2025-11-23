@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/haptics_util.dart';
@@ -10,7 +11,9 @@ import 'package:mchad/utils/value_listenables_builder.dart';
 import 'package:mchad/views/widgets/dark_mode_button_widget.dart';
 
 class NavigationRailWidget extends StatelessWidget {
-  const NavigationRailWidget({Key? key}) : super(key: key);
+  const NavigationRailWidget({Key? key, required this.settings})
+    : super(key: key);
+  final SettingsModel settings;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class NavigationRailWidget extends StatelessWidget {
         });
 
         return NavigationRail(
+          backgroundColor: settings.colorScheme.surfaceContainer,
           selectedIndex: selectedTab,
           labelType: NavigationRailLabelType.all,
           groupAlignment: 0,

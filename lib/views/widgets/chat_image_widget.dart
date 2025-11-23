@@ -3,14 +3,20 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/views/pages/image_page.dart';
 
 class ChatImageWidget extends StatelessWidget {
-  const ChatImageWidget({Key? key, required this.src, required this.account})
-    : super(key: key);
+  const ChatImageWidget({
+    Key? key,
+    required this.src,
+    required this.account,
+    required this.settings,
+  }) : super(key: key);
   final String src;
   final Account account;
+  final SettingsModel settings;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,7 @@ class ChatImageWidget extends StatelessWidget {
               src: src,
               cacheKey: cacheKey,
               headers: account.getHeaders(src: src),
+              settings: settings,
             ),
       ),
     );

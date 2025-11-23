@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/views/widgets/chat_emoticon_widget.dart';
@@ -113,7 +114,8 @@ class ChatBubble extends StatelessWidget {
                         message.message.shortHtml,
                         renderMode: RenderMode.column,
                         customStylesBuilder: buildStyles,
-                        customWidgetBuilder: buildHtmlWidget,
+                        customWidgetBuilder:
+                            (element) => buildHtmlWidget(element, settings),
                       ),
                     ),
                   ),
@@ -132,7 +134,7 @@ class ChatBubble extends StatelessWidget {
     return {'border-radius': '10px'};
   }
 
-  Widget? buildHtmlWidget(dom.Element element) {
+  Widget? buildHtmlWidget(dom.Element element, SettingsModel settings) {
     if (element.outerHtml == '<br>') {
       return SizedBox.shrink();
     }
@@ -159,6 +161,7 @@ class ChatBubble extends StatelessWidget {
           child: ChatImageWidget(
             src: element.attributes['src']!,
             account: account,
+            settings: settings,
           ),
         ),
       );
@@ -167,6 +170,7 @@ class ChatBubble extends StatelessWidget {
       return ChatImageWidget(
         src: element.attributes['href']!,
         account: account,
+        settings: settings,
       );
     }
     return null;
@@ -177,15 +181,13 @@ class ChatBubble extends StatelessWidget {
       showDragHandle: true,
       context: context,
       builder:
-          (context) => SafeArea(
-            child: GestureDetector(
-              child: MessageOptionsModal(
-                isSelf: isSentByMe,
-                account: account,
-                message: message,
-                chatboxFocusNode: chatboxFocusNode,
-                textController: textController,
-              ),
+          (context) => GestureDetector(
+            child: MessageOptionsModal(
+              isSelf: isSentByMe,
+              account: account,
+              message: message,
+              chatboxFocusNode: chatboxFocusNode,
+              textController: textController,
             ),
           ),
     );

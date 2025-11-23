@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_icon/gradient_icon.dart';
 import 'package:mchad/data/constants.dart';
+import 'package:mchad/data/models/settings_model.dart';
 
 class UiUtil {
   static double getBottomSafeAreaHeight(BuildContext context, bool withNavbar) {
@@ -45,6 +47,12 @@ class UiUtil {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
+    );
+  }
+
+  static void refreshStatusBarTheme(SettingsModel settings) {
+    SystemChrome.setSystemUIOverlayStyle(
+      settings.isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
     );
   }
 }

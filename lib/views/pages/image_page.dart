@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:mchad/data/constants.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
+import 'package:mchad/utils/ui_util.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
@@ -18,10 +20,12 @@ class ImagePage extends StatefulWidget {
     required this.src,
     required this.headers,
     required this.cacheKey,
+    required this.settings,
   }) : super(key: key);
   final String src;
   final Map<String, String> headers;
   final String cacheKey;
+  final SettingsModel settings;
 
   @override
   State<ImagePage> createState() => _ImagePageState();
@@ -35,6 +39,11 @@ class _ImagePageState extends State<ImagePage> {
     if (!uiVisible) {
       showUi();
     }
+    // Since the Image Page always has dark AppBar background,
+    // if rest of the app is in light theme
+    // flutter sometimes uses wrong status bar theme.
+    // Manual refresh when exiting Image Page fixes it
+    UiUtil.refreshStatusBarTheme(widget.settings);
     super.dispose();
   }
 
