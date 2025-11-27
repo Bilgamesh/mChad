@@ -111,10 +111,10 @@ class AccountsTab extends StatelessWidget {
     try {
       final loginService = MchatLoginService(baseUrl: account.forumUrl);
       await loginService.logout(account);
-      await account.delete();
     } catch (e) {
       logger.error(e.toString());
     } finally {
+      await account.delete();
       if (wasSelected) {
         accountStore.getOrNull(0)?.select();
         Account.saveAll();

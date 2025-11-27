@@ -35,21 +35,21 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   @override
   void initState() {
-    chatScrollNotifier.value = scrollController;
-    chatScrollNotifier.notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      chatScrollOffsetNotifier.value = 0;
+      globals.chatScrollController = scrollController;
 
-    scrollController.addListener(() {
-      chatScrollNotifier.value = scrollController;
-      chatScrollNotifier.notifyListeners();
+      scrollController.addListener(() {
+        chatScrollOffsetNotifier.value = scrollController.offset;
+      });
     });
-
     super.initState();
   }
 
   @override
   void dispose() {
-    chatScrollNotifier.value = null;
-    chatScrollNotifier.notifyListeners();
+    chatScrollOffsetNotifier.value = 0;
+    globals.chatScrollController = null;
     scrollController.dispose();
     super.dispose();
   }

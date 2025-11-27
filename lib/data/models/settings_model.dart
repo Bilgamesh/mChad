@@ -77,7 +77,7 @@ class SettingsModel {
   }
 
   SettingsModel updateAccentColor() {
-    colors[0] = SystemTheme.accentColor.accent;
+    colors[0] = SystemTheme.accentColor.accent.withAlpha(255);
     return updateColorScheme();
   }
 

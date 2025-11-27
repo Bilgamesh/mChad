@@ -17,8 +17,7 @@ class PropertyValueNotifier<T> extends ValueNotifier<T> {
 }
 
 ValueNotifier<int> selectedTabNotifier = ValueNotifier(0);
-PropertyValueNotifier<ScrollController?> chatScrollNotifier =
-    PropertyValueNotifier(null);
+ValueNotifier<double> chatScrollOffsetNotifier = ValueNotifier(0);
 PropertyValueNotifier<List<Account>> accountsNotifier = PropertyValueNotifier(
   [],
 );

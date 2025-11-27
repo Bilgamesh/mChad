@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/ui_util.dart';
+import 'package:mchad/data/globals.dart' as globals;
 
 class FloatingScrollButtonWidget extends StatelessWidget {
   const FloatingScrollButtonWidget({
@@ -19,40 +19,32 @@ class FloatingScrollButtonWidget extends StatelessWidget {
       Orientation.portrait => 70,
       _ => 35,
     };
-    return ValueListenableBuilder(
-      valueListenable: chatScrollNotifier,
-      builder: (context, scrollController, child) {
-        if ((scrollController?.offset ?? 0) < 2000) {
-          return SizedBox.shrink();
-        }
-        return AnimatedPadding(
-          duration: Duration(
-            milliseconds: settings.transitionAnimations ? space : 0,
-          ),
-          curve: Curves.easeOut,
-          padding: EdgeInsets.only(
-            bottom:
-                (space +
-                    UiUtil.getBottomSafeAreaHeight(
-                      context,
-                      orientation == Orientation.portrait,
-                    )),
-          ),
-          child: FloatingActionButton.small(
-            shape: CircleBorder(),
+    return AnimatedPadding(
+      duration: Duration(
+        milliseconds: settings.transitionAnimations ? space : 0,
+      ),
+      curve: Curves.easeOut,
+      padding: EdgeInsets.only(
+        bottom:
+            (space +
+                UiUtil.getBottomSafeAreaHeight(
+                  context,
+                  orientation == Orientation.portrait,
+                )),
+      ),
+      child: FloatingActionButton.small(
+        shape: CircleBorder(),
 
-            child: Icon(Icons.arrow_downward),
-            onPressed: () {
-              HapticsUtil.vibrate();
-              scrollController?.animateTo(
-                scrollController.position.minScrollExtent,
-                duration: const Duration(seconds: 1),
-                curve: Curves.easeOut,
-              );
-            },
-          ),
-        );
-      },
+        child: Icon(Icons.arrow_downward),
+        onPressed: () {
+          HapticsUtil.vibrate();
+          globals.chatScrollController?.animateTo(
+            globals.chatScrollController!.position.minScrollExtent,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeOut,
+          );
+        },
+      ),
     );
   }
 }

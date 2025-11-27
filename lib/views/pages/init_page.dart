@@ -38,16 +38,20 @@ class InitPage extends StatelessWidget {
     globals.syncManager.startAll();
     globals.updateCheck.startCheck();
 
-    LifecycleService().addListener(() {
-      final state = WidgetsBinding.instance.lifecycleState;
-      if (state == AppLifecycleState.paused) {
-        globals.syncManager.stopAll();
-        globals.updateCheck.stopCheck();
-        globals.background = true;
-      } else if (state == AppLifecycleState.resumed) {
-        globals.syncManager.startAll();
-        globals.updateCheck.startCheck();
-        globals.background = false;
+    LifecycleService().addListener((AppLifecycleState state) {
+      switch (state) {
+        case AppLifecycleState.paused:
+        case AppLifecycleState.detached:
+        case AppLifecycleState.hidden:
+        case AppLifecycleState.inactive:
+          globals.syncManager.stopAll();
+          globals.updateCheck.stopCheck();
+          globals.background = true;
+          break;
+        default:
+          globals.syncManager.startAll();
+          globals.updateCheck.startCheck();
+          globals.background = false;
       }
     }).startListening();
 
