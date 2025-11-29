@@ -13,11 +13,13 @@ class Account {
     this.avatarUrl,
     this.userAgent,
     this.wasPreviouslySelected,
-  }) : cookieStore = CookieStore(forumName: forumName, userId: userId);
+  }) : cookieStore = CookieStore(forumName: forumName, userId: userId),
+       infiniteScroll = true;
 
   String? avatarUrl;
   String userName;
   final String userId, forumName, forumUrl;
+  bool infiniteScroll;
   final CookieStore cookieStore;
   String? formToken, creationTime;
   String? userAgent;

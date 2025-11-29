@@ -73,6 +73,12 @@ class KUpdateConfig {
       'https://api.github.com/repos/Bilgamesh/mChad/releases';
 }
 
+class KRepositoryInfo {
+  static const licenseUrl =
+      "https://github.com/Bilgamesh/mChad/blob/master/LICENSE";
+  static const repoUrl = "https://github.com/Bilgamesh/mChad";
+  static const issueTrackerUrl = "https://github.com/Bilgamesh/mChad/issues";}
+
 class KNotificationsConfig {
   static const maxNotificationMessages = 5;
   static const channelId = 'mChad-notifications-channel';

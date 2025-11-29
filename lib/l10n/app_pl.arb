@@ -55,5 +55,13 @@
   "bbcodes": "BBCodes",
   "hiddenUsers": "Ukryci użytkownicy",
   "updateAvailable": "Dostępna aktualizacja",
-  "authorizingCloudflare": "Autoryzuję Cloudflare"
+  "authorizingCloudflare": "Autoryzuję Cloudflare",
+  "externalBrowser": "Zewnętrzna przeglądarka",
+  "openLinksInBrowser": "Otwieraj linki w przeglądarce",
+  "about": "Informacje",
+  "version": "Wersja aplikacji",
+  "license": "Licencja",
+  "licenses": "Licencje",
+  "sourceCode": "Kod źródłowy",
+  "issueTracker": "Śledzenie problemów"
 }

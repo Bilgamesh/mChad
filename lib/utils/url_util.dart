@@ -1,3 +1,6 @@
+import 'package:mchad/data/notifiers.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class UrlUtil {
   static List<String> getAllUrlPermutations(String userProvidedUrl) {
     userProvidedUrl = userProvidedUrl.toLowerCase().replaceFirst(
@@ -41,5 +44,15 @@ class UrlUtil {
         .elementAt(0);
     if (name.startsWith('www.')) name = name.replaceFirst('www.', '');
     return name[0].toUpperCase() + name.substring(1);
+  }
+
+  static Future<void> openUrl(String url) async {
+    final LaunchMode mode =
+        settingsNotifier.value.openLinksInBrowser
+            ? LaunchMode.externalApplication
+            : LaunchMode.inAppBrowserView;
+    if (!await launchUrl(Uri.parse(url), mode: mode)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

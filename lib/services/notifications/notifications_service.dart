@@ -35,6 +35,16 @@ class NotificationsService {
         false;
   }
 
+  static Future<bool> requestPermission() async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    return await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >()
+            ?.requestNotificationsPermission() ??
+        false;
+  }
+
   Future<void> notify(List<message_model.Message> messages) async {
     if (!notificationsInitialized) throw 'Notifications not initialized';
     if (messages.lastOrNull?.user.id == account.userId) {

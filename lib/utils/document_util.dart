@@ -49,7 +49,20 @@ class DocumentUtil {
   static bool hasSessionCookie(Map<String, String>? headers) {
     return headers != null &&
         headers['set-cookie'] != null &&
-        headers['set-cookie'] != 'null';
+        headers['set-cookie'] != 'null' &&
+        !isAnonymousCookieUser(headers['set-cookie']!);
+  }
+
+  static bool isAnonymousCookieUser(String cookie) {
+    final items = cookie.split(" ");
+    for (var item in items) {
+      final parts = item.split("=");
+      final key = parts.elementAtOrNull(0) ?? "";
+      final value = parts.elementAtOrNull(1) ?? "";
+      if (key.endsWith("_u") && value == "1;") return true;
+      if (key.endsWith("_u") && value != "1;" && value != ";") return false;
+    }
+    return false;
   }
 
   static String? extractUserId(String cookie) {

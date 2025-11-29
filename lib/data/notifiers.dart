@@ -6,6 +6,7 @@ import 'package:mchad/data/models/emoticons_response_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class PropertyValueNotifier<T> extends ValueNotifier<T> {
   PropertyValueNotifier(T value) : super(value);
@@ -44,3 +45,4 @@ PropertyValueNotifier<SettingsModel> settingsNotifier = PropertyValueNotifier(
   SettingsModel.defaultSettings,
 );
 ValueNotifier<UpdateStatus> updateNotifier = ValueNotifier(UpdateStatus.none);
+ValueNotifier<PackageInfo?> packageInfoNotifier = ValueNotifier(null);

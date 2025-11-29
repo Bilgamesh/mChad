@@ -12,7 +12,6 @@ import 'package:mchad/views/widgets/chat_widget.dart';
 import 'package:mchad/views/widgets/chatbox_widget.dart';
 import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/text_widgets_modal_widget.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class ChatTab extends StatefulWidget {
   const ChatTab({Key? key, required this.orientation}) : super(key: key);
@@ -36,12 +35,6 @@ class _ChatTabState extends State<ChatTab> {
     chatboxFocusNode.dispose();
     textController.dispose();
     super.dispose();
-  }
-
-  void onArchiveFetch(VisibilityInfo indicatorVisibility) {
-    if (indicatorVisibility.visibleFraction > 0) {
-      globals.syncManager.sync.then((sync) => sync.fetchArchiveMessages());
-    }
   }
 
   @override
@@ -77,7 +70,7 @@ class _ChatTabState extends State<ChatTab> {
                     textController: textController,
                     onlineUsers: onlineUsers,
                     transitionAnimations: settings.transitionAnimations,
-                    infiniteScrollEnabled: true,
+                    infiniteScrollEnabled: account.infiniteScroll,
                   ),
                 },
               ),

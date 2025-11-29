@@ -25,13 +25,12 @@ class BackgroundSync {
       return;
     }
     logger.info('[BackgroundFetch] Headless event received.');
-
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('block_app', true);
     try {
-      final prefs = await SharedPreferences.getInstance();
       final accountStore = AccountStore(prefs: prefs);
       final accounts = accountStore.all;
       final settings = await SettingsStore(prefs: prefs).getSettings();
-
       for (var account in accounts) {
         try {
           final chatService = MchatChatService(account: account);
@@ -55,6 +54,7 @@ class BackgroundSync {
     } catch (e) {
       logger.error(e.toString());
     } finally {
+      prefs.setBool('block_app', false);
       BackgroundFetch.finish(taskId);
     }
   }
@@ -75,6 +75,7 @@ class BackgroundSync {
       logger.info('[BackgroundFetch] Event received $taskId');
 
       if (globals.background) {
+        globals.blocked = true;
         final prefs = await SharedPreferences.getInstance();
         final accountStore = AccountStore(prefs: prefs);
         final accounts = accountStore.all;
@@ -101,6 +102,7 @@ class BackgroundSync {
     } catch (e) {
       logger.error(e.toString());
     } finally {
+      globals.blocked = false;
       BackgroundFetch.finish(taskId);
     }
   }

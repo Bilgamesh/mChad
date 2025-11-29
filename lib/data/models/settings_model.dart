@@ -17,6 +17,7 @@ class SettingsModel {
     required this.haptics,
     required this.languageIndex,
     required this.transitionAnimations,
+    required this.openLinksInBrowser,
   }) : colorScheme = ColorScheme.fromSeed(
          seedColor: KAppTheme.appColors.elementAt(colorIndex),
          brightness: isDark ? Brightness.dark : Brightness.light,
@@ -27,6 +28,7 @@ class SettingsModel {
   bool notifications;
   bool haptics;
   bool transitionAnimations;
+  bool openLinksInBrowser;
   int languageIndex;
   List<Color> colors;
   ColorScheme colorScheme;
@@ -40,6 +42,7 @@ class SettingsModel {
       haptics: props.elementAtOrNull(3) == 'true',
       languageIndex: int.tryParse(props.elementAtOrNull(4) ?? '0') ?? 0,
       transitionAnimations: props.elementAtOrNull(5) == 'true',
+      openLinksInBrowser: props.elementAtOrNull(6) == 'true',
     );
   }
 
@@ -55,6 +58,7 @@ class SettingsModel {
       haptics: false,
       languageIndex: LocalizationUtil.systemLanguageIndex,
       transitionAnimations: true,
+      openLinksInBrowser: false,
     );
   }
 
@@ -67,6 +71,7 @@ class SettingsModel {
       haptics.toString(),
       languageIndex.toString(),
       transitionAnimations.toString(),
+      openLinksInBrowser.toString(),
     ]);
   }
 
@@ -118,6 +123,11 @@ class SettingsModel {
 
   SettingsModel setTransitionAnimations(bool value) {
     transitionAnimations = value;
+    return this;
+  }
+
+  SettingsModel setOpenLinksInBrowser(bool value) {
+    openLinksInBrowser = value;
     return this;
   }
 

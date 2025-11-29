@@ -34,6 +34,8 @@ class MchatSync {
       refreshStatusNotifier.value[account] = VerificationStatus.loading;
       refreshStatusNotifier.notifyListeners();
 
+      await waitForUnblock();
+
       final existingMessages = messageMapNotifier.value[account] ?? [];
 
       /* When the application has just been opened
@@ -385,7 +387,12 @@ class MchatSync {
         account: account,
         onCloudFlare: onCloudFlare,
       ).fetchArchive(startIndex);
-      if (response.messages != null) onAddOld(response.messages!);
+      if (response.messages == null || response.messages!.isEmpty) {
+        account.infiniteScroll = false;
+        accountsNotifier.notifyListeners();
+      } else {
+        onAddOld(response.messages!);
+      }
       loadingArchive = false;
     } catch (e) {
       loadingArchive = false;
@@ -404,5 +411,13 @@ class MchatSync {
     LocalizationUtil.currentLocalization.then((localization) {
       ModalUtil.showMessage(localization.authorizingCloudflare);
     });
+  }
+
+  Future<void> waitForUnblock() async {
+    var count = 0;
+    while (count++ < 5 && globals.blocked) {
+      await Future.delayed(Duration(seconds: 1));
+    }
+    globals.blocked = false;
   }
 }

@@ -40,7 +40,10 @@ class _ChatWidgetState extends State<ChatWidget> {
       globals.chatScrollController = scrollController;
 
       scrollController.addListener(() {
-        chatScrollOffsetNotifier.value = scrollController.offset;
+        if ((chatScrollOffsetNotifier.value - scrollController.offset).abs() >
+            500) {
+          chatScrollOffsetNotifier.value = scrollController.offset;
+        }
       });
     });
     super.initState();

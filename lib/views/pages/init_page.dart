@@ -1,5 +1,6 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/stores/account_store.dart';
 import 'package:mchad/data/stores/settings_store.dart';
 import 'package:mchad/jobs/mchat/mchat_background_sync.dart';
@@ -9,6 +10,7 @@ import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/pages/tabs_page.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:system_theme/system_theme.dart';
@@ -22,8 +24,10 @@ class InitPage extends StatelessWidget {
   Future<void> initApp(BuildContext context) async {
     initializeDateFormatting();
     await initSettings();
+    await initPackageInfo();
 
     final prefs = await SharedPreferences.getInstance();
+    await waitForUnblock(prefs);
     final accountStore = AccountStore(prefs: prefs);
     final accounts = accountStore.all;
 
@@ -64,6 +68,14 @@ class InitPage extends StatelessWidget {
     );
   }
 
+  Future<void> waitForUnblock(SharedPreferences prefs) async {
+    var count = 0;
+    while (count++ < 5 && (prefs.getBool('block_app') ?? false)) {
+      await Future.delayed(Duration(seconds: 1));
+    }
+    prefs.setBool('block_app', false);
+  }
+
   Future<void> initSettings() async {
     final settingsStore = await SettingsStore.getInstance();
     final settings = await settingsStore.getSettings();
@@ -71,6 +83,11 @@ class InitPage extends StatelessWidget {
     await SystemTheme.accentColor.load();
     settings.updateAccentColor();
     settings.apply();
+  }
+
+  Future<void> initPackageInfo() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    packageInfoNotifier.value = packageInfo;
   }
 
   Future<void> initBackgroundFetch() async {

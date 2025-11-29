@@ -6,6 +6,7 @@ import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/document_util.dart';
+import 'package:mchad/utils/url_util.dart';
 import 'package:mchad/views/widgets/chat_emoticon_widget.dart';
 import 'package:mchad/views/widgets/chat_image_widget.dart';
 import 'package:mchad/views/widgets/message_options_modal.dart';
@@ -116,6 +117,10 @@ class ChatBubble extends StatelessWidget {
                         customStylesBuilder: buildStyles,
                         customWidgetBuilder:
                             (element) => buildHtmlWidget(element, settings),
+                        onTapUrl: (url) {
+                          UrlUtil.openUrl(url);
+                          return true;
+                        },
                       ),
                     ),
                   ),

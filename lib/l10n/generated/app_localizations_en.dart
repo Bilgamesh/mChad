@@ -179,4 +179,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get authorizingCloudflare => 'Authorizing Cloudflare';
+
+  @override
+  String get externalBrowser => 'External browser';
+
+  @override
+  String get openLinksInBrowser => 'Open links in a web browser';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get version => 'App version';
+
+  @override
+  String get license => 'License';
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get sourceCode => 'Source code';
+
+  @override
+  String get issueTracker => 'Issue tracker';
 }

@@ -439,6 +439,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Authorizing Cloudflare'**
   String get authorizingCloudflare;
+
+  /// No description provided for @externalBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'External browser'**
+  String get externalBrowser;
+
+  /// No description provided for @openLinksInBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Open links in a web browser'**
+  String get openLinksInBrowser;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'App version'**
+  String get version;
+
+  /// No description provided for @license.
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get license;
+
+  /// No description provided for @licenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Licenses'**
+  String get licenses;
+
+  /// No description provided for @sourceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Source code'**
+  String get sourceCode;
+
+  /// No description provided for @issueTracker.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue tracker'**
+  String get issueTracker;
 }
 
 class _AppLocalizationsDelegate
