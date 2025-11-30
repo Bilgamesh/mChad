@@ -53,6 +53,7 @@ class _ImagePageState extends State<ImagePage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         automaticallyImplyLeading: uiVisible,
         title: FittedBox(
           child: switch (uiVisible) {
