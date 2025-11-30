@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class _NoTransitionsBuilder extends PageTransitionsBuilder {
   const _NoTransitionsBuilder();
@@ -21,7 +22,17 @@ class ThemeUtil {
     required bool animations,
     TextTheme Function([TextTheme? textTheme])? textThemeBuilder,
   }) {
-    var baseThemeData = ThemeData(colorScheme: colorScheme);
+    var baseThemeData = ThemeData(
+      colorScheme: colorScheme,
+      appBarTheme: const AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarContrastEnforced: false,
+          systemStatusBarContrastEnforced: false
+        ),
+      ),
+    );
     if (!animations) {
       baseThemeData = baseThemeData.copyWith(
         pageTransitionsTheme: PageTransitionsTheme(
