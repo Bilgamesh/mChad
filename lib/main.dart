@@ -18,7 +18,6 @@ void main() {
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
   );
-  GoogleFonts.config.allowRuntimeFetching = false;
   runApp(const MyApp());
 }
 
