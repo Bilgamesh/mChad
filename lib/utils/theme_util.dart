@@ -22,14 +22,20 @@ class ThemeUtil {
     required bool animations,
     TextTheme Function([TextTheme? textTheme])? textThemeBuilder,
   }) {
+    final oppositeBrightness =
+        colorScheme.brightness == Brightness.dark
+            ? Brightness.light
+            : Brightness.dark;
     var baseThemeData = ThemeData(
       colorScheme: colorScheme,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarContrastEnforced: false,
-          systemStatusBarContrastEnforced: false
+          systemStatusBarContrastEnforced: false,
+          statusBarIconBrightness: oppositeBrightness,
+          systemNavigationBarIconBrightness: oppositeBrightness,
         ),
       ),
     );
