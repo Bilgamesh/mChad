@@ -61,6 +61,7 @@ class TabsPage extends StatelessWidget {
                   color: settings.colorScheme.surfaceContainer,
                   child: SafeArea(
                     top: false,
+                    bottom: selectedTab == 0,
                     child: Container(
                       color: settings.colorScheme.surface,
                       child: Row(
