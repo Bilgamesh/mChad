@@ -71,16 +71,19 @@ class TabsPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                floatingActionButton: switch (selectedTab) {
-                  0 => switch (chatScrollOffset >= 2000) {
-                    true => FloatingScrollButtonWidget(
-                      settings: settings,
-                      orientation: orientation,
-                    ),
-                    false => null,
-                  },
-                  1 => LoginButtonWidget(),
-                  _ => null,
+                floatingActionButton: switch (settings.transitionAnimations) {
+                  true => buildAnimatedFloatingActionButton(
+                    selectedTab,
+                    chatScrollOffset,
+                    settings,
+                    orientation,
+                  ),
+                  false => buildStaticFloatingActionButton(
+                    selectedTab,
+                    chatScrollOffset,
+                    settings,
+                    orientation,
+                  ),
                 },
                 bottomNavigationBar: switch (orientation) {
                   Orientation.portrait => NavigationBarWidget(),
@@ -91,4 +94,38 @@ class TabsPage extends StatelessWidget {
       },
     );
   }
+
+  Widget? buildAnimatedFloatingActionButton(
+    int selectedTab,
+    double chatScrollOffset,
+    SettingsModel settings,
+    Orientation orientation,
+  ) => switch (selectedTab) {
+    0 => switch (chatScrollOffset >= 2000) {
+      true => FloatingScrollButtonWidget(
+        settings: settings,
+        orientation: orientation,
+      ),
+      false => null,
+    },
+    1 => LoginButtonWidget(),
+    _ => null,
+  };
+
+  Widget buildStaticFloatingActionButton(
+    int selectedTab,
+    double chatScrollOffset,
+    SettingsModel settings,
+    Orientation orientation,
+  ) => switch (selectedTab) {
+    0 => switch (chatScrollOffset >= 2000) {
+      true => FloatingScrollButtonWidget(
+        settings: settings,
+        orientation: orientation,
+      ),
+      false => SizedBox.shrink(),
+    },
+    1 => LoginButtonWidget(),
+    _ => SizedBox.shrink(),
+  };
 }

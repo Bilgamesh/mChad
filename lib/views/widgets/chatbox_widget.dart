@@ -40,7 +40,8 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
   void initState() {
     widget.textController.addListener(updateCachedInputText);
     widget.textController.addListener(updateMessageLengthLimitLabel);
-    Timer(const Duration(milliseconds: 0), () {
+    Future.microtask(() {
+      if (!mounted) return;
       setState(() {
         loaded = true;
       });

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/utils/theme_util.dart';
@@ -36,6 +35,7 @@ class MyApp extends StatelessWidget {
             title: 'mChad',
             theme: ThemeUtil.createTheme(
               colorScheme: settings.colorScheme,
+              animations: settings.transitionAnimations,
               textThemeBuilder: switch (settings.fontIndex) {
                 0 => null,
                 _ => KAppTheme.textThemes.elementAtOrNull(

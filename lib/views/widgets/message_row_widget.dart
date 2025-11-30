@@ -44,13 +44,14 @@ class MessageRowWidget extends StatefulWidget {
 }
 
 class _MessageRowWidgetState extends State<MessageRowWidget> {
-  bool? loaded;
+  bool loaded = false;
 
   @override
   void initState() {
     loaded = !widget.message.isNew;
-    if (!loaded!) {
-      Timer(const Duration(milliseconds: 0), () {
+    if (!loaded) {
+      Future.microtask(() {
+        if (!mounted) return;
         setState(() {
           loaded = true;
           widget.message.isNew = false;
@@ -72,7 +73,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
             .trim();
 
     return AnimatedOpacity(
-      opacity: (loaded! && !widget.message.isDeleting) ? 1.0 : 0.0,
+      opacity: (loaded && !widget.message.isDeleting) ? 1.0 : 0.0,
       duration: Duration(milliseconds: widget.transitionAnimations ? 500 : 0),
       child: VisibilityDetector(
         key: Key('${widget.message.id}-padding'),
