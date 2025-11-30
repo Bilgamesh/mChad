@@ -6,6 +6,7 @@ import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/stores/settings_store.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/localization_util.dart';
+import 'package:mchad/utils/theme_util.dart';
 import 'package:mchad/utils/ui_util.dart';
 import 'package:system_theme/system_theme.dart';
 
@@ -18,20 +19,16 @@ class SettingsModel {
     required this.languageIndex,
     required this.transitionAnimations,
     required this.openLinksInBrowser,
-  }) : colorScheme = ColorScheme.fromSeed(
-         seedColor: KAppTheme.appColors.elementAt(colorIndex),
-         brightness: isDark ? Brightness.dark : Brightness.light,
-       ),
-       colors = [...KAppTheme.appColors];
+    required this.lowContrastBackground,
+  });
   int colorIndex;
   bool isDark;
   bool notifications;
   bool haptics;
   bool transitionAnimations;
   bool openLinksInBrowser;
+  bool lowContrastBackground;
   int languageIndex;
-  List<Color> colors;
-  ColorScheme colorScheme;
 
   static SettingsModel fromString(String strinfigiedSettings) {
     final props = List<String>.from(jsonDecode(strinfigiedSettings));
@@ -43,6 +40,7 @@ class SettingsModel {
       languageIndex: int.tryParse(props.elementAtOrNull(4) ?? '0') ?? 0,
       transitionAnimations: props.elementAtOrNull(5) == 'true',
       openLinksInBrowser: props.elementAtOrNull(6) == 'true',
+      lowContrastBackground: props.elementAtOrNull(7) == 'true',
     );
   }
 
@@ -59,6 +57,7 @@ class SettingsModel {
       languageIndex: LocalizationUtil.systemLanguageIndex,
       transitionAnimations: true,
       openLinksInBrowser: false,
+      lowContrastBackground: false,
     );
   }
 
@@ -72,6 +71,7 @@ class SettingsModel {
       languageIndex.toString(),
       transitionAnimations.toString(),
       openLinksInBrowser.toString(),
+      lowContrastBackground.toString(),
     ]);
   }
 
@@ -81,28 +81,33 @@ class SettingsModel {
     return apply();
   }
 
-  SettingsModel updateAccentColor() {
+  List<Color> get colors {
+    final colors = [...KAppTheme.appColors];
     colors[0] = SystemTheme.accentColor.accent.withAlpha(255);
-    return updateColorScheme();
+    return colors;
   }
 
-  SettingsModel updateColorScheme() {
-    colorScheme = ColorScheme.fromSeed(
-      seedColor: colors.elementAt(colorIndex),
-      brightness: isDark ? Brightness.dark : Brightness.light,
-    );
-    return this;
+  ColorScheme get colorScheme {
+    if (lowContrastBackground) {
+      return ThemeUtil.getLowContrastColorScheme(
+        colors.elementAt(colorIndex),
+        isDark,
+      );
+    } else {
+      return ThemeUtil.getRegularColorScheme(
+        colors.elementAt(colorIndex),
+        isDark,
+      );
+    }
   }
 
   SettingsModel setDarkMode(bool value) {
     isDark = value;
-    updateColorScheme();
     return this;
   }
 
   SettingsModel setColorIndex(int index) {
     colorIndex = index;
-    updateColorScheme();
     return this;
   }
 
@@ -128,6 +133,11 @@ class SettingsModel {
 
   SettingsModel setOpenLinksInBrowser(bool value) {
     openLinksInBrowser = value;
+    return this;
+  }
+
+  SettingsModel setLowContrastBackground(bool value) {
+    lowContrastBackground = value;
     return this;
   }
 

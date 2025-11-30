@@ -81,7 +81,6 @@ class InitPage extends StatelessWidget {
     final settings = await settingsStore.getSettings();
     SystemTheme.fallbackColor = settings.colors[0];
     await SystemTheme.accentColor.load();
-    settings.updateAccentColor();
     settings.apply();
   }
 

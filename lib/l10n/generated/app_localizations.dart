@@ -452,6 +452,18 @@ abstract class AppLocalizations {
   /// **'Open links in a web browser'**
   String get openLinksInBrowser;
 
+  /// No description provided for @lowConstrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Low contrast'**
+  String get lowConstrast;
+
+  /// No description provided for @lowersBackgroundColorContrast.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowers background color contrast'**
+  String get lowersBackgroundColorContrast;
+
   /// No description provided for @about.
   ///
   /// In en, this message translates to:

@@ -57,7 +57,7 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
           decoration: InputDecoration(
             filled: true,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              borderRadius: BorderRadius.circular(15.0),
               borderSide: BorderSide.none,
             ),
           ),

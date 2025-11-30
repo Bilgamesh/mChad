@@ -53,6 +53,17 @@ class SettingsTab extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0),
                 SettingsToggleRowWidget(
+                  label: AppLocalizations.of(context).lowConstrast,
+                  subtitle:
+                      AppLocalizations.of(
+                        context,
+                      ).lowersBackgroundColorContrast,
+                  value: settings.lowContrastBackground,
+                  onValueChanged:
+                      (value) =>
+                          settings.setLowContrastBackground(value).save(),
+                ),
+                SettingsToggleRowWidget(
                   label: AppLocalizations.of(context).notifications,
                   value: settings.notifications,
                   onValueChanged: (value) async {

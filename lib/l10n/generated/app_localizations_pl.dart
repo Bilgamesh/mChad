@@ -187,6 +187,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get openLinksInBrowser => 'Otwieraj linki w przeglądarce';
 
   @override
+  String get lowConstrast => 'Niski kontrast';
+
+  @override
+  String get lowersBackgroundColorContrast => 'Obniża kontrast koloru tła';
+
+  @override
   String get about => 'Informacje';
 
   @override

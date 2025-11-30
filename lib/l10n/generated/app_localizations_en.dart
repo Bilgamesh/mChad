@@ -187,6 +187,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openLinksInBrowser => 'Open links in a web browser';
 
   @override
+  String get lowConstrast => 'Low contrast';
+
+  @override
+  String get lowersBackgroundColorContrast =>
+      'Lowers background color contrast';
+
+  @override
   String get about => 'About';
 
   @override
