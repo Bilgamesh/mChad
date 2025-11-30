@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum VerificationStatus { none, loading, error, success }
 
@@ -66,6 +67,33 @@ class KAppTheme {
     Color(0xFFE6E6FA),
     Color(0xFFFF7F50),
   ];
+
+  static final List<TextStyle> textStyles = [
+    GoogleFonts.firaSans(),
+    GoogleFonts.ibmPlexSans(),
+    GoogleFonts.inter(),
+    GoogleFonts.notoSans(),
+    GoogleFonts.openSans(),
+    GoogleFonts.roboto(),
+  ];
+
+  static final List<TextTheme Function([TextTheme?])> textThemes = [
+    GoogleFonts.firaSansTextTheme,
+    GoogleFonts.ibmPlexSansTextTheme,
+    GoogleFonts.interTextTheme,
+    GoogleFonts.notoSansTextTheme,
+    GoogleFonts.openSansTextTheme,
+    GoogleFonts.robotoTextTheme,
+  ];
+
+  static const List<String> fontNames = [
+    "Fira Sans",
+    "IBM Plex Sans",
+    "Inter",
+    "Noto Sans",
+    "Open Sans",
+    "Roboto",
+  ];
 }
 
 class KUpdateConfig {
@@ -77,7 +105,8 @@ class KRepositoryInfo {
   static const licenseUrl =
       "https://github.com/Bilgamesh/mChad/blob/master/LICENSE";
   static const repoUrl = "https://github.com/Bilgamesh/mChad";
-  static const issueTrackerUrl = "https://github.com/Bilgamesh/mChad/issues";}
+  static const issueTrackerUrl = "https://github.com/Bilgamesh/mChad/issues";
+}
 
 class KNotificationsConfig {
   static const maxNotificationMessages = 5;

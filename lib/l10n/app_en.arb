@@ -60,6 +60,8 @@
   "openLinksInBrowser": "Open links in a web browser",
   "lowConstrast": "Low contrast",
   "lowersBackgroundColorContrast": "Lowers background color contrast",
+  "font": "Font",
+  "defaultFont": "Default",
   "about": "About",
   "version": "App version",
   "license": "License",

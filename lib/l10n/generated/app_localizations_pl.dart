@@ -193,6 +193,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get lowersBackgroundColorContrast => 'Obniża kontrast koloru tła';
 
   @override
+  String get font => 'Czcionka';
+
+  @override
+  String get defaultFont => 'Domyślna';
+
+  @override
   String get about => 'Informacje';
 
   @override

@@ -95,6 +95,25 @@ class SettingsTab extends StatelessWidget {
                       (value) => settings.setOpenLinksInBrowser(value).save(),
                 ),
                 SettingsDropdownWidget(
+                  label: AppLocalizations.of(context).font,
+                  value: settings.fontIndex,
+                  menuItems: List.generate(
+                    KAppTheme.fontNames.length + 1,
+                    (index) => DropdownMenuItem(
+                      value: index,
+                      child: switch (index) {
+                        0 => Text(AppLocalizations.of(context).defaultFont),
+                        _ => Text(
+                          KAppTheme.fontNames[index - 1],
+                          style: KAppTheme.textStyles[index - 1],
+                        ),
+                      },
+                    ),
+                  ),
+                  onChanged:
+                      (value) => settings.setFontIndex(value ?? 3).save(),
+                ),
+                SettingsDropdownWidget(
                   label: AppLocalizations.of(context).languageLabel,
                   value: settings.languageIndex,
                   menuItems: [

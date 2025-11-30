@@ -20,6 +20,7 @@ class SettingsModel {
     required this.transitionAnimations,
     required this.openLinksInBrowser,
     required this.lowContrastBackground,
+    required this.fontIndex,
   });
   int colorIndex;
   bool isDark;
@@ -29,6 +30,7 @@ class SettingsModel {
   bool openLinksInBrowser;
   bool lowContrastBackground;
   int languageIndex;
+  int fontIndex;
 
   static SettingsModel fromString(String strinfigiedSettings) {
     final props = List<String>.from(jsonDecode(strinfigiedSettings));
@@ -41,6 +43,7 @@ class SettingsModel {
       transitionAnimations: props.elementAtOrNull(5) == 'true',
       openLinksInBrowser: props.elementAtOrNull(6) == 'true',
       lowContrastBackground: props.elementAtOrNull(7) == 'true',
+      fontIndex: int.tryParse(props.elementAtOrNull(8) ?? '0') ?? 0,
     );
   }
 
@@ -58,6 +61,7 @@ class SettingsModel {
       transitionAnimations: true,
       openLinksInBrowser: false,
       lowContrastBackground: false,
+      fontIndex: 0,
     );
   }
 
@@ -72,6 +76,7 @@ class SettingsModel {
       transitionAnimations.toString(),
       openLinksInBrowser.toString(),
       lowContrastBackground.toString(),
+      fontIndex.toString(),
     ]);
   }
 
@@ -138,6 +143,11 @@ class SettingsModel {
 
   SettingsModel setLowContrastBackground(bool value) {
     lowContrastBackground = value;
+    return this;
+  }
+
+  SettingsModel setFontIndex(int value) {
+    fontIndex = value;
     return this;
   }
 

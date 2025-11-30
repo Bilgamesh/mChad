@@ -464,6 +464,18 @@ abstract class AppLocalizations {
   /// **'Lowers background color contrast'**
   String get lowersBackgroundColorContrast;
 
+  /// No description provided for @font.
+  ///
+  /// In en, this message translates to:
+  /// **'Font'**
+  String get font;
+
+  /// No description provided for @defaultFont.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get defaultFont;
+
   /// No description provided for @about.
   ///
   /// In en, this message translates to:

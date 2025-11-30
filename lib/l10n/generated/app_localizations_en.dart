@@ -194,6 +194,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Lowers background color contrast';
 
   @override
+  String get font => 'Font';
+
+  @override
+  String get defaultFont => 'Default';
+
+  @override
   String get about => 'About';
 
   @override

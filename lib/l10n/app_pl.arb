@@ -60,6 +60,8 @@
   "openLinksInBrowser": "Otwieraj linki w przeglądarce",
   "lowConstrast": "Niski kontrast",
   "lowersBackgroundColorContrast": "Obniża kontrast koloru tła",
+  "font": "Czcionka",
+  "defaultFont": "Domyślna",
   "about": "Informacje",
   "version": "Wersja aplikacji",
   "license": "Licencja",
