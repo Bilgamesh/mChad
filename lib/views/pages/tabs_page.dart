@@ -57,19 +57,29 @@ class TabsPage extends StatelessWidget {
                   ),
                   _ => null,
                 },
-                body: Row(
-                  children: [
-                    if (orientation == Orientation.landscape)
-                      NavigationRailWidget(settings: settings),
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: Duration(
-                          milliseconds: settings.transitionAnimations ? 250 : 0,
-                        ),
-                        child: tabs[selectedTab](orientation),
+                body: Container(
+                  color: settings.colorScheme.surfaceContainer,
+                  child: SafeArea(
+                    top: false,
+                    child: Container(
+                      color: settings.colorScheme.surface,
+                      child: Row(
+                        children: [
+                          if (orientation == Orientation.landscape)
+                            NavigationRailWidget(settings: settings),
+                          Expanded(
+                            child: AnimatedSwitcher(
+                              duration: Duration(
+                                milliseconds:
+                                    settings.transitionAnimations ? 250 : 0,
+                              ),
+                              child: tabs[selectedTab](orientation),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 floatingActionButton: switch (settings.transitionAnimations) {
                   true => buildAnimatedFloatingActionButton(
