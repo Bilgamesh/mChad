@@ -107,26 +107,35 @@ class AccountsTab extends StatelessWidget {
     HapticsUtil.vibrate();
     final accountStore = await AccountStore.getInstance();
     final wasSelected = account.isSelected();
-    globals.syncManager.stopAll();
+
+    globals.syncManager.tryStopAll();
+
     try {
       final loginService = MchatLoginService(baseUrl: account.forumUrl);
       await loginService.logout(account);
     } catch (e) {
       logger.error(e.toString());
-    } finally {
+    }
+    try {
       await account.delete();
-      if (wasSelected) {
-        accountStore.getOrNull(0)?.select();
-        Account.saveAll();
-      }
-      globals.syncManager.startAll();
-      if (context.mounted && accountStore.count == 0) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()),
-          (route) => false,
-        );
-      }
+    } catch (e) {
+      logger.error(e.toString());
+    }
+
+    if (wasSelected) {
+      accountStore.getOrNull(0)?.select();
+      Account.saveAll();
+    }
+
+    if (accountStore.count > 0) globals.syncManager.tryStartAll();
+
+    if (accountStore.count == 0) {
+      globals.syncManager.tryStopAll();
+      Navigator.pushAndRemoveUntil(
+        context.mounted ? context : globals.navigatorKey.currentContext!,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (route) => false,
+      );
     }
   }
 }
