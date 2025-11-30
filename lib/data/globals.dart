@@ -16,3 +16,5 @@ Map<Account, String> likeMessageMap = {};
 int focusLocksCount = 0;
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 bool background = false;
+ScrollController? chatScrollController;
+bool blocked = false;

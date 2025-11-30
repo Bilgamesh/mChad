@@ -15,7 +15,7 @@ class MessageEditWidget extends StatefulWidget {
 }
 
 class _MessageEditWidgetState extends State<MessageEditWidget> {
-  var editController = TextEditingController();
+  final editController = TextEditingController();
   var validated = false;
 
   @override
@@ -57,7 +57,7 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
           decoration: InputDecoration(
             filled: true,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              borderRadius: BorderRadius.circular(15.0),
               borderSide: BorderSide.none,
             ),
           ),
@@ -72,27 +72,25 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
           child: Text(AppLocalizations.of(context).cancel),
         ),
         TextButton(
-          onPressed:
-              !validated
-                  ? null
-                  : () async {
-                    HapticsUtil.vibrate();
-                    Navigator.pop(context);
-                    if (widget.selectedMessage.message.text.trim() ==
-                        editController.text.trim()) {
-                      return;
-                    }
-                    globals.syncManager.sync.then(
-                      (sync) => sync
-                          .editOnServer(
-                            widget.selectedMessage.id,
-                            editController.text,
-                          )
-                          .onError(
-                            (error, trace) => ModalUtil.showError(error),
-                          ),
-                    );
-                  },
+          onPressed: switch (validated) {
+            false => null,
+            true => () {
+              HapticsUtil.vibrate();
+              Navigator.pop(context);
+              if (widget.selectedMessage.message.text.trim() ==
+                  editController.text.trim()) {
+                return;
+              }
+              globals.syncManager.sync.then(
+                (sync) => sync
+                    .editOnServer(
+                      widget.selectedMessage.id,
+                      editController.text,
+                    )
+                    .onError((error, trace) => ModalUtil.showError(error)),
+              );
+            },
+          },
           child: Text(AppLocalizations.of(context).confirm),
         ),
       ],

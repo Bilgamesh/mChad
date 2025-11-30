@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:mchad/data/constants.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
+import 'package:mchad/utils/ui_util.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
@@ -18,10 +20,12 @@ class ImagePage extends StatefulWidget {
     required this.src,
     required this.headers,
     required this.cacheKey,
+    required this.settings,
   }) : super(key: key);
   final String src;
   final Map<String, String> headers;
   final String cacheKey;
+  final SettingsModel settings;
 
   @override
   State<ImagePage> createState() => _ImagePageState();
@@ -35,37 +39,41 @@ class _ImagePageState extends State<ImagePage> {
     if (!uiVisible) {
       showUi();
     }
+    // Since the Image Page always has dark AppBar background,
+    // if rest of the app is in light theme
+    // flutter sometimes uses wrong status bar theme.
+    // Manual refresh when exiting Image Page fixes it
+    UiUtil.refreshStatusBarTheme(widget.settings);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var fileName = urlToName(widget.src);
+    final fileName = urlToName(widget.src);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         automaticallyImplyLeading: uiVisible,
         title: FittedBox(
-          child:
-              uiVisible
-                  ? Text(fileName, style: TextStyle(color: Colors.white))
-                  : null,
+          child: switch (uiVisible) {
+            true => Text(fileName, style: TextStyle(color: Colors.white)),
+            false => null,
+          },
         ),
         backgroundColor: uiVisible ? Colors.black54 : Colors.transparent,
         iconTheme: IconThemeData(color: Colors.white),
-        actions:
-            uiVisible
-                ? [
-                  IconButton(
-                    onPressed: () => download(widget.src, fileName, context),
-                    icon: Icon(Icons.download),
-                  ),
-                  IconButton(
-                    onPressed: () => share(widget.src),
-                    icon: Icon(Icons.share),
-                  ),
-                ]
-                : [],
+        actions: [
+          if (uiVisible)
+            IconButton(
+              onPressed: () => download(widget.src, fileName, context),
+              icon: Icon(Icons.download),
+            ),
+          if (uiVisible)
+            IconButton(
+              onPressed: () => share(widget.src),
+              icon: Icon(Icons.share),
+            ),
+        ],
       ),
       body: GestureDetector(
         onTap: () {
@@ -84,7 +92,6 @@ class _ImagePageState extends State<ImagePage> {
             headers: widget.headers,
             cacheKey: widget.cacheKey,
           ),
-          // onTapDown: (context, details, controllerValue) => onTap(),
           gaplessPlayback: true,
         ),
       ),
@@ -103,7 +110,7 @@ class _ImagePageState extends State<ImagePage> {
   }
 
   String urlToName(String url) {
-    var fileName = url.split('/').last;
+    final fileName = url.split('/').last;
     if (!fileName.contains('/') &&
         KImageConfig.imageExtensions.contains(
           '.${fileName.split('.').last.toLowerCase()}',
@@ -151,7 +158,7 @@ class _ImagePageState extends State<ImagePage> {
       if (index > 0) {
         fileName = path.replaceFirst('/storage/emulated/0/Download/', '');
       }
-      var res = await get(Uri.parse(url));
+      final res = await get(Uri.parse(url));
       await file.writeAsBytes(res.bodyBytes);
       if (!context.mounted) return;
       ModalUtil.showMessage(

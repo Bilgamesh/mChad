@@ -12,7 +12,7 @@ class LocalizationUtil {
   }
 
   static int get systemLanguageIndex {
-    var index = AppLocalizations.supportedLocales.indexWhere(
+    final index = AppLocalizations.supportedLocales.indexWhere(
       (locale) => locale.languageCode == Platform.localeName.split('_').first,
     );
     if (index != -1) return index;

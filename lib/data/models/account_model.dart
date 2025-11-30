@@ -13,11 +13,13 @@ class Account {
     this.avatarUrl,
     this.userAgent,
     this.wasPreviouslySelected,
-  }) : cookieStore = CookieStore(forumName: forumName, userId: userId);
+  }) : cookieStore = CookieStore(forumName: forumName, userId: userId),
+       infiniteScroll = true;
 
   String? avatarUrl;
   String userName;
   final String userId, forumName, forumUrl;
+  bool infiniteScroll;
   final CookieStore cookieStore;
   String? formToken, creationTime;
   String? userAgent;
@@ -46,7 +48,7 @@ class Account {
     emoticonMapNotifer.value[this] = emoticonMapNotifer.value[this] ?? [];
     editDeleteLimitMapNotifier.value[this] =
         editDeleteLimitMapNotifier.value[this] ?? 0;
-    var index = accountsNotifier.value.indexOf(this);
+    final index = accountsNotifier.value.indexOf(this);
     if (index == -1) {
       accountsNotifier.value.add(this);
     } else {
@@ -57,8 +59,8 @@ class Account {
   }
 
   static Account fromString(String stringifiedAccount) {
-    var decodedList = List<String>.from(jsonDecode(stringifiedAccount));
-    var account = Account(
+    final decodedList = List<String>.from(jsonDecode(stringifiedAccount));
+    final account = Account(
       userName: decodedList.elementAt(0),
       userId: decodedList.elementAt(1),
       forumName: decodedList.elementAt(2),
@@ -70,25 +72,25 @@ class Account {
   }
 
   static Future<Account> fromStore(int index) async {
-    var store = await AccountStore.getInstance();
+    final store = await AccountStore.getInstance();
     return store.get(index);
   }
 
   static Future<List<Account>> getAll() async {
-    var store = await AccountStore.getInstance();
-    return store.getAll();
+    final store = await AccountStore.getInstance();
+    return store.all;
   }
 
   static Future<void> saveAll() async {
-    var accounts = await getAll();
-    for (var account in accounts) {
+    final accounts = await getAll();
+    for (final account in accounts) {
       await account.save();
     }
   }
 
   Future<int> save() async {
-    var store = await AccountStore.getInstance();
-    var index = store.indexOf(this);
+    final store = await AccountStore.getInstance();
+    final index = store.indexOf(this);
     if (index != -1) {
       return await store.update(this);
     } else {
@@ -97,13 +99,13 @@ class Account {
   }
 
   Future<int> getIndex() async {
-    var store = await AccountStore.getInstance();
+    final store = await AccountStore.getInstance();
     return store.indexOf(this);
   }
 
   Future<void> delete() async {
-    var store = await AccountStore.getInstance();
-    var index = store.indexOf(this);
+    final store = await AccountStore.getInstance();
+    final index = store.indexOf(this);
     if (index == -1) throw 'Account is not saved. Failed to delete.';
     accountsNotifier.value.removeAt(index);
     accountsNotifier.notifyListeners();
@@ -115,16 +117,16 @@ class Account {
   }
 
   Future<void> updateCookies(String cookies) async {
-    var split = cookies.split(' ');
-    for (var cookie in split) {
+    final split = cookies.split(' ');
+    for (final cookie in split) {
       await updateCookie(cookie);
     }
   }
 
   Future<void> addCookie(String cookie) async {
     if (!cookie.endsWith(';')) cookie += ';';
-    var existing = await getCookies();
-    var all = existing.split(' ');
+    final existing = await getCookies();
+    final all = existing.split(' ');
     all.add(cookie);
     await setCookies(all.join(' '));
   }
@@ -135,10 +137,10 @@ class Account {
   }
 
   Future<void> removeCookie(String cookie) async {
-    var name = cookie.split('=').first;
-    var existing = await getCookies();
-    var all = existing.split(' ');
-    for (var cookie in [...all]) {
+    final name = cookie.split('=').first;
+    final existing = await getCookies();
+    final all = existing.split(' ');
+    for (final cookie in [...all]) {
       if (cookie.split('=').first == name) {
         all.remove(cookie);
       }
@@ -161,5 +163,16 @@ class Account {
 
   void select() {
     selectedAccountNotifier.value = this;
+  }
+
+  Map<String, String> getHeaders({String? src}) {
+    if (src == null || src.startsWith(forumUrl)) {
+      return {
+        'x-requested-with': 'XMLHttpRequest',
+        'cookie': cachedCookies ?? '',
+        'user-agent': userAgent ?? '',
+      };
+    }
+    return {};
   }
 }

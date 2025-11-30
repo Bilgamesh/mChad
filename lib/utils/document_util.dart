@@ -11,11 +11,11 @@ var logger = LoggingUtil(module: 'document_util');
 class DocumentUtil {
   static String findInputData(Document doc, String name, String field) {
     if (name.startsWith('#')) {
-      var result = doc.querySelectorAll(name).elementAt(0).attributes[field];
+      final result = doc.querySelectorAll(name).elementAt(0).attributes[field];
       if (result == null) throw 'Field $field of $name missing in the document';
       return result;
     } else {
-      var result =
+      final result =
           doc.querySelectorAll('[name="$name"]').elementAt(0).attributes[field];
       if (result == null) throw 'Field $field of $name missing in the document';
       return result;
@@ -49,7 +49,20 @@ class DocumentUtil {
   static bool hasSessionCookie(Map<String, String>? headers) {
     return headers != null &&
         headers['set-cookie'] != null &&
-        headers['set-cookie'] != 'null';
+        headers['set-cookie'] != 'null' &&
+        !isAnonymousCookieUser(headers['set-cookie']!);
+  }
+
+  static bool isAnonymousCookieUser(String cookie) {
+    final items = cookie.split(" ");
+    for (var item in items) {
+      final parts = item.split("=");
+      final key = parts.elementAtOrNull(0) ?? "";
+      final value = parts.elementAtOrNull(1) ?? "";
+      if (key.endsWith("_u") && value == "1;") return true;
+      if (key.endsWith("_u") && value != "1;" && value != ";") return false;
+    }
+    return false;
   }
 
   static String? extractUserId(String cookie) {
@@ -89,7 +102,7 @@ class DocumentUtil {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('bbtags = new Array(')) {
-          var bbTagsArr = script.text
+          final bbTagsArr = script.text
               .split('bbtags = new Array(')
               .last
               .split(');')
@@ -122,7 +135,7 @@ class DocumentUtil {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('editDeleteLimit')) {
-          var limit =
+          final limit =
               script.text
                   .split('editDeleteLimit')
                   .elementAt(1)
@@ -144,7 +157,7 @@ class DocumentUtil {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('editDeleteLimit')) {
-          var limit =
+          final limit =
               script.text
                   .split('mssgLngth')
                   .elementAt(1)
@@ -166,8 +179,8 @@ class DocumentUtil {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('\tlikes\t')) {
-          var regex = RegExp(r'logId\s+:\s(\d+),');
-          var match = regex.firstMatch(script.text);
+          final regex = RegExp(r'logId\s+:\s(\d+),');
+          final match = regex.firstMatch(script.text);
           if (match != null) {
             return match.group(1);
           }
@@ -182,10 +195,10 @@ class DocumentUtil {
 
   static String removeInnerBlockquotes(String htmlString) {
     try {
-      var document = parse(htmlString);
-      var topLevelBlockquotes = document.querySelectorAll('blockquote');
+      final document = parse(htmlString);
+      final topLevelBlockquotes = document.querySelectorAll('blockquote');
       for (var blockquote in topLevelBlockquotes) {
-        var innerBlockquotes = blockquote.querySelectorAll('blockquote');
+        final innerBlockquotes = blockquote.querySelectorAll('blockquote');
         for (var inner in innerBlockquotes) {
           inner.remove();
         }
@@ -229,10 +242,10 @@ class DocumentUtil {
   }
 
   static bool isImageLink(Element element) {
-    var isLink = element.attributes['class']?.contains('postlink') ?? false;
+    final isLink = element.attributes['class']?.contains('postlink') ?? false;
     if (!isLink) return false;
-    var url = element.attributes['href']?.toString() ?? '';
-    var extension = '.${url.split('.').lastOrNull ?? ''}';
+    final url = element.attributes['href']?.toString() ?? '';
+    final extension = '.${url.split('.').lastOrNull ?? ''}';
     return KImageConfig.imageExtensions.contains(extension);
   }
 

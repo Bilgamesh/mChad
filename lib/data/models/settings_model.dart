@@ -6,7 +6,9 @@ import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/stores/settings_store.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/localization_util.dart';
+import 'package:mchad/utils/theme_util.dart';
 import 'package:mchad/utils/ui_util.dart';
+import 'package:system_theme/system_theme.dart';
 
 class SettingsModel {
   SettingsModel({
@@ -16,20 +18,22 @@ class SettingsModel {
     required this.haptics,
     required this.languageIndex,
     required this.transitionAnimations,
-  }) : colorScheme = ColorScheme.fromSeed(
-         seedColor: KAppTheme.appColors.elementAt(colorIndex),
-         brightness: isDark ? Brightness.dark : Brightness.light,
-       );
+    required this.openLinksInBrowser,
+    required this.lowContrastBackground,
+    required this.fontIndex,
+  });
   int colorIndex;
   bool isDark;
   bool notifications;
   bool haptics;
   bool transitionAnimations;
+  bool openLinksInBrowser;
+  bool lowContrastBackground;
   int languageIndex;
-  ColorScheme colorScheme;
+  int fontIndex;
 
   static SettingsModel fromString(String strinfigiedSettings) {
-    var props = List<String>.from(jsonDecode(strinfigiedSettings));
+    final props = List<String>.from(jsonDecode(strinfigiedSettings));
     return SettingsModel(
       colorIndex: int.tryParse(props.elementAtOrNull(0) ?? '0') ?? 0,
       isDark: props.elementAtOrNull(1) == 'true',
@@ -37,6 +41,9 @@ class SettingsModel {
       haptics: props.elementAtOrNull(3) == 'true',
       languageIndex: int.tryParse(props.elementAtOrNull(4) ?? '0') ?? 0,
       transitionAnimations: props.elementAtOrNull(5) == 'true',
+      openLinksInBrowser: props.elementAtOrNull(6) == 'true',
+      lowContrastBackground: props.elementAtOrNull(7) == 'true',
+      fontIndex: int.tryParse(props.elementAtOrNull(8) ?? '0') ?? 0,
     );
   }
 
@@ -44,7 +51,7 @@ class SettingsModel {
     return AppLocalizations.supportedLocales[languageIndex];
   }
 
-  static SettingsModel getDefault() {
+  static SettingsModel get defaultSettings {
     return SettingsModel(
       colorIndex: 0,
       isDark: UiUtil.isSystemDarkMode,
@@ -52,6 +59,9 @@ class SettingsModel {
       haptics: false,
       languageIndex: LocalizationUtil.systemLanguageIndex,
       transitionAnimations: true,
+      openLinksInBrowser: false,
+      lowContrastBackground: false,
+      fontIndex: 0,
     );
   }
 
@@ -64,32 +74,45 @@ class SettingsModel {
       haptics.toString(),
       languageIndex.toString(),
       transitionAnimations.toString(),
+      openLinksInBrowser.toString(),
+      lowContrastBackground.toString(),
+      fontIndex.toString(),
     ]);
   }
 
   Future<SettingsModel> save() async {
-    var store = await SettingsStore.getInstance();
+    final store = await SettingsStore.getInstance();
     store.setSettings(this);
     return apply();
   }
 
-  SettingsModel updateColorScheme() {
-    colorScheme = ColorScheme.fromSeed(
-      seedColor: KAppTheme.appColors.elementAt(colorIndex),
-      brightness: isDark ? Brightness.dark : Brightness.light,
-    );
-    return this;
+  List<Color> get colors {
+    final colors = [...KAppTheme.appColors];
+    colors[0] = SystemTheme.accentColor.accent.withAlpha(255);
+    return colors;
+  }
+
+  ColorScheme get colorScheme {
+    if (lowContrastBackground) {
+      return ThemeUtil.getLowContrastColorScheme(
+        colors.elementAt(colorIndex),
+        isDark,
+      );
+    } else {
+      return ThemeUtil.getRegularColorScheme(
+        colors.elementAt(colorIndex),
+        isDark,
+      );
+    }
   }
 
   SettingsModel setDarkMode(bool value) {
     isDark = value;
-    updateColorScheme();
     return this;
   }
 
   SettingsModel setColorIndex(int index) {
     colorIndex = index;
-    updateColorScheme();
     return this;
   }
 
@@ -110,6 +133,21 @@ class SettingsModel {
 
   SettingsModel setTransitionAnimations(bool value) {
     transitionAnimations = value;
+    return this;
+  }
+
+  SettingsModel setOpenLinksInBrowser(bool value) {
+    openLinksInBrowser = value;
+    return this;
+  }
+
+  SettingsModel setLowContrastBackground(bool value) {
+    lowContrastBackground = value;
+    return this;
+  }
+
+  SettingsModel setFontIndex(int value) {
+    fontIndex = value;
     return this;
   }
 

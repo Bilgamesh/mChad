@@ -59,21 +59,22 @@ class _TextWidgetsModalWidgetState extends State<TextWidgetsModalWidget> {
               });
             },
           ),
-          tab?.first == Tabs.bbcodes
-              ? BbcodesListWidget(
-                account: widget.account,
-                textController: widget.textController,
-                lastTextSelection: widget.lastTextSelection,
-                chatboxFocusNode: widget.chatboxFocusNode,
-                scrollController: widget.scrollController,
-              )
-              : EmoticonListWidget(
-                account: widget.account,
-                textController: widget.textController,
-                lastTextSelection: widget.lastTextSelection,
-                chatboxFocusNode: widget.chatboxFocusNode,
-                scrollController: widget.scrollController,
-              ),
+          if (tab?.first == Tabs.bbcodes)
+            BbcodesListWidget(
+              account: widget.account,
+              textController: widget.textController,
+              lastTextSelection: widget.lastTextSelection,
+              chatboxFocusNode: widget.chatboxFocusNode,
+              scrollController: widget.scrollController,
+            ),
+          if (tab?.first == Tabs.emoticons)
+            EmoticonListWidget(
+              account: widget.account,
+              textController: widget.textController,
+              lastTextSelection: widget.lastTextSelection,
+              chatboxFocusNode: widget.chatboxFocusNode,
+              scrollController: widget.scrollController,
+            ),
         ],
       ),
     );

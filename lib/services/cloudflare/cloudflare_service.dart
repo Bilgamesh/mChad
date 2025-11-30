@@ -13,18 +13,18 @@ class CloudflareService {
         Completer<CloudflareAuthorization>();
     String? cookie;
     String? userAgent;
-    var headlessWebView = HeadlessInAppWebView(
+    final headlessWebView = HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: WebUri('$baseUrl/ucp.php?mode=login')),
       initialSettings: InAppWebViewSettings(
         isInspectable: true,
         incognito: true,
       ),
       onLoadStop: (controller, url) async {
-        var jsResponse = await controller.callAsyncJavaScript(
+        final jsResponse = await controller.callAsyncJavaScript(
           functionBody: 'return navigator.userAgent;',
         );
         userAgent = jsResponse?.value.toString();
-        var cookieResponse = await CookieManager.instance().getCookie(
+        final cookieResponse = await CookieManager.instance().getCookie(
           url: WebUri(baseUrl),
           name: 'cf_clearance',
         );

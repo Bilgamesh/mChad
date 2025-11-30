@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/utils/theme_util.dart';
 import 'package:mchad/views/pages/init_page.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/data/globals.dart' as globals;
@@ -31,7 +33,16 @@ class MyApp extends StatelessWidget {
             navigatorKey: globals.navigatorKey,
             debugShowCheckedModeBanner: false,
             title: 'mChad',
-            theme: ThemeData(colorScheme: settings.colorScheme),
+            theme: ThemeUtil.createTheme(
+              colorScheme: settings.colorScheme,
+              animations: settings.transitionAnimations,
+              textThemeBuilder: switch (settings.fontIndex) {
+                0 => null,
+                _ => KAppTheme.textThemes.elementAtOrNull(
+                  settings.fontIndex - 1,
+                ),
+              },
+            ),
             localizationsDelegates: [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

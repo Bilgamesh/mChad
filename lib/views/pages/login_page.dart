@@ -29,10 +29,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   var validated = false;
-  var addressController = TextEditingController();
-  var usernameController = TextEditingController();
-  var passwordController = TextEditingController();
-  var addressFocusNode = FocusNode();
+  final addressController = TextEditingController();
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final addressFocusNode = FocusNode();
   var addressFocusCount = 0;
   var pageActive = true;
   var loading = false;
@@ -81,128 +81,139 @@ class _LoginPageState extends State<LoginPage> {
         ),
         actions: [DarkModeButtonWidget()],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child:
-                  loading
-                      ? LoadingWidget()
-                      : ListView(
-                        padding: const EdgeInsets.all(20.0),
-                        shrinkWrap: true,
-                        children: [
-                          Icon(Icons.forum_outlined, size: 70.0),
-                          SizedBox(height: 20.0),
-                          Center(
-                            child: Text(
-                              AppLocalizations.of(context).loginPageLabel,
-                              style: TextStyle(fontSize: 20.0),
-                            ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 600),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: switch (loading) {
+                    true => LoadingWidget(),
+                    false => ListView(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 20,
+                        bottom: 150,
+                      ),
+                      shrinkWrap: true,
+                      children: [
+                        Icon(Icons.forum_outlined, size: 70.0),
+                        SizedBox(height: 20.0),
+                        Center(
+                          child: Text(
+                            AppLocalizations.of(context).loginPageLabel,
+                            style: TextStyle(fontSize: 20.0),
                           ),
-                          SizedBox(height: 20.0),
-                          TextField(
-                            keyboardType: TextInputType.url,
-                            controller: addressController,
-                            focusNode: addressFocusNode,
-                            onTapOutside: (event) {
-                              validated = validate();
-                              FocusScope.of(context).unfocus();
-                            },
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              label: Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).addressTextFieldHint,
-                                  ),
-                                  addressVerificationStatus ==
-                                          VerificationStatus.error
-                                      ? Text(
-                                        ' - ${AppLocalizations.of(context).mChatNotFound}',
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                              suffixIcon: VerificationIconWidget(
-                                status: addressVerificationStatus,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20.0),
-                          TextField(
-                            controller: usernameController,
-                            onTapOutside: (event) {
-                              validated = validate();
-                              FocusScope.of(context).unfocus();
-                            },
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              label: Row(
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(
-                                      context,
-                                    ).usernameTextFieldHint,
-                                  ),
-                                  existingUser
-                                      ? Text(
-                                        ' - ${AppLocalizations.of(context).existingUserError}',
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                      : SizedBox.shrink(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 20.0),
-                          TextField(
-                            controller: passwordController,
-                            onTapOutside: (event) {
-                              validated = validate();
-                              FocusScope.of(context).unfocus();
-                            },
-                            onSubmitted:
-                                (value) => validated ? onLogin(context) : null,
-                            obscureText: !showPassword,
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              labelText:
+                        ),
+                        SizedBox(height: 20.0),
+                        TextField(
+                          keyboardType: TextInputType.url,
+                          controller: addressController,
+                          focusNode: addressFocusNode,
+                          onTapOutside: (event) {
+                            validated = validate();
+                            FocusScope.of(context).unfocus();
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Text(
                                   AppLocalizations.of(
                                     context,
-                                  ).passwordTextFieldHint,
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  HapticsUtil.vibrate();
-                                  setState(() {
-                                    showPassword = !showPassword;
-                                  });
-                                },
-                                icon:
-                                    showPassword
-                                        ? Icon(Icons.visibility_off)
-                                        : Icon(Icons.visibility),
-                              ),
+                                  ).addressTextFieldHint,
+                                ),
+                                if (addressVerificationStatus ==
+                                    VerificationStatus.error)
+                                  Text(
+                                    ' - ${AppLocalizations.of(context).mChatNotFound}',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                              ],
+                            ),
+                            suffixIcon: VerificationIconWidget(
+                              status: addressVerificationStatus,
                             ),
                           ),
-                          SizedBox(height: 20.0),
-                          OutlinedButton(
-                            onPressed:
-                                validated ? () => onLogin(context) : null,
-                            child: Text(
-                              AppLocalizations.of(context).loginButtonLabel,
+                        ),
+                        SizedBox(height: 20.0),
+                        TextField(
+                          controller: usernameController,
+                          onTapOutside: (event) {
+                            validated = validate();
+                            FocusScope.of(context).unfocus();
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            label: Row(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  ).usernameTextFieldHint,
+                                ),
+                                if (existingUser)
+                                  Text(
+                                    ' - ${AppLocalizations.of(context).existingUserError}',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-            ),
+                        ),
+                        SizedBox(height: 20.0),
+                        TextField(
+                          controller: passwordController,
+                          onTapOutside: (event) {
+                            validated = validate();
+                            FocusScope.of(context).unfocus();
+                          },
+                          onSubmitted: (value) {
+                            if (validated) onLogin(context);
+                          },
+                          obscureText: !showPassword,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(
+                                  context,
+                                ).passwordTextFieldHint,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                HapticsUtil.vibrate();
+                                setState(() {
+                                  showPassword = !showPassword;
+                                });
+                              },
+                              icon: switch (showPassword) {
+                                true => Icon(Icons.visibility_off),
+                                false => Icon(Icons.visibility),
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20.0),
+                        OutlinedButton(
+                          onPressed: switch (validated) {
+                            true => (() => onLogin(context)),
+                            false => null,
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).loginButtonLabel,
+                          ),
+                        ),
+                      ],
+                    ),
+                  },
+                ),
+              ),
+              KeyboardSpaceWidget(withNavbar: false),
+            ],
           ),
-          KeyboardSpaceWidget(withNavbar: false),
-        ],
+        ),
       ),
     );
   }
@@ -220,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool isAccountAlreadyAdded() {
-    var accounts = accountsNotifier.value;
+    final accounts = accountsNotifier.value;
     return accounts
         .where(
           (account) =>
@@ -255,12 +266,12 @@ class _LoginPageState extends State<LoginPage> {
       });
       return;
     }
-    var urls = UrlUtil.getAllUrlPermutations(addressController.text);
-    var addressFocusCountOld = addressFocusCount;
+    final urls = UrlUtil.getAllUrlPermutations(addressController.text);
+    final addressFocusCountOld = addressFocusCount;
     setState(() {
       addressVerificationStatus = VerificationStatus.loading;
     });
-    var discoverySuccess = await discoverUrl(
+    final discoverySuccess = await discoverUrl(
       urls,
       () => !pageActive || addressFocusCountOld != addressFocusCount,
     );
@@ -287,7 +298,7 @@ class _LoginPageState extends State<LoginPage> {
     for (var url in urls) {
       if (shouldAbort()) return null;
       try {
-        var loginService = MchatLoginService(
+        final loginService = MchatLoginService(
           baseUrl: url,
           onCloudFlare: onCloudFlare,
         );
@@ -307,13 +318,13 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         loading = true;
       });
-      var loginService = MchatLoginService(
+      final loginService = MchatLoginService(
         baseUrl: addressController.text,
         onCloudFlare: onCloudFlare,
       );
       await loginService.init();
       await Future.delayed(Duration(seconds: 1));
-      var loginData = await loginService.loginWithCredentials(
+      final loginData = await loginService.loginWithCredentials(
         usernameController.text,
         passwordController.text,
       );
@@ -354,7 +365,7 @@ class _LoginPageState extends State<LoginPage> {
     BuildContext context,
     MchatLoginModel loginData,
   ) async {
-    var account = Account(
+    final account = Account(
       userName: usernameController.text,
       userId: loginData.userId!,
       forumName: loginData.forumName!,

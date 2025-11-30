@@ -69,13 +69,13 @@ class Message {
   }
 
   Future<void> saveAsLatest(Account account) async {
-    var prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('${account.hashCode}_latestMessageId', id);
   }
 
   static Future<int> getLatestId(Account account) async {
-    var prefs = await SharedPreferences.getInstance();
-    var id = prefs.getInt('${account.hashCode}_latestMessageId');
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('${account.hashCode}_latestMessageId');
     return id ?? 0;
   }
 }

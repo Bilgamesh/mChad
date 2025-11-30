@@ -179,4 +179,40 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get authorizingCloudflare => 'Autoryzuję Cloudflare';
+
+  @override
+  String get externalBrowser => 'Zewnętrzna przeglądarka';
+
+  @override
+  String get openLinksInBrowser => 'Otwieraj linki w przeglądarce';
+
+  @override
+  String get lowConstrast => 'Niski kontrast';
+
+  @override
+  String get lowersBackgroundColorContrast => 'Obniża kontrast koloru tła';
+
+  @override
+  String get font => 'Czcionka';
+
+  @override
+  String get defaultFont => 'Domyślna';
+
+  @override
+  String get about => 'Informacje';
+
+  @override
+  String get version => 'Wersja aplikacji';
+
+  @override
+  String get license => 'Licencja';
+
+  @override
+  String get licenses => 'Licencje';
+
+  @override
+  String get sourceCode => 'Kod źródłowy';
+
+  @override
+  String get issueTracker => 'Śledzenie problemów';
 }

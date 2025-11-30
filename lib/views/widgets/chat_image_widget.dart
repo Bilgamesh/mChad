@@ -3,34 +3,38 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/views/pages/image_page.dart';
 
 class ChatImageWidget extends StatelessWidget {
-  const ChatImageWidget({Key? key, required this.src, required this.account})
-    : super(key: key);
+  const ChatImageWidget({
+    Key? key,
+    required this.src,
+    required this.account,
+    required this.settings,
+  }) : super(key: key);
   final String src;
   final Account account;
+  final SettingsModel settings;
 
   @override
   Widget build(BuildContext context) {
-    var constraint = min(
+    final constraint = min(
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
-    var headers = {
-      'x-requested-with': 'XMLHttpRequest',
-      'cookie': account.cachedCookies ?? '',
-      'user-agent': account.userAgent ?? '',
-    };
-    var cacheKey = CryptoUtil.generateMd5('$headers$src');
+    final cacheKey = CryptoUtil.generateMd5('${account.getHeaders()}$src');
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: GestureDetector(
-        onTap: () => open(context, headers, cacheKey),
+        onTap: () => open(context, account.getHeaders(), cacheKey),
         child: CachedNetworkImage(
+          fadeInDuration: Duration.zero,
+          placeholderFadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
           imageUrl: src,
-          httpHeaders: src.startsWith(account.forumUrl) ? headers : {},
+          httpHeaders: account.getHeaders(src: src),
           cacheKey: cacheKey,
           height: constraint,
           width: constraint,
@@ -57,7 +61,8 @@ class ChatImageWidget extends StatelessWidget {
             (context) => ImagePage(
               src: src,
               cacheKey: cacheKey,
-              headers: src.startsWith(account.forumUrl) ? headers : {},
+              headers: account.getHeaders(src: src),
+              settings: settings,
             ),
       ),
     );

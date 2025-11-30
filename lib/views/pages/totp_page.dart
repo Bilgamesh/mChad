@@ -28,7 +28,7 @@ class TotpPage extends StatefulWidget {
 }
 
 class _TotpPageState extends State<TotpPage> {
-  var totpController = TextEditingController();
+  final totpController = TextEditingController();
   var validated = false;
   var loading = false;
 
@@ -60,46 +60,46 @@ class _TotpPageState extends State<TotpPage> {
         children: [
           Expanded(
             child: Center(
-              child:
-                  loading
-                      ? LoadingWidget()
-                      : ListView(
-                        padding: const EdgeInsets.all(20.0),
-                        shrinkWrap: true,
-                        children: [
-                          Icon(Icons.forum_outlined, size: 70.0),
-                          SizedBox(height: 20.0),
-                          Center(
-                            child: Text(
-                              AppLocalizations.of(context).loginPageLabel,
-                              style: TextStyle(fontSize: 20.0),
-                            ),
-                          ),
-                          SizedBox(height: 20.0),
-                          TextField(
-                            keyboardType: TextInputType.numberWithOptions(),
-                            controller: totpController,
-                            onTapOutside:
-                                (event) => FocusScope.of(context).unfocus(),
-                            onSubmitted:
-                                (value) => validated ? onSubmit(context) : null,
-                            decoration: InputDecoration(
-                              labelText:
-                                  AppLocalizations.of(
-                                    context,
-                                  ).totpTextFieldHint,
-                            ),
-                          ),
-                          SizedBox(height: 20.0),
-                          OutlinedButton(
-                            onPressed:
-                                validated ? () => onSubmit(context) : null,
-                            child: Text(
-                              AppLocalizations.of(context).loginButtonLabel,
-                            ),
-                          ),
-                        ],
+              child: switch (loading) {
+                true => LoadingWidget(),
+                false => ListView(
+                  padding: const EdgeInsets.all(20.0),
+                  shrinkWrap: true,
+                  children: [
+                    Icon(Icons.forum_outlined, size: 70.0),
+                    SizedBox(height: 20.0),
+                    Center(
+                      child: Text(
+                        AppLocalizations.of(context).loginPageLabel,
+                        style: TextStyle(fontSize: 20.0),
                       ),
+                    ),
+                    SizedBox(height: 20.0),
+                    TextField(
+                      keyboardType: TextInputType.numberWithOptions(),
+                      controller: totpController,
+                      onTapOutside: (event) => FocusScope.of(context).unfocus(),
+                      onSubmitted: (value) {
+                        if (validated) onSubmit(context);
+                      },
+                      decoration: InputDecoration(
+                        labelText:
+                            AppLocalizations.of(context).totpTextFieldHint,
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    OutlinedButton(
+                      onPressed: switch (validated) {
+                        true => (() => onSubmit(context)),
+                        false => null,
+                      },
+                      child: Text(
+                        AppLocalizations.of(context).loginButtonLabel,
+                      ),
+                    ),
+                  ],
+                ),
+              },
             ),
           ),
           KeyboardSpaceWidget(withNavbar: false),
@@ -117,7 +117,7 @@ class _TotpPageState extends State<TotpPage> {
       setState(() {
         loading = true;
       });
-      var loginData = await widget.loginService.loginWithOtp(
+      final loginData = await widget.loginService.loginWithOtp(
         totpController.text,
       );
       totpController.clear();
@@ -139,7 +139,7 @@ class _TotpPageState extends State<TotpPage> {
     MchatLoginModel loginData,
   ) async {
     totpController.clear();
-    var account = Account(
+    final account = Account(
       userName: widget.username,
       userId: loginData.userId!,
       forumName: loginData.forumName!,

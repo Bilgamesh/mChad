@@ -24,7 +24,7 @@ class UpdateCheck {
 
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-      var updateAvailable = await GithubUpdateService(
+      final updateAvailable = await GithubUpdateService(
         endpoint: endpoint,
       ).isNewVersionAvailable(packageInfo.version);
 

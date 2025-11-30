@@ -35,6 +35,16 @@ class NotificationsService {
         false;
   }
 
+  static Future<bool> requestPermission() async {
+    final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    return await flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin
+            >()
+            ?.requestNotificationsPermission() ??
+        false;
+  }
+
   Future<void> notify(List<message_model.Message> messages) async {
     if (!notificationsInitialized) throw 'Notifications not initialized';
     if (messages.lastOrNull?.user.id == account.userId) {
@@ -43,7 +53,7 @@ class NotificationsService {
       );
       return;
     }
-    var lastMessages =
+    final lastMessages =
         messages.reversed
             .take(KNotificationsConfig.maxNotificationMessages)
             .toList();
@@ -55,7 +65,7 @@ class NotificationsService {
       message.notify();
     }
 
-    var accountIndex = await account.getIndex();
+    final accountIndex = await account.getIndex();
 
     await flutterLocalNotificationsPlugin.show(
       accountIndex,

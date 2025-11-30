@@ -3,14 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
+import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/time_util.dart';
+import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/views/widgets/avatar_widget.dart';
 import 'package:mchad/views/widgets/online_users_modal.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 
 class AccountCardWidget extends StatefulWidget {
@@ -39,14 +41,19 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   @override
   void initState() {
     timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
-      var timeRelativeNew = await TimeUtil.convertToAgo(
-        refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
-      );
-      setState(() {
-        timeRelative = timeRelativeNew;
-      });
+      updateTime();
     });
+    refreshTimeMapNotifer.addListener(updateTime);
     super.initState();
+  }
+
+  void updateTime() async {
+    final timeRelativeNew = await TimeUtil.convertToAgo(
+      refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
+    );
+    setState(() {
+      timeRelative = timeRelativeNew;
+    });
   }
 
   String getTimeRelative(BuildContext context) {
@@ -59,192 +66,145 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   @override
   void dispose() {
     timer?.cancel();
+    refreshTimeMapNotifer.removeListener(updateTime);
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    var headers = {
-      'x-requested-with': 'XMLHttpRequest',
-      'cookie': widget.account.cachedCookies ?? '',
-      'user-agent': widget.account.userAgent ?? '',
-    };
-    return ValueListenableBuilder(
-      valueListenable: settingsNotifier,
-      builder:
-          (context, settings, child) => ValueListenableBuilder(
-            valueListenable: onlineUsersMapNotifer,
-            builder:
-                (context, onlineUsersMap, child) => Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+  Widget build(BuildContext context) => ValueListenablesBuilder(
+    listenables: [
+      settingsNotifier,
+      onlineUsersMapNotifer,
+      refreshStatusNotifier,
+      messageMapNotifier,
+    ],
+    builder: (context, values, child) {
+      final settings = values[0] as SettingsModel;
+      final onlineUsersMap = values[1] as Map<Account, OnlineUsersResponse>;
+      final onlineUsers = onlineUsersMap[widget.account];
+      final refreshStatusMap = values[2] as Map<Account, VerificationStatus>;
+      final refreshStatus =
+          refreshStatusMap[widget.account] ?? VerificationStatus.none;
+      final messageMap = values[3] as Map<Account, List<Message>>;
+      final messages = messageMap[widget.account] ?? [];
+      final unreadMessages = messages.where((m) => !(m.isRead ?? false));
+      return Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: ListTile(
+          selected: widget.isSelected,
+          onTap: widget.onSelect,
+          leading: AvatarWidget(
+            avatarSrc: widget.account.avatarUrl,
+            account: widget.account,
+          ),
+          titleAlignment: ListTileTitleAlignment.titleHeight,
+          onLongPress: () => showOnlineUsersModal(context, onlineUsers),
+          title: Row(
+            children: [
+              Text(
+                widget.account.userName,
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+              Expanded(child: SizedBox.shrink()),
+              VerificationIconWidget(status: refreshStatus),
+            ],
+          ),
+          selectedTileColor: settings.colorScheme.surfaceContainerHigh,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          minTileHeight: 200.0,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                child: switch (widget.isSelected) {
+                  true => Text(
+                    '@${widget.account.forumName} - ${AppLocalizations.of(context).currentlySelected}',
                   ),
-                  child: ListTile(
-                    selected: widget.isSelected,
-                    onTap: widget.onSelect,
-                    leading: CircleAvatar(
-                      radius: 25.0,
-                      backgroundColor: Colors.transparent,
-                      foregroundImage:
-                          widget.account.avatarUrl != null
-                              ? CachedNetworkImageProvider(
-                                widget.account.avatarUrl!,
-                                headers:
-                                    widget.account.avatarUrl!.startsWith(
-                                          widget.account.forumUrl,
-                                        )
-                                        ? headers
-                                        : {},
-                                cacheKey: CryptoUtil.generateMd5(
-                                  '$headers${widget.account.avatarUrl!}',
-                                ),
-                              )
-                              : AssetImage('assets/images/no_avatar.gif'),
+                  false => Text('@${widget.account.forumName}'),
+                },
+              ),
+              FittedBox(
+                child: Row(
+                  children: [
+                    Text(
+                      '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsers?.totalCount ?? 0}',
                     ),
-                    titleAlignment: ListTileTitleAlignment.titleHeight,
-                    onLongPress:
-                        () => showOnlineUsersModal(context, onlineUsersMap),
-                    title: Row(
-                      children: [
-                        Text(
-                          widget.account.userName,
-                          style: TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                        Expanded(child: SizedBox.shrink()),
-                        ValueListenableBuilder(
-                          valueListenable: refreshStatusNotifier,
-                          builder:
-                              (context, refreshStatusMap, child) =>
-                                  VerificationIconWidget(
-                                    status:
-                                        refreshStatusMap[widget.account] ??
-                                        VerificationStatus.none,
-                                  ),
-                        ),
-                      ],
+                    IconButton(
+                      onPressed: () {
+                        HapticsUtil.vibrate();
+                        showOnlineUsersModal(context, onlineUsers);
+                      },
+                      icon: Icon(Icons.info_outline),
                     ),
-                    selectedTileColor:
-                        settings.colorScheme.surfaceContainerHigh,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    minTileHeight: 200.0,
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: Text(
-                            widget.isSelected
-                                ? '@${widget.account.forumName} - ${AppLocalizations.of(context).currentlySelected}'
-                                : '@${widget.account.forumName}',
-                          ),
-                        ),
-                        FittedBox(
-                          child: Row(
-                            children: [
-                              Text(
-                                '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsersMap[widget.account]?.totalCount ?? 0}',
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  HapticsUtil.vibrate();
-                                  showOnlineUsersModal(context, onlineUsersMap);
-                                },
-                                icon: Icon(Icons.info_outline),
-                              ),
-                            ],
-                          ),
-                        ),
-                        widget.isSelected
-                            ? SizedBox.shrink()
-                            : ValueListenableBuilder(
-                              valueListenable: messageMapNotifier,
-                              builder: (context, messageMap, child) {
-                                var unreadMessages = messageMap[widget.account]!
-                                    .where((m) => !(m.isRead ?? false));
-                                if (unreadMessages.isEmpty) {
-                                  return SizedBox.shrink();
-                                }
-                                return SizedBox(
-                                  height: 30,
-                                  child: Text(
-                                    '${AppLocalizations.of(context).unreadMessages}: ${unreadMessages.length}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                        Row(
-                          children: [
-                            ValueListenableBuilder(
-                              valueListenable: refreshStatusNotifier,
-                              builder:
-                                  (
-                                    context,
-                                    refreshStatusMap,
-                                    child,
-                                  ) => SizedBox(
-                                    height: 38,
-                                    child: Text(
-                                      refreshStatusMap[widget.account] ==
-                                              VerificationStatus.loading
-                                          ? AppLocalizations.of(
-                                            context,
-                                          ).chatRefreshing
-                                          : (refreshStatusMap[widget.account] ==
-                                                  VerificationStatus.error
-                                              ? '${AppLocalizations.of(context).chatRefreshError} ${timeRelative ?? getTimeRelative(context)}'
-                                              : '${AppLocalizations.of(context).chatRefreshed} ${timeRelative ?? getTimeRelative(context)}'),
-                                      style:
-                                          refreshStatusMap[widget.account] ==
-                                                  VerificationStatus.error
-                                              ? TextStyle(color: Colors.red)
-                                              : TextStyle(),
-                                    ),
-                                  ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10.0),
-                        Row(
-                          children: [
-                            Expanded(child: SizedBox.shrink()),
-                            OutlinedButton(
-                              onPressed: widget.onOpen,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.menu_open),
-                                  Text(
-                                    ' ${AppLocalizations.of(context).open} ',
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 10.0),
-                            OutlinedButton(
-                              onPressed: widget.onLogout,
-                              child: Row(
-                                children: [
-                                  Icon(Icons.logout),
-                                  Text(AppLocalizations.of(context).logout),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  ],
+                ),
+              ),
+              if (!widget.isSelected && unreadMessages.isNotEmpty)
+                SizedBox(
+                  height: 30,
+                  child: Text(
+                    '${AppLocalizations.of(context).unreadMessages}: ${unreadMessages.length}',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
+              Row(
+                children: [
+                  SizedBox(
+                    height: 38,
+                    child: switch (refreshStatus) {
+                      VerificationStatus.loading => Text(
+                        AppLocalizations.of(context).chatRefreshing,
+                      ),
+                      VerificationStatus.error => Text(
+                        '${AppLocalizations.of(context).chatRefreshError} ${timeRelative ?? getTimeRelative(context)}',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      _ => Text(
+                        '${AppLocalizations.of(context).chatRefreshed} ${timeRelative ?? getTimeRelative(context)}',
+                      ),
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.0),
+              Row(
+                children: [
+                  Expanded(child: SizedBox.shrink()),
+                  OutlinedButton(
+                    onPressed: widget.onOpen,
+                    child: Row(
+                      children: [
+                        Icon(Icons.menu_open),
+                        Text(' ${AppLocalizations.of(context).open} '),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  OutlinedButton(
+                    onPressed: widget.onLogout,
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout),
+                        Text(AppLocalizations.of(context).logout),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-    );
-  }
+        ),
+      );
+    },
+  );
 
   void showOnlineUsersModal(
     BuildContext context,
-    Map<Account, OnlineUsersResponse> onlineUsersMap,
+    OnlineUsersResponse? onlineUsers,
   ) {
     showModalBottomSheet(
       showDragHandle: true,
@@ -252,9 +212,9 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
       builder:
           (context) => SafeArea(
             child: OnlineUsersModal(
-              onlineUsers: onlineUsersMap[widget.account]?.users ?? [],
-              onlineBots: onlineUsersMap[widget.account]?.bots ?? [],
-              hiddenCount: onlineUsersMap[widget.account]?.hiddenCount ?? 0,
+              onlineUsers: onlineUsers?.users ?? [],
+              onlineBots: onlineUsers?.bots ?? [],
+              hiddenCount: onlineUsers?.hiddenCount ?? 0,
             ),
           ),
     );

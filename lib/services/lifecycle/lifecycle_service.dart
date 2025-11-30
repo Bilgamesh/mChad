@@ -6,21 +6,25 @@ class LifecycleService with WidgetsBindingObserver {
 
   LifecycleService._internal();
 
-  final List<VoidCallback> _listeners = [];
+  final List<void Function(AppLifecycleState state)> _listeners = [];
 
-  LifecycleService addListener(VoidCallback listener) {
+  LifecycleService addListener(
+    void Function(AppLifecycleState state) listener,
+  ) {
     _listeners.add(listener);
     return this;
   }
 
-  LifecycleService removeListener(VoidCallback listener) {
+  LifecycleService removeListener(
+    void Function(AppLifecycleState state) listener,
+  ) {
     _listeners.remove(listener);
     return this;
   }
 
   void notifyListeners(AppLifecycleState state) {
     for (var listener in _listeners) {
-      listener();
+      listener(state);
     }
   }
 

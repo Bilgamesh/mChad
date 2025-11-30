@@ -1,5 +1,6 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:mchad/data/notifiers.dart';
 import 'package:mchad/data/stores/account_store.dart';
 import 'package:mchad/data/stores/settings_store.dart';
 import 'package:mchad/jobs/mchat/mchat_background_sync.dart';
@@ -9,8 +10,10 @@ import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/pages/tabs_page.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:system_theme/system_theme.dart';
 import 'package:mchad/data/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'init_page');
@@ -20,11 +23,13 @@ class InitPage extends StatelessWidget {
 
   Future<void> initApp(BuildContext context) async {
     initializeDateFormatting();
-    initSettings();
+    await initSettings();
+    await initPackageInfo();
 
-    var prefs = await SharedPreferences.getInstance();
-    var accountStore = AccountStore(prefs: prefs);
-    var accounts = accountStore.getAll();
+    final prefs = await SharedPreferences.getInstance();
+    await waitForUnblock(prefs);
+    final accountStore = AccountStore(prefs: prefs);
+    final accounts = accountStore.all;
 
     for (var account in accounts) {
       account.updateNotifiers();
@@ -37,16 +42,20 @@ class InitPage extends StatelessWidget {
     globals.syncManager.startAll();
     globals.updateCheck.startCheck();
 
-    LifecycleService().addListener(() {
-      final state = WidgetsBinding.instance.lifecycleState;
-      if (state == AppLifecycleState.paused) {
-        globals.syncManager.stopAll();
-        globals.updateCheck.stopCheck();
-        globals.background = true;
-      } else if (state == AppLifecycleState.resumed) {
-        globals.syncManager.startAll();
-        globals.updateCheck.startCheck();
-        globals.background = false;
+    LifecycleService().addListener((AppLifecycleState state) {
+      switch (state) {
+        case AppLifecycleState.paused:
+        case AppLifecycleState.detached:
+        case AppLifecycleState.hidden:
+        case AppLifecycleState.inactive:
+          globals.syncManager.stopAll();
+          globals.updateCheck.stopCheck();
+          globals.background = true;
+          break;
+        default:
+          globals.syncManager.startAll();
+          globals.updateCheck.startCheck();
+          globals.background = false;
       }
     }).startListening();
 
@@ -54,15 +63,30 @@ class InitPage extends StatelessWidget {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => accounts.isNotEmpty ? TabsPage() : LoginPage(),
+        builder: (context) => accounts.isEmpty ? LoginPage() : TabsPage(),
       ),
     );
   }
 
+  Future<void> waitForUnblock(SharedPreferences prefs) async {
+    var count = 0;
+    while (count++ < 5 && (prefs.getBool('block_app') ?? false)) {
+      await Future.delayed(Duration(seconds: 1));
+    }
+    prefs.setBool('block_app', false);
+  }
+
   Future<void> initSettings() async {
-    var settingsStore = await SettingsStore.getInstance();
-    var settings = await settingsStore.getSettings();
+    final settingsStore = await SettingsStore.getInstance();
+    final settings = await settingsStore.getSettings();
+    SystemTheme.fallbackColor = settings.colors[0];
+    await SystemTheme.accentColor.load();
     settings.apply();
+  }
+
+  Future<void> initPackageInfo() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    packageInfoNotifier.value = packageInfo;
   }
 
   Future<void> initBackgroundFetch() async {

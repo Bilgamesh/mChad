@@ -50,7 +50,7 @@ class BBTag {
   }
 
   bool hasBetterAlternative(List<BBTag> otherBbTags) {
-    for (var otherBbTag in otherBbTags) {
+    for (final otherBbTag in otherBbTags) {
       if (alternatives.contains(otherBbTag.start)) {
         return true;
       }

@@ -47,9 +47,9 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   Future<void> updateClipboardData() async {
-    var hasData = await Clipboard.hasStrings();
+    final hasData = await Clipboard.hasStrings();
     if (!hasData) return;
-    var data = await Clipboard.getData('text/plain');
+    final data = await Clipboard.getData('text/plain');
     setState(() {
       clipboardData = data;
     });
@@ -64,44 +64,39 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
           controller: widget.scrollController,
           child: ValueListenableBuilder(
             valueListenable: bbtagMapNotifier,
-            builder:
-                (context, bbtagMap, child) => SafeArea(
-                  child: Wrap(
-                    children: List.generate(
-                      bbtagMap[widget.account]?.length ?? 0,
-                      (index) =>
-                          shouldBeAvailable(
-                                bbtagMap[widget.account]![index],
-                                bbtagMap[widget.account]!,
-                              )
-                              ? Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: IconButton.filled(
-                                    isSelected: bbtagMap[widget.account]![index]
-                                        .supportsContent(clipboardData?.text),
-                                    onPressed:
-                                        () => onBbCodeTap(
-                                          context,
-                                          bbtagMap[widget.account]![index],
-                                        ),
-                                    onLongPress:
-                                        () => onBbCodeTap(
-                                          context,
-                                          bbtagMap[widget.account]![index],
-                                        ),
-                                    icon: Icon(
-                                      bbtagMap[widget.account]![index].icon,
-                                    ),
-                                  ),
-                                ),
-                              )
-                              : SizedBox.shrink(),
-                    ),
+            builder: (context, bbtagMap, child) {
+              final bbtags = bbtagMap[widget.account] ?? [];
+              return SafeArea(
+                child: Wrap(
+                  children: List.generate(
+                    bbtags.length,
+                    (index) => switch (shouldBeAvailable(
+                      bbtags[index],
+                      bbtags,
+                    )) {
+                      true => Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: IconButton.filled(
+                            isSelected: bbtags[index].supportsContent(
+                              clipboardData?.text,
+                            ),
+                            onPressed:
+                                () => onBbCodeTap(context, bbtags[index]),
+                            onLongPress:
+                                () => onBbCodeTap(context, bbtags[index]),
+                            icon: Icon(bbtags[index].icon),
+                          ),
+                        ),
+                      ),
+                      false => SizedBox.shrink(),
+                    },
                   ),
                 ),
+              );
+            },
           ),
         ),
       ),
@@ -126,14 +121,14 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void addBbCodeToEmptyTextField(BBTag bbcode) {
-    var fullBbCodeValue =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '${bbcode.start}${clipboardData?.text}${bbcode.end} '
-            : '${bbcode.start}${bbcode.end}';
-    var cursorPosition =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '${bbcode.start}${clipboardData?.text}${bbcode.end} '.length
-            : bbcode.start.length;
+    final fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
+      false => '${bbcode.start}${bbcode.end}',
+    };
+    final cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
+      false => bbcode.start.length,
+    };
     widget.textController.value = TextEditingValue(
       text: fullBbCodeValue,
       selection: TextSelection.fromPosition(
@@ -143,21 +138,21 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void addBbCodeAtCursorPosition(BBTag bbcode) {
-    var left = widget.textController.text.substring(
+    final left = widget.textController.text.substring(
       0,
       widget.lastTextSelection!.start,
     );
-    var right = widget.textController.text.substring(
+    final right = widget.textController.text.substring(
       widget.lastTextSelection!.start,
     );
-    var fullBbCodeValue =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '${bbcode.start}${clipboardData?.text}${bbcode.end} '
-            : '${bbcode.start}${bbcode.end}';
-    var cursorPosition =
-        bbcode.supportsContent(clipboardData?.text)
-            ? '$left${bbcode.start}${clipboardData?.text}${bbcode.end} '.length
-            : '$left${bbcode.start}'.length;
+    final fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
+      false => '${bbcode.start}${bbcode.end}',
+    };
+    final cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+      true => '$left${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
+      false => '$left${bbcode.start}'.length,
+    };
     widget.textController.value = TextEditingValue(
       text: '$left$fullBbCodeValue$right',
       selection: TextSelection.fromPosition(
@@ -167,18 +162,18 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void wrapSelectedTextWithBbCode(BBTag bbcode) {
-    var left = widget.textController.text.substring(
+    final left = widget.textController.text.substring(
       0,
       widget.lastTextSelection!.start,
     );
-    var inside = widget.textController.text.substring(
+    final inside = widget.textController.text.substring(
       widget.lastTextSelection!.start,
       widget.lastTextSelection!.end,
     );
-    var right = widget.textController.text.substring(
+    final right = widget.textController.text.substring(
       widget.lastTextSelection!.end,
     );
-    var fullBbCodeValue = '${bbcode.start}$inside${bbcode.end}';
+    final fullBbCodeValue = '${bbcode.start}$inside${bbcode.end}';
     widget.textController.value = TextEditingValue(
       text: '$left$fullBbCodeValue$right',
       selection: TextSelection(

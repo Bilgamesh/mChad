@@ -7,17 +7,36 @@ var logger = LoggingUtil(module: 'mchat_global_sync');
 
 class MchatSyncManager {
   bool loadingArchive = false;
-  bool isRunning = false;
+
+  bool get isRunning {
+    final activeSyncs = globals.syncs.where((sync) => !sync.stopped);
+    return activeSyncs.isNotEmpty;
+  }
+
+  void tryStartAll() {
+    try {
+      startAll();
+    } catch (e) {
+      logger.error(e.toString());
+    }
+  }
 
   void startAll() {
     if (isRunning) throw 'All syncs are already running';
     logger.info('Startinc all syncs');
     for (var account in accountsNotifier.value) {
-      var sync = MchatSync(account: account);
+      final sync = MchatSync(account: account);
       globals.syncs.add(sync);
       sync.startAll();
     }
-    isRunning = true;
+  }
+
+  void tryStopAll() {
+    try {
+      stopAll();
+    } catch (e) {
+      logger.error(e.toString());
+    }
   }
 
   void stopAll() {
@@ -27,7 +46,6 @@ class MchatSyncManager {
       sync.stop();
     }
     globals.syncs.clear();
-    isRunning = false;
   }
 
   void restartAll() {
@@ -45,11 +63,11 @@ class MchatSyncManager {
   }
 
   Future<MchatSync> get sync async {
-    var accountIndex = await selectedAccountNotifier.value?.getIndex();
+    final accountIndex = await selectedAccountNotifier.value?.getIndex();
     if (accountIndex == null) {
       throw 'Failed to get synchronizer due to missing account';
     }
-    var sync = globals.syncs.elementAtOrNull(accountIndex);
+    final sync = globals.syncs.elementAtOrNull(accountIndex);
     if (sync == null) {
       throw 'No synchronizers found';
     }

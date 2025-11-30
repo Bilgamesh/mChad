@@ -30,12 +30,12 @@ class MchatLoginService {
       headers['cookie'] = cloudflareAuthorization!.cookie;
       headers['user-agent'] = cloudflareAuthorization!.userAgent;
     }
-    var streamedResponse = await (Client().send(
+    final streamedResponse = await (Client().send(
       Request('GET', Uri.parse(targetUrl))
         ..followRedirects = cloudflareAuthorization != null
         ..headers.addAll(headers),
     ));
-    var response = await Response.fromStream(streamedResponse);
+    final response = await Response.fromStream(streamedResponse);
     if (DocumentUtil.isCloudflare(response.body, baseUrl) &&
         cloudflareAuthorization == null) {
       if (onCloudFlare != null) onCloudFlare!();
@@ -46,7 +46,7 @@ class MchatLoginService {
     if (!response.body.contains('dmzx/mchat')) {
       throw 'MChat not found on this page.';
     }
-    var doc = parse(response.body);
+    final doc = parse(response.body);
 
     loginPageData = MchatLoginModel(
       creationTime: DocumentUtil.findInputData(doc, 'creation_time', 'value'),
@@ -103,13 +103,13 @@ class MchatLoginService {
     });
     body += '&redirect=index.php';
 
-    var streamedResponse = await (Client().send(
+    final streamedResponse = await (Client().send(
       Request('POST', Uri.parse(targetUrl))
         ..followRedirects = cloudflareAuthorization != null
         ..body = body
         ..headers.addAll(headers),
     ));
-    var response = await Response.fromStream(streamedResponse);
+    final response = await Response.fromStream(streamedResponse);
 
     checkErrors(response);
     if (DocumentUtil.hasSessionCookie(response.headers)) {
@@ -126,7 +126,7 @@ class MchatLoginService {
       );
     }
 
-    var doc = parse(response.body);
+    final doc = parse(response.body);
     otpData = MchatLoginModel(
       creationTime: DocumentUtil.findInputData(doc, 'creation_time', 'value'),
       formToken: DocumentUtil.findInputData(doc, 'form_token', 'value'),
@@ -161,8 +161,8 @@ class MchatLoginService {
     if (otpData!.sid == null) throw 'sid missing from otpData';
     if (otpData!.random == null) throw 'random missing from otpData';
 
-    var targetUrl = '$baseUrl${otpData!.submit}';
-    var targetHeaders = {
+    final targetUrl = '$baseUrl${otpData!.submit}';
+    final targetHeaders = {
       'content-type': 'application/x-www-form-urlencoded',
       'cookie': otpData!.cookie!,
     };
@@ -171,7 +171,7 @@ class MchatLoginService {
       targetHeaders['cookie'] =
           '${targetHeaders['cookie']} ${cloudflareAuthorization!.cookie}';
     }
-    var body = UrlUtil.mapToUrlEncoded({
+    final body = UrlUtil.mapToUrlEncoded({
       'creation_time': otpData!.creationTime!,
       'form_token': otpData!.formToken!,
       'sid': otpData!.sid!,
@@ -180,13 +180,13 @@ class MchatLoginService {
       'redirect': 'index.php',
     });
 
-    var streamedResponse = await (Client().send(
+    final streamedResponse = await (Client().send(
       Request('POST', Uri.parse(targetUrl))
         ..followRedirects = cloudflareAuthorization != null
         ..body = body
         ..headers.addAll(targetHeaders),
     ));
-    var response = await Response.fromStream(streamedResponse);
+    final response = await Response.fromStream(streamedResponse);
     checkErrors(response);
     if (response.statusCode == 302) {
       var cookie = DocumentUtil.extractCookie(response.headers);
@@ -204,10 +204,10 @@ class MchatLoginService {
   }
 
   Future<void> logout(Account account) async {
-    var cookie = await account.getCookies();
-    var sid = cookie.split('_sid=').elementAt(1).split(';').elementAt(0);
-    var targetUrl = '$baseUrl/ucp.php?mode=logout&sid=$sid';
-    var headers = {'cookie': cookie};
+    final cookie = await account.getCookies();
+    final sid = cookie.split('_sid=').elementAt(1).split(';').elementAt(0);
+    final targetUrl = '$baseUrl/ucp.php?mode=logout&sid=$sid';
+    final headers = {'cookie': cookie};
     if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
     await (Client().send(
       Request('GET', Uri.parse(targetUrl))
@@ -217,8 +217,8 @@ class MchatLoginService {
   }
 
   void checkErrors(Response response) {
-    var doc = parse(response.body);
-    var errorElements = doc.getElementsByClassName('error');
+    final doc = parse(response.body);
+    final errorElements = doc.getElementsByClassName('error');
     if (errorElements.isNotEmpty) {
       throw errorElements.elementAt(0).text.replaceAll(RegExp(r'\s+'), ' ');
     }

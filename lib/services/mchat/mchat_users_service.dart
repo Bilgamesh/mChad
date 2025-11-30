@@ -15,24 +15,24 @@ class MchatUsersService {
 
   Future<Account> fetchUserProfile() async {
     try {
-      var headers = {
+      final headers = {
         'accept':
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var targetUrl =
+      final targetUrl =
           '${account.forumUrl}/memberlist.php?mode=viewprofile&u=${account.userId}';
-      var streamedResponse = await (Client().send(
+      final streamedResponse = await (Client().send(
         Request('GET', Uri.parse(targetUrl))..headers.addAll(headers),
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
-      var doc = parse(response.body);
-      var avatarUrl =
+      final doc = parse(response.body);
+      final avatarUrl =
           doc.getElementsByClassName('avatar').isNotEmpty
               ? (account.forumUrl +
                   doc
@@ -67,24 +67,24 @@ class MchatUsersService {
 
   Future<OnlineUsersResponse> fetchOnlineUsers() async {
     try {
-      var headers = {
+      final headers = {
         'accept':
             'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
         'cookie': await account.getCookies(),
       };
       if (account.userAgent != null) headers['user-agent'] = account.userAgent!;
-      var targetUrl = '${account.forumUrl}/viewonline.php';
-      var streamedResponse = await (Client().send(
+      final targetUrl = '${account.forumUrl}/viewonline.php';
+      final streamedResponse = await (Client().send(
         Request('GET', Uri.parse(targetUrl))..headers.addAll(headers),
       ));
-      var response = await Response.fromStream(streamedResponse);
+      final response = await Response.fromStream(streamedResponse);
       if (DocumentUtil.hasSessionCookie(response.headers)) {
-        var cookies = DocumentUtil.extractCookie(response.headers)!;
+        final cookies = DocumentUtil.extractCookie(response.headers)!;
         await account.updateCookies(cookies);
       }
       if (DocumentUtil.isCloudflare(response.body, account.forumUrl)) {
         if (onCloudFlare != null) onCloudFlare!();
-        var cloudflareAuthorization =
+        final cloudflareAuthorization =
             await CloudflareService(
               baseUrl: account.forumUrl,
             ).authorizeHeadless();
@@ -93,29 +93,29 @@ class MchatUsersService {
         await account.save();
         return await fetchOnlineUsers();
       }
-      var doc = parse(response.body);
-      var message = doc.querySelector('.viewonline-title')!.text;
-      var table = doc.querySelector('tbody');
+      final doc = parse(response.body);
+      final message = doc.querySelector('.viewonline-title')!.text;
+      final table = doc.querySelector('tbody');
       List<String> users = [];
       List<String> userIds = [];
       List<String> bots = [];
       for (var row in table!.children) {
-        var user = row.querySelector('[class^=username][href]')?.text;
-        var userId =
+        final user = row.querySelector('[class^=username][href]')?.text;
+        final userId =
             row
                 .querySelector('[class^=username][href]')
                 ?.attributes['href']
                 ?.split('&u=')
                 .lastOrNull;
-        var bot = row.querySelector('[class^=username]:not([href])')?.text;
+        final bot = row.querySelector('[class^=username]:not([href])')?.text;
         if (user != null) users.add(user);
         if (userId != null) userIds.add(userId);
         if (bot != null) bots.add(bot);
       }
-      var regExp = RegExp(r'\d+');
-      var matches = regExp.allMatches(message);
-      var counts = matches.map((match) => int.parse(match.group(0)!)).toList();
-      var totalCount =
+      final regExp = RegExp(r'\d+');
+      final matches = regExp.allMatches(message);
+      final counts = matches.map((match) => int.parse(match.group(0)!)).toList();
+      final totalCount =
           counts.fold(0, (int accumulator, int currentValue) {
             return accumulator + currentValue;
           }) -
