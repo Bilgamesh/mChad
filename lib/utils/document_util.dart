@@ -1,15 +1,21 @@
 import 'dart:convert';
 
-import 'package:html/dom.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart';
 import 'package:mchad/data/constants.dart';
+import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/bbtag_model.dart';
+import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/utils/logging_util.dart';
+import 'package:mchad/data/globals.dart' as globals;
 
 var logger = LoggingUtil(module: 'document_util');
 
 class DocumentUtil {
-  static String findInputData(Document doc, String name, String field) {
+  static String findInputData(dom.Document doc, String name, String field) {
     if (name.startsWith('#')) {
       final result = doc.querySelectorAll(name).elementAt(0).attributes[field];
       if (result == null) throw 'Field $field of $name missing in the document';
@@ -81,7 +87,7 @@ class DocumentUtil {
     );
   }
 
-  static String? extractLikeMessage(Document doc) {
+  static String? extractLikeMessage(dom.Document doc) {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('\tlikes\t')) {
@@ -98,7 +104,7 @@ class DocumentUtil {
     }
   }
 
-  static List<BBTag>? extractBBTags(Document doc) {
+  static List<BBTag>? extractBBTags(dom.Document doc) {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('bbtags = new Array(')) {
@@ -131,7 +137,7 @@ class DocumentUtil {
     }
   }
 
-  static int extractEditDeleteLimit(Document doc) {
+  static int extractEditDeleteLimit(dom.Document doc) {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('editDeleteLimit')) {
@@ -153,7 +159,7 @@ class DocumentUtil {
     }
   }
 
-  static int extractMessageLimit(Document doc) {
+  static int extractMessageLimit(dom.Document doc) {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('editDeleteLimit')) {
@@ -175,7 +181,7 @@ class DocumentUtil {
     }
   }
 
-  static String? extractLogId(Document doc) {
+  static String? extractLogId(dom.Document doc) {
     try {
       for (var script in doc.getElementsByTagName('script')) {
         if (script.text.contains('\tlikes\t')) {
@@ -226,22 +232,22 @@ class DocumentUtil {
     return urlPattern.hasMatch(url);
   }
 
-  static bool isImage(Element element) {
+  static bool isImage(dom.Element element) {
     return (element.toString().contains('img'));
   }
 
-  static bool isSmilie(Element element) {
+  static bool isSmilie(dom.Element element) {
     return isImage(element) &&
         (element.attributes['class']?.contains('smilies') ?? false);
   }
 
-  static bool isSystemSmilie(Element element) {
+  static bool isSystemSmilie(dom.Element element) {
     return element.className == 'emoji smilies' &&
         (element.attributes['alt'] != null ||
             element.attributes['src'] != null);
   }
 
-  static bool isImageLink(Element element) {
+  static bool isImageLink(dom.Element element) {
     final isLink = element.attributes['class']?.contains('postlink') ?? false;
     if (!isLink) return false;
     final url = element.attributes['href']?.toString() ?? '';
@@ -304,6 +310,23 @@ class DocumentUtil {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  static void preCacheImage(String src, Account account) {
+    precacheImage(
+      CachedNetworkImageProvider(
+        src,
+        cacheKey: CryptoUtil.generateMd5('${account.getHeaders()}$src'),
+        headers: account.getHeaders(src: src),
+      ),
+      globals.navigatorKey.currentContext!,
+    );
+  }
+
+  static void preCacheAvatars(List<Message> messages, Account account) {
+    for (final message in messages) {
+      preCacheImage(message.avatar.src, account);
     }
   }
 }

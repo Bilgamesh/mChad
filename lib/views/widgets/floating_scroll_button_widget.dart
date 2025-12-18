@@ -15,10 +15,7 @@ class FloatingScrollButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = switch (orientation) {
-      Orientation.portrait => 70,
-      _ => 35,
-    };
+    final space = 70;
     return AnimatedPadding(
       duration: Duration(
         milliseconds: settings.transitionAnimations ? space : 0,

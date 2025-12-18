@@ -23,24 +23,20 @@ class SettingsTab extends StatelessWidget {
         final settings = values[0] as SettingsModel;
         final update = values[1] as UpdateStatus;
         final packageInfo = values[2] as PackageInfo?;
-        return ListView(
+        return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          children: [
-            Column(
+          child: SafeArea(
+            child: Column(
               children: [
                 if (update != UpdateStatus.none)
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                        child: UpdateButtonWidget(
-                          settings: settings,
-                          update: update,
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: UpdateButtonWidget(
+                      settings: settings,
+                      update: update,
+                    ),
                   ),
+                if (update != UpdateStatus.none) SizedBox(height: 20.0),
                 ListTile(
                   title: Text(
                     AppLocalizations.of(context).colorStyle,
@@ -128,11 +124,7 @@ class SettingsTab extends StatelessWidget {
                   ],
                   onChanged: (value) => settings.setLanguage(value ?? 0).save(),
                 ),
-              ],
-            ),
-            Divider(),
-            Column(
-              children: [
+                Divider(),
                 ListTile(
                   title: Text(
                     AppLocalizations.of(context).version,
@@ -188,7 +180,7 @@ class SettingsTab extends StatelessWidget {
                 ),
               ],
             ),
-          ],
+          ),
         );
       },
     );
