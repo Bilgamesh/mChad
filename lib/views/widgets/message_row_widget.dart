@@ -145,6 +145,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
               ),
               if (!widget.hasFollowUp)
                 Material(
+                  color: Colors.transparent,
                   child: Row(
                     mainAxisAlignment: switch (widget.isSender) {
                       true => MainAxisAlignment.end,

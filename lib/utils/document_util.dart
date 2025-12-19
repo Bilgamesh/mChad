@@ -313,15 +313,19 @@ class DocumentUtil {
     }
   }
 
-  static void preCacheImage(String src, Account account) {
-    precacheImage(
-      CachedNetworkImageProvider(
-        src,
-        cacheKey: CryptoUtil.generateMd5('${account.getHeaders()}$src'),
-        headers: account.getHeaders(src: src),
-      ),
-      globals.navigatorKey.currentContext!,
-    );
+  static Future<void> preCacheImage(String src, Account account) async {
+    try {
+      await precacheImage(
+        CachedNetworkImageProvider(
+          src,
+          cacheKey: CryptoUtil.generateMd5('${account.getHeaders()}$src'),
+          headers: account.getHeaders(src: src),
+        ),
+        globals.navigatorKey.currentContext!,
+      );
+    } catch (error) {
+      logger.error(error.toString());
+    }
   }
 
   static void preCacheAvatars(List<Message> messages, Account account) {
