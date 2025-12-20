@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:mchad/data/globals.dart' as globals;
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/globals.dart' as globals;
+import 'package:mchad/data/state/notifiers.dart';
 
 var errorShown = false;
 var messageShown = false;

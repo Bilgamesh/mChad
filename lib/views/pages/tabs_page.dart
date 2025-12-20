@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/utils/notifier_util.dart';
 import 'package:mchad/views/tabs/accounts_tab.dart';
 import 'package:mchad/views/tabs/chat_tab.dart';
 import 'package:mchad/views/tabs/settings_tab.dart';

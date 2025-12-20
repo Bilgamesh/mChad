@@ -1,8 +1,8 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/data/stores/account_store.dart';
-import 'package:mchad/data/stores/settings_store.dart';
+import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/data/persistent-stores/account_store.dart';
+import 'package:mchad/data/persistent-stores/settings_store.dart';
 import 'package:mchad/jobs/mchat/mchat_background_sync.dart';
 import 'package:mchad/services/lifecycle/lifecycle_service.dart';
 import 'package:mchad/services/notifications/notifications_service.dart';
@@ -14,7 +14,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:system_theme/system_theme.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'init_page');
 

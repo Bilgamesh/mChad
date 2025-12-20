@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/utils/url_util.dart';
 import 'package:mchad/views/widgets/chat_emoticon_widget.dart';

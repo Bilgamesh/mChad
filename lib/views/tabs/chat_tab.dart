@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
-import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/utils/notifier_util.dart';
 import 'package:mchad/views/widgets/chat_placeholder_widget.dart';
 import 'package:mchad/views/widgets/chat_widget.dart';
 import 'package:mchad/views/widgets/chatbox_widget.dart';
@@ -56,6 +56,7 @@ class _ChatTabState extends State<ChatTab> {
         final onlineUsers = onlineUsersMap[account];
         final messageLimitMap = values[4] as Map<Account, int>;
         final messageLimit = messageLimitMap[account] ?? 0;
+
         return Column(
           children: [
             Expanded(

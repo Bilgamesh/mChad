@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/mchat_login_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/services/mchat/mchat_login_service.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/localization_util.dart';
@@ -16,7 +16,7 @@ import 'package:mchad/views/widgets/keyboard_space_widget.dart';
 import 'package:mchad/views/widgets/loading_widget.dart';
 import 'package:mchad/views/widgets/verification_icon_widget.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'login_page');
 

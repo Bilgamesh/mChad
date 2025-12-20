@@ -10,7 +10,7 @@ import 'package:mchad/data/models/bbtag_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/utils/crypto_util.dart';
 import 'package:mchad/utils/logging_util.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 
 var logger = LoggingUtil(module: 'document_util');
 

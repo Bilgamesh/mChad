@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
-import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/data/stores/account_store.dart';
+import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/data/persistent-stores/account_store.dart';
 import 'package:mchad/services/mchat/mchat_login_service.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/logging_util.dart';
-import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/utils/notifier_util.dart';
 import 'package:mchad/views/pages/login_page.dart';
 import 'package:mchad/views/widgets/account_card_widget.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 
 final logger = LoggingUtil(module: 'accounts_tab');
 

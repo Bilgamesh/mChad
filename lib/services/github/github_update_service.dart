@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/utils/modal_util.dart';
@@ -37,7 +37,9 @@ class GithubUpdateService {
   Future<bool> isNewVersionAvailable(String currentVersion) async {
     final latest = await latestVersion;
     final [latestMajor, latestMinor, latestPatch] = latest.split('.');
-    final [currentMajor, currentMinor, currentPatch] = currentVersion.split('.');
+    final [currentMajor, currentMinor, currentPatch] = currentVersion.split(
+      '.',
+    );
 
     if (int.parse(latestMajor) > int.parse(currentMajor)) return true;
 

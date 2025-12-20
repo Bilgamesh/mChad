@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/ui_util.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 
 class FloatingScrollButtonWidget extends StatelessWidget {
   const FloatingScrollButtonWidget({

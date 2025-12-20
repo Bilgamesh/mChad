@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/views/widgets/avatar_widget.dart';
 import 'package:mchad/views/widgets/chat_bubble_widget.dart';
 import 'package:intl/intl.dart';

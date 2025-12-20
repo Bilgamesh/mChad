@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/constants.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/services/notifications/notifications_service.dart';
 import 'package:mchad/utils/url_util.dart';
-import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/utils/notifier_util.dart';
 import 'package:mchad/views/widgets/color_picker_widget.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/views/widgets/settings_dropdown_widget.dart';

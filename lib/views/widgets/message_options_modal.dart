@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
-import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/data/state/globals.dart' as globals;
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/modal_util.dart';
 import 'package:flutter/services.dart';

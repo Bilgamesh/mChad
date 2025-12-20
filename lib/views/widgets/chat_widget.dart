@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/views/widgets/message_row_widget.dart';
 import 'package:mchad/views/widgets/placeholder_message_widget.dart';
 import 'package:visibility_detector/visibility_detector.dart';

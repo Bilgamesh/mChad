@@ -1,6 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+class PropertyValueNotifier<T> extends ValueNotifier<T> {
+  PropertyValueNotifier(T value) : super(value);
+
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
+  }
+}
+
 class ValueListenablesBuilder extends StatelessWidget {
   const ValueListenablesBuilder({
     Key? key,
