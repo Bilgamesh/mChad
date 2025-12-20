@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/utils/haptics_util.dart';
 
 class SettingsToggleRowWidget extends StatelessWidget {

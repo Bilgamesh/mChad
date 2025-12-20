@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 
 class VerificationIconWidget extends StatelessWidget {
   const VerificationIconWidget({Key? key, required this.status})

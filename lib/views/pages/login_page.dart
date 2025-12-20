@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/mchat_login_model.dart';
 import 'package:mchad/data/state/notifiers.dart';

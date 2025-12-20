@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/theme_util.dart';
 import 'package:mchad/views/pages/init_page.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/utils/notifier_util.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/bbtag_model.dart';
 import 'package:mchad/data/models/emoticons_response_model.dart';

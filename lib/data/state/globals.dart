@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/jobs/mchat/mchat_sync_manager.dart';
 import 'package:mchad/jobs/mchat/mchat_sync.dart';
