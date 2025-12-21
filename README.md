@@ -32,6 +32,7 @@ Download the APK from [GitHub Releases](https://github.com/Bilgamesh/mChad/relea
     <img src="./screenshots/screenshot_2.png" width=160>
     <img src="./screenshots/screenshot_3.png" width=160>
     <img src="./screenshots/screenshot_4.png" width=160>
+    <img src="./screenshots/screenshot_5.png" width=160>
 </div>
 
 ## Features
