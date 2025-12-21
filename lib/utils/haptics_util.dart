@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 
 class HapticsUtil {
   static Future<void> vibrate() async {
@@ -7,5 +7,4 @@ class HapticsUtil {
       await HapticFeedback.heavyImpact();
     }
   }
-
 }

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/data/stores/account_store.dart';
-import 'package:mchad/data/stores/cookie_store.dart';
+import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/data/persistent-stores/account_store.dart';
+import 'package:mchad/data/persistent-stores/cookie_store.dart';
 
 class Account {
   Account({

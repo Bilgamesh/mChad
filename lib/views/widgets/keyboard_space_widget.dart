@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/ui_util.dart';
 
 class KeyboardSpaceWidget extends StatelessWidget {

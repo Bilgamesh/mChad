@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/bbtag_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 
 class BbcodesListWidget extends StatefulWidget {
@@ -121,11 +121,15 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
   }
 
   void addBbCodeToEmptyTextField(BBTag bbcode) {
-    final fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final fullBbCodeValue = switch (bbcode.supportsContent(
+      clipboardData?.text,
+    )) {
       true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
       false => '${bbcode.start}${bbcode.end}',
     };
-    final cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final cursorPosition = switch (bbcode.supportsContent(
+      clipboardData?.text,
+    )) {
       true => '${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
       false => bbcode.start.length,
     };
@@ -145,11 +149,15 @@ class _BbcodesListWidgetState extends State<BbcodesListWidget> {
     final right = widget.textController.text.substring(
       widget.lastTextSelection!.start,
     );
-    final fullBbCodeValue = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final fullBbCodeValue = switch (bbcode.supportsContent(
+      clipboardData?.text,
+    )) {
       true => '${bbcode.start}${clipboardData?.text}${bbcode.end} ',
       false => '${bbcode.start}${bbcode.end}',
     };
-    final cursorPosition = switch (bbcode.supportsContent(clipboardData?.text)) {
+    final cursorPosition = switch (bbcode.supportsContent(
+      clipboardData?.text,
+    )) {
       true => '$left${bbcode.start}${clipboardData?.text}${bbcode.end} '.length,
       false => '$left${bbcode.start}'.length,
     };

@@ -1,18 +1,18 @@
 import 'dart:async';
 
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/bbtag_model.dart';
 import 'package:mchad/data/models/emoticons_response_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/online_users_response_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/services/mchat/mchat_chat_service.dart';
 import 'package:mchad/services/mchat/mchat_emoticons_service.dart';
 import 'package:mchad/services/mchat/mchat_users_service.dart';
 import 'package:mchad/utils/localization_util.dart';
 import 'package:mchad/utils/logging_util.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 import 'package:mchad/utils/modal_util.dart';
 
 class MchatSync {

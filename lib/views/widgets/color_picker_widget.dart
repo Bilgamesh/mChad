@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
-import 'package:mchad/utils/ui_util.dart';
+import 'package:mchad/views/widgets/gradient_circle_widget.dart';
 
 class ColorPickerWidget extends StatefulWidget {
   const ColorPickerWidget({Key? key, required this.settings}) : super(key: key);
@@ -36,17 +36,17 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                           });
                           widget.settings.setColorIndex(colorIndex).save();
                         },
-                        icon: UiUtil.wrapWithGradient(
+                        icon: GradientCircleWidget(
+                          enableGradient: colorIndex == 0,
                           icon: switch (isSelected) {
                             true => Icons.circle,
                             false => Icons.circle_outlined,
                           },
-                          condition: colorIndex == 0,
                           gradientColors: [Colors.redAccent, Colors.blueAccent],
-                          size: 40.0,
                           color: settings.colors
                               .elementAt(colorIndex)
                               .withAlpha(255),
+                          size: 40.0,
                         ),
                       );
                     }),

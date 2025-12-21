@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:gradient_icon/gradient_icon.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/settings_model.dart';
 
 class UiUtil {
@@ -21,38 +20,19 @@ class UiUtil {
         Brightness.dark;
   }
 
-  static Widget wrapWithBadge({
-    required Widget icon,
-    required bool condition,
-    required String label,
-  }) {
-    if (!condition) return icon;
-    return Badge(label: Text(label), child: icon);
-  }
-
-  static Widget wrapWithGradient({
-    required IconData icon,
-    required bool condition,
-    required List<Color> gradientColors,
-    required Color color,
-    required double size,
-  }) {
-    if (!condition) return Icon(icon, size: size, color: color);
-    return GradientIcon(
-      icon: icon,
-      size: size,
-      offset: Offset(0, 0),
-      gradient: LinearGradient(
-        colors: gradientColors,
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    );
-  }
-
   static void refreshStatusBarTheme(SettingsModel settings) {
+    final oppositeBrightness =
+        settings.isDark ? Brightness.light : Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(
-      settings.isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarContrastEnforced: false,
+        systemStatusBarContrastEnforced: false,
+        statusBarIconBrightness: oppositeBrightness,
+        systemNavigationBarIconBrightness: oppositeBrightness,
+        statusBarBrightness: oppositeBrightness,
+      ),
     );
   }
 }

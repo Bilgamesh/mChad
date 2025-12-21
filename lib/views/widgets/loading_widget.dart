@@ -9,7 +9,10 @@ class LoadingWidget extends StatelessWidget {
       child: SizedBox(
         height: 100.0,
         width: 100.0,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          strokeWidth: 10,
+          strokeCap: StrokeCap.round,
+        ),
       ),
     );
   }

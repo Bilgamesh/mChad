@@ -1,4 +1,4 @@
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UrlUtil {

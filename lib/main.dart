@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/config/constants.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/theme_util.dart';
-import 'package:mchad/views/pages/init_page.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
+import 'package:mchad/views/pages/login_page.dart';
+import 'package:mchad/views/pages/tabs_page.dart';
+import 'package:mchad/config/app_initialization.dart';
 
-void main() {
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -22,13 +24,14 @@ void main() {
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
   );
-  runApp(const MyApp());
+
+  runApp(MyApp(appInitialization: await initApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.appInitialization});
+  final AppInitializationData appInitialization;
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
@@ -56,7 +59,7 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
             locale: settings.locale,
-            home: InitPage(),
+            home: appInitialization.isLoggedIn ? TabsPage() : LoginPage(),
           ),
     );
   }

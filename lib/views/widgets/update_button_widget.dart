@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/services/github/github_update_service.dart';

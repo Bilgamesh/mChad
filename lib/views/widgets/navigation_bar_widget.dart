@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/haptics_util.dart';
-import 'package:mchad/utils/ui_util.dart';
-import 'package:mchad/utils/value_listenables_builder.dart';
+import 'package:mchad/utils/notifier_util.dart';
 
 class NavigationBarWidget extends StatelessWidget {
   const NavigationBarWidget({Key? key}) : super(key: key);
@@ -49,37 +48,37 @@ class NavigationBarWidget extends StatelessWidget {
 
           destinations: [
             NavigationDestination(
-              icon: UiUtil.wrapWithBadge(
-                icon: switch (selectedTab) {
+              icon: Badge(
+                label: Text('${unreadMessagesCurrent.length}'),
+                isLabelVisible: unreadMessagesCurrent.isNotEmpty,
+                child: switch (selectedTab) {
                   0 => Icon(Icons.chat),
                   _ => Icon(Icons.chat_outlined),
                 },
-                condition: unreadMessagesCurrent.isNotEmpty,
-                label: unreadMessagesCurrent.length.toString(),
               ),
               label: AppLocalizations.of(context).chatLabelValue,
             ),
 
             NavigationDestination(
-              icon: UiUtil.wrapWithBadge(
-                icon: switch (selectedTab) {
+              icon: Badge(
+                label: Text('${unreadMessagesRemaining.length}'),
+                isLabelVisible: unreadMessagesRemaining.isNotEmpty,
+                child: switch (selectedTab) {
                   1 => Icon(Icons.people),
                   _ => Icon(Icons.people_outline),
                 },
-                condition: unreadMessagesRemaining.isNotEmpty,
-                label: unreadMessagesRemaining.length.toString(),
               ),
               label: AppLocalizations.of(context).accountsLabelValue,
             ),
 
             NavigationDestination(
-              icon: UiUtil.wrapWithBadge(
-                icon: switch (selectedTab) {
+              icon: Badge(
+                label: Text('!'),
+                isLabelVisible: update == UpdateStatus.available,
+                child: switch (selectedTab) {
                   2 => Icon(Icons.settings),
                   _ => Icon(Icons.settings_outlined),
                 },
-                condition: update == UpdateStatus.available,
-                label: '!',
               ),
               label: AppLocalizations.of(context).settingsLabelValue,
             ),

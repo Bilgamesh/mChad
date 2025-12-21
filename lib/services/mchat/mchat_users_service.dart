@@ -52,6 +52,9 @@ class MchatUsersService {
                 .elementAt(0)
                 .innerHtml;
       }
+      if (avatarUrl != null) {
+        DocumentUtil.preCacheImage(avatarUrl, account);
+      }
       return Account(
         avatarUrl: avatarUrl,
         userName: userName,
@@ -114,7 +117,8 @@ class MchatUsersService {
       }
       final regExp = RegExp(r'\d+');
       final matches = regExp.allMatches(message);
-      final counts = matches.map((match) => int.parse(match.group(0)!)).toList();
+      final counts =
+          matches.map((match) => int.parse(match.group(0)!)).toList();
       final totalCount =
           counts.fold(0, (int accumulator, int currentValue) {
             return accumulator + currentValue;

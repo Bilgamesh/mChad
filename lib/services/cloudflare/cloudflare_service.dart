@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/cloudflare_authorization_model.dart';
 
 class CloudflareService {

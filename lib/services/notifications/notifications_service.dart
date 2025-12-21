@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart' as message_model;
 import 'package:mchad/utils/logging_util.dart';

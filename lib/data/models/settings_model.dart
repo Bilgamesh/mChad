@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
-import 'package:mchad/data/notifiers.dart';
-import 'package:mchad/data/stores/settings_store.dart';
+import 'package:mchad/config/constants.dart';
+import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/data/persistent-stores/settings_store.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/utils/localization_util.dart';
 import 'package:mchad/utils/theme_util.dart';

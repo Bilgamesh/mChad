@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mchad/data/constants.dart';
+import 'package:mchad/config/constants.dart';
 
 class VerificationIconWidget extends StatelessWidget {
   const VerificationIconWidget({Key? key, required this.status})
@@ -12,7 +12,11 @@ class VerificationIconWidget extends StatelessWidget {
       child: SizedBox(
         height: 30.0,
         width: 30.0,
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: Colors.green,
+          strokeCap: StrokeCap.round,
+          padding: EdgeInsets.all(5),
+        ),
       ),
     ),
     VerificationStatus.error => UnconstrainedBox(

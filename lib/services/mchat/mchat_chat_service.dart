@@ -53,6 +53,7 @@ class MchatChatService {
       if (messages.isEmpty) {
         logger.info('No posts found in main page HTML');
       }
+      DocumentUtil.preCacheAvatars(messages, account);
       return MchatChatModel(
         bbtags: bbtags,
         creationTime: creationTime,
@@ -100,6 +101,7 @@ class MchatChatService {
     List<Message>? add, edit;
     if (json['add'] != null) {
       add = parseMessages(json['add']!, account.forumUrl);
+      DocumentUtil.preCacheAvatars(add, account);
     }
     if (json['edit'] != null) {
       edit = parseMessages(json['edit']!, account.forumUrl);
@@ -156,6 +158,7 @@ class MchatChatService {
       List<Message>? add, edit;
       if (json['add'] != null) {
         add = parseMessages(json['add']!, account.forumUrl);
+        DocumentUtil.preCacheAvatars(add, account);
       }
       if (json['edit'] != null) {
         edit = parseMessages(json['edit']!, account.forumUrl);
@@ -339,6 +342,7 @@ class MchatChatService {
       if (messages.isEmpty) {
         logger.info('No posts found in archive HTML');
       }
+      DocumentUtil.preCacheAvatars(messages, account);
       return MchatChatModel(messages: messages);
     } catch (e) {
       logger.error('Error when fetching archive startIndex $startIndex: $e');

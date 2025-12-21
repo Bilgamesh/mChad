@@ -48,7 +48,9 @@ class MchatEmoticonsService {
       final result = EmoticonsResponse(hasNextPage: hasNextPage);
       final imgs = doc.querySelectorAll('.inner > a > img');
       for (var img in imgs) {
-        final pictureUrl = account.forumUrl + img.attributes['src']!.substring(1);
+        final pictureUrl =
+            account.forumUrl + img.attributes['src']!.substring(1);
+        DocumentUtil.preCacheImage(pictureUrl, account);
         final width = img.attributes['width']!;
         final height = img.attributes['height']!;
         final code = img.attributes['alt']!;

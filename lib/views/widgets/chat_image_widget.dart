@@ -30,19 +30,12 @@ class ChatImageWidget extends StatelessWidget {
       child: GestureDetector(
         onTap: () => open(context, account.getHeaders(), cacheKey),
         child: CachedNetworkImage(
-          fadeInDuration: Duration.zero,
-          placeholderFadeInDuration: Duration.zero,
-          fadeOutDuration: Duration.zero,
           imageUrl: src,
           httpHeaders: account.getHeaders(src: src),
           cacheKey: cacheKey,
           height: constraint,
           width: constraint,
           fit: BoxFit.cover,
-          placeholder:
-              (context, url) => FittedBox(
-                child: CircularProgressIndicator(padding: EdgeInsets.all(50)),
-              ),
           errorWidget: (context, url, error) => Icon(Icons.error),
         ),
       ),

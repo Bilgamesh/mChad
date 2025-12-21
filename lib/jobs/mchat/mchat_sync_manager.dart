@@ -1,7 +1,7 @@
-import 'package:mchad/data/notifiers.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/jobs/mchat/mchat_sync.dart';
 import 'package:mchad/utils/logging_util.dart';
-import 'package:mchad/data/globals.dart' as globals;
+import 'package:mchad/data/state/globals.dart' as globals;
 
 var logger = LoggingUtil(module: 'mchat_global_sync');
 
