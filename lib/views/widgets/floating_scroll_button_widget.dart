@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/settings_model.dart';
+import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
 import 'package:mchad/utils/ui_util.dart';
-import 'package:mchad/data/state/globals.dart' as globals;
 
 class FloatingScrollButtonWidget extends StatelessWidget {
   const FloatingScrollButtonWidget({
@@ -15,33 +15,35 @@ class FloatingScrollButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final space = 70;
-    return AnimatedPadding(
-      duration: Duration(
-        milliseconds: settings.transitionAnimations ? space : 0,
-      ),
-      curve: Curves.easeOut,
-      padding: EdgeInsets.only(
-        bottom:
-            (space +
-                UiUtil.getBottomSafeAreaHeight(
-                  context,
-                  orientation == Orientation.portrait,
-                )),
-      ),
-      child: FloatingActionButton.small(
-        shape: CircleBorder(),
+    const space = 70;
+    final bottomSafeArea = UiUtil.getBottomSafeAreaHeight(
+      context,
+      orientation == Orientation.portrait,
+    );
 
-        child: Icon(Icons.arrow_downward),
-        onPressed: () {
-          HapticsUtil.vibrate();
-          globals.chatScrollController?.animateTo(
-            globals.chatScrollController!.position.minScrollExtent,
-            duration: const Duration(seconds: 1),
-            curve: Curves.easeOut,
-          );
-        },
-      ),
+    return ValueListenableBuilder(
+      valueListenable: chatScrollOffsetNotifier,
+      builder:
+          (context, value, child) =>
+              value < 2000
+                  ? SizedBox.shrink()
+                  : Padding(
+                    padding: EdgeInsets.only(bottom: space + bottomSafeArea),
+                    child: FloatingActionButton.small(
+                      shape: CircleBorder(),
+                      child: Icon(Icons.arrow_downward),
+                      onPressed: () {
+                        HapticsUtil.vibrate();
+                        PrimaryScrollController.maybeOf(context)?.animateTo(
+                          PrimaryScrollController.maybeOf(
+                            context,
+                          )!.position.minScrollExtent,
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                    ),
+                  ),
     );
   }
 }

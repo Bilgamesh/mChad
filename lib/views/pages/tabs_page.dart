@@ -29,13 +29,12 @@ class TabsPage extends StatelessWidget {
         settingsNotifier,
         selectedTabNotifier,
         selectedAccountNotifier,
-        chatScrollOffsetNotifier,
       ],
       builder: (context, values, child) {
         final settings = values[0] as SettingsModel;
         final selectedTab = values[1] as int;
         final selectedAccount = values[2] as Account?;
-        final chatScrollOffset = values[3] as double;
+
         return OrientationBuilder(
           builder:
               (context, orientation) => Scaffold(
@@ -82,19 +81,13 @@ class TabsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                floatingActionButton: switch (settings.transitionAnimations) {
-                  true => buildAnimatedFloatingActionButton(
-                    selectedTab,
-                    chatScrollOffset,
-                    settings,
-                    orientation,
+                floatingActionButton: switch (selectedTab) {
+                  0 => FloatingScrollButtonWidget(
+                    orientation: orientation,
+                    settings: settings,
                   ),
-                  false => buildStaticFloatingActionButton(
-                    selectedTab,
-                    chatScrollOffset,
-                    settings,
-                    orientation,
-                  ),
+                  1 => LoginButtonWidget(),
+                  _ => SizedBox.shrink(),
                 },
                 bottomNavigationBar: switch (orientation) {
                   Orientation.portrait => NavigationBarWidget(),
@@ -105,38 +98,4 @@ class TabsPage extends StatelessWidget {
       },
     );
   }
-
-  Widget? buildAnimatedFloatingActionButton(
-    int selectedTab,
-    double chatScrollOffset,
-    SettingsModel settings,
-    Orientation orientation,
-  ) => switch (selectedTab) {
-    0 => switch (chatScrollOffset >= 2000) {
-      true => FloatingScrollButtonWidget(
-        settings: settings,
-        orientation: orientation,
-      ),
-      false => null,
-    },
-    1 => LoginButtonWidget(),
-    _ => null,
-  };
-
-  Widget buildStaticFloatingActionButton(
-    int selectedTab,
-    double chatScrollOffset,
-    SettingsModel settings,
-    Orientation orientation,
-  ) => switch (selectedTab) {
-    0 => switch (chatScrollOffset >= 2000) {
-      true => FloatingScrollButtonWidget(
-        settings: settings,
-        orientation: orientation,
-      ),
-      false => SizedBox.shrink(),
-    },
-    1 => LoginButtonWidget(),
-    _ => SizedBox.shrink(),
-  };
 }

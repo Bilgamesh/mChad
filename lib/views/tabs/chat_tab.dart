@@ -63,7 +63,7 @@ class _ChatTabState extends State<ChatTab> {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: switch (messages.length) {
-                  0 => ChatPlaceholderWidget(),
+                  0 => ChatPlaceholderWidget(settings: settings),
                   _ => ChatWidget(
                     account: account,
                     chatboxFocusNode: chatboxFocusNode,
@@ -72,6 +72,7 @@ class _ChatTabState extends State<ChatTab> {
                     onlineUsers: onlineUsers,
                     transitionAnimations: settings.transitionAnimations,
                     infiniteScrollEnabled: account.infiniteScroll,
+                    settings: settings,
                   ),
                 },
               ),
@@ -81,6 +82,7 @@ class _ChatTabState extends State<ChatTab> {
               textController: textController,
               account: account,
               messageLimit: messageLimit,
+              settings: settings,
               onCodePressed: (TextSelection? lastTextSelection) {
                 HapticsUtil.vibrate();
                 openTextWidgetsModal(

@@ -3,11 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/views/widgets/chat_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ChatPlaceholderWidget extends StatefulWidget {
-  const ChatPlaceholderWidget({Key? key}) : super(key: key);
+  const ChatPlaceholderWidget({Key? key, required this.settings})
+    : super(key: key);
+  final SettingsModel settings;
 
   @override
   State<ChatPlaceholderWidget> createState() => _ChatPlaceholderWidgetState();
@@ -77,6 +80,7 @@ class _ChatPlaceholderWidgetState extends State<ChatPlaceholderWidget> {
         textController: TextEditingController(),
         chatboxFocusNode: FocusNode(),
         transitionAnimations: false,
+        settings: widget.settings,
       ),
     );
   }

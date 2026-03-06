@@ -58,6 +58,10 @@ Future<AppInitializationData> initApp() async {
     }
   }).startListening();
 
+  selectedTabNotifier.addListener(() {
+    chatScrollOffsetNotifier.value = 0;
+  });
+
   return AppInitializationData(isLoggedIn: accounts.isNotEmpty);
 }
 

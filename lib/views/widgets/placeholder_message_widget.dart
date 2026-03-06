@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/views/widgets/message_row_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -12,10 +13,12 @@ class PlaceholderMessageWidget extends StatefulWidget {
     required this.index,
     required this.textController,
     required this.chatboxFocusNode,
+    required this.settings,
   }) : super(key: key);
   final int index;
   final TextEditingController textController;
   final FocusNode chatboxFocusNode;
+  final SettingsModel settings;
 
   @override
   State<PlaceholderMessageWidget> createState() =>
@@ -53,6 +56,7 @@ class _PlaceholderMessageWidgetState extends State<PlaceholderMessageWidget> {
       enabled: true,
       child: MessageRowWidget(
         index: widget.index - 1,
+        settings: widget.settings,
         account: Account(
           userName: 'TestUser',
           userId: '12345',

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mchad/data/models/account_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/data/state/globals.dart' as globals;
 import 'package:mchad/utils/modal_util.dart';
@@ -20,6 +21,7 @@ class ChatboxWidget extends StatefulWidget {
     required this.onEmojiPressed,
     required this.account,
     required this.messageLimit,
+    required this.settings,
   }) : super(key: key);
   final FocusNode chatboxFocusNode;
   final TextEditingController textController;
@@ -27,6 +29,7 @@ class ChatboxWidget extends StatefulWidget {
   final void Function(TextSelection? lastTextSelection) onEmojiPressed;
   final Account account;
   final int messageLimit;
+  final SettingsModel settings;
 
   @override
   _ChatboxWidgetState createState() => _ChatboxWidgetState();
@@ -58,85 +61,76 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: settingsNotifier,
-      builder:
-          (context, settings, child) => AnimatedSwitcher(
-            duration: Duration(
-              milliseconds: settings.transitionAnimations ? 150 : 0,
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: widget.settings.transitionAnimations ? 150 : 0),
+      transitionBuilder:
+          (child, animation) => SlideTransition(
+            position: (animation.value == 1 ? offset2 : offset1).animate(
+              animation,
             ),
-            transitionBuilder:
-                (child, animation) => SlideTransition(
-                  position: (animation.value == 1 ? offset2 : offset1).animate(
-                    animation,
+            child: child,
+          ),
+      child: switch (loaded) {
+        false => SizedBox(height: 61.0),
+        true => Container(
+          color: widget.settings.colorScheme.surfaceContainer,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 45.0,
+              width: double.infinity,
+              child: TextField(
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(
+                    widget.messageLimit > 0 ? widget.messageLimit : -1,
                   ),
-                  child: child,
-                ),
-            child: switch (loaded) {
-              false => SizedBox(height: 61.0),
-              true => Container(
-                color: settings.colorScheme.surfaceContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    height: 45.0,
-                    width: double.infinity,
-                    child: TextField(
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(
-                          widget.messageLimit > 0 ? widget.messageLimit : -1,
+                ],
+                onTapOutside:
+                    (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                controller: widget.textController,
+                focusNode: widget.chatboxFocusNode,
+                style: TextStyle(fontSize: 16.0),
+                onSubmitted: onSubmitted,
+                decoration: InputDecoration(
+                  filled: true,
+                  suffixIcon: SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            final textSelection =
+                                globals.textSelectionMap[widget.account];
+                            widget.onCodePressed(textSelection);
+                          },
+                          icon: Icon(Icons.code_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            final textSelection =
+                                globals.textSelectionMap[widget.account];
+                            widget.onEmojiPressed(textSelection);
+                          },
+                          icon: Icon(Icons.emoji_emotions_outlined),
                         ),
                       ],
-                      onTapOutside:
-                          (event) =>
-                              FocusManager.instance.primaryFocus?.unfocus(),
-                      controller: widget.textController,
-                      focusNode: widget.chatboxFocusNode,
-                      style: TextStyle(fontSize: 16.0),
-                      onSubmitted: onSubmitted,
-                      decoration: InputDecoration(
-                        filled: true,
-                        suffixIcon: SizedBox(
-                          width: 100,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  final textSelection =
-                                      globals.textSelectionMap[widget.account];
-                                  widget.onCodePressed(textSelection);
-                                },
-                                icon: Icon(Icons.code_outlined),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  final textSelection =
-                                      globals.textSelectionMap[widget.account];
-                                  widget.onEmojiPressed(textSelection);
-                                },
-                                icon: Icon(Icons.emoji_emotions_outlined),
-                              ),
-                            ],
-                          ),
-                        ),
-                        hintText: AppLocalizations.of(context).chatboxHint,
-                        labelText: labelText.isNotEmpty ? labelText : null,
-                        labelStyle: TextStyle(
-                          color: settings.colorScheme.error,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
                     ),
+                  ),
+                  hintText: AppLocalizations.of(context).chatboxHint,
+                  labelText: labelText.isNotEmpty ? labelText : null,
+                  labelStyle: TextStyle(color: widget.settings.colorScheme.error),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
-            },
+            ),
           ),
+        ),
+      },
     );
   }
 

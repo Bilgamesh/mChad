@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/state/globals.dart' as globals;
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
@@ -8,7 +9,7 @@ import 'package:mchad/views/widgets/message_row_widget.dart';
 import 'package:mchad/views/widgets/placeholder_message_widget.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ChatWidget extends StatefulWidget {
+class ChatWidget extends StatelessWidget {
   const ChatWidget({
     Key? key,
     required this.account,
@@ -16,6 +17,7 @@ class ChatWidget extends StatefulWidget {
     required this.textController,
     required this.chatboxFocusNode,
     required this.transitionAnimations,
+    required this.settings,
     this.infiniteScrollEnabled,
     this.onlineUsers,
   }) : super(key: key);
@@ -24,100 +26,80 @@ class ChatWidget extends StatefulWidget {
   final TextEditingController textController;
   final FocusNode chatboxFocusNode;
   final OnlineUsersResponse? onlineUsers;
+  final SettingsModel settings;
   final bool transitionAnimations;
   final bool? infiniteScrollEnabled;
 
   @override
-  State<ChatWidget> createState() => _ChatWidgetState();
-}
-
-class _ChatWidgetState extends State<ChatWidget> {
-  final scrollController = ScrollController();
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      chatScrollOffsetNotifier.value = 0;
-      globals.chatScrollController = scrollController;
-
-      scrollController.addListener(() {
-        if ((chatScrollOffsetNotifier.value - scrollController.offset).abs() >
-            500) {
-          chatScrollOffsetNotifier.value = scrollController.offset;
-        }
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    chatScrollOffsetNotifier.value = 0;
-    globals.chatScrollController = null;
-    scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: (widget.messages.length + 2),
-      reverse: true,
-      controller: scrollController,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return SizedBox(height: 100.0);
-        }
-        if (index - 1 < widget.messages.length) {
-          return MessageRowWidget(
-            key: Key('${widget.messages[index - 1].id}'),
-            index: index - 1,
-            account: widget.account,
-            chatboxFocusNode: widget.chatboxFocusNode,
-            textController: widget.textController,
-            hasFollowUp: hasFollowUpMessage(index - 1, widget.messages),
-            isFollowUp: hasFollowUpMessage(index, widget.messages),
-            isOnline: isOnline(
-              widget.onlineUsers,
-              widget.messages[index - 1].user.id,
-            ),
-            message: widget.messages[index - 1],
-            messages: widget.messages,
-            transitionAnimations: widget.transitionAnimations,
-          );
-        }
-
-        if (widget.infiniteScrollEnabled == true) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0),
-            child: VisibilityDetector(
-              key: Key('archive-fetch-indicator'),
-              onVisibilityChanged: onArchiveFetch,
-              child: Column(
-                children: [
-                  PlaceholderMessageWidget(
-                    index: index,
-                    textController: widget.textController,
-                    chatboxFocusNode: widget.chatboxFocusNode,
-                  ),
-                  PlaceholderMessageWidget(
-                    index: index,
-                    textController: widget.textController,
-                    chatboxFocusNode: widget.chatboxFocusNode,
-                  ),
-                  PlaceholderMessageWidget(
-                    index: index,
-                    textController: widget.textController,
-                    chatboxFocusNode: widget.chatboxFocusNode,
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-        return SizedBox.shrink();
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        final diff =
+            chatScrollOffsetNotifier.value - scrollNotification.metrics.pixels;
+        if (diff.abs() > 300)
+          chatScrollOffsetNotifier.value = scrollNotification.metrics.pixels;
+        return false;
       },
+      child: ListView.builder(
+        itemCount: (messages.length + 2),
+        reverse: true,
+        shrinkWrap: true,
+        primary: true,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return SizedBox(height: 100.0);
+          }
+          if (index - 1 < messages.length) {
+            return MessageRowWidget(
+              key: Key('${messages[index - 1].id}'),
+              index: index - 1,
+              account: account,
+              chatboxFocusNode: chatboxFocusNode,
+              textController: textController,
+              hasFollowUp: hasFollowUpMessage(index - 1, messages),
+              isFollowUp: hasFollowUpMessage(index, messages),
+              isOnline: isOnline(onlineUsers, messages[index - 1].user.id),
+              message: messages[index - 1],
+              messages: messages,
+              transitionAnimations: transitionAnimations,
+              settings: settings,
+            );
+          }
+
+          if (infiniteScrollEnabled == true) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0),
+              child: VisibilityDetector(
+                key: Key('archive-fetch-indicator'),
+                onVisibilityChanged: onArchiveFetch,
+                child: Column(
+                  children: [
+                    PlaceholderMessageWidget(
+                      index: index,
+                      textController: textController,
+                      chatboxFocusNode: chatboxFocusNode,
+                      settings: settings,
+                    ),
+                    PlaceholderMessageWidget(
+                      index: index,
+                      textController: textController,
+                      chatboxFocusNode: chatboxFocusNode,
+                      settings: settings,
+                    ),
+                    PlaceholderMessageWidget(
+                      index: index,
+                      textController: textController,
+                      chatboxFocusNode: chatboxFocusNode,
+                      settings: settings,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+          return SizedBox.shrink();
+        },
+      ),
     );
   }
 

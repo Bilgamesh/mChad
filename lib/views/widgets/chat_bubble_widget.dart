@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/document_util.dart';
 import 'package:mchad/utils/url_util.dart';
 import 'package:mchad/views/widgets/chat_emoticon_widget.dart';
@@ -23,6 +22,7 @@ class ChatBubble extends StatelessWidget {
   final TextEditingController textController;
   final bool hasFollowUp;
   final bool isFollowUp;
+  final SettingsModel settings;
 
   const ChatBubble({
     super.key,
@@ -34,6 +34,7 @@ class ChatBubble extends StatelessWidget {
     required this.textController,
     required this.hasFollowUp,
     required this.isFollowUp,
+    required this.settings,
   });
 
   @override
@@ -42,91 +43,57 @@ class ChatBubble extends StatelessWidget {
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
+
+    final borderRadius = getBubbleBorderRadius();
+
     return Padding(
       padding: EdgeInsets.only(
         top: isFollowUp ? 0.0 : 10.0,
         bottom: hasFollowUp ? 3.0 : 10.0,
       ),
-      child: ValueListenableBuilder(
-        valueListenable: settingsNotifier,
-        builder:
-            (context, settings, child) => Align(
-              alignment: switch (isSentByMe) {
-                true => Alignment.centerRight,
-                false => Alignment.centerLeft,
-              },
+      child: Align(
+        alignment: switch (isSentByMe) {
+          true => Alignment.centerRight,
+          false => Alignment.centerLeft,
+        },
+        child: Container(
+          margin: EdgeInsets.only(
+            top: isFollowUp ? 0 : 4,
+            bottom: hasFollowUp ? 0 : 4,
+            left: 10,
+            right: 10,
+          ),
+          constraints: BoxConstraints(maxWidth: constraint),
+          decoration: BoxDecoration(
+            color: switch (isSentByMe) {
+              true => settings.colorScheme.primaryContainer,
+              false => settings.colorScheme.surfaceContainerHighest,
+            },
+            borderRadius: borderRadius,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            borderRadius: borderRadius,
+            child: InkWell(
+              onLongPress: () => onLongPress(context, account),
+              borderRadius: borderRadius,
               child: Container(
-                margin: EdgeInsets.only(
-                  top: isFollowUp ? 0 : 4,
-                  bottom: hasFollowUp ? 0 : 4,
-                  left: 10,
-                  right: 10,
-                ),
-                constraints: BoxConstraints(maxWidth: constraint),
-                decoration: BoxDecoration(
-                  color: switch (isSentByMe) {
-                    true => settings.colorScheme.primaryContainer,
-                    false => settings.colorScheme.surfaceContainerHighest,
+                padding: const EdgeInsets.all(10),
+                child: HtmlWidget(
+                  message.message.shortHtml,
+                  renderMode: RenderMode.column,
+                  customStylesBuilder: buildStyles,
+                  customWidgetBuilder:
+                      (element) => buildHtmlWidget(element, settings),
+                  onTapUrl: (url) {
+                    UrlUtil.openUrl(url);
+                    return true;
                   },
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                    bottomLeft: switch (isSentByMe) {
-                      true => Radius.circular(15),
-                      false => Radius.circular(hasFollowUp ? 15 : 3),
-                    },
-                    bottomRight: switch (isSentByMe) {
-                      true => Radius.circular(hasFollowUp ? 15 : 3),
-                      false => Radius.circular(15),
-                    },
-                  ),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                    bottomLeft: switch (isSentByMe) {
-                      true => Radius.circular(15),
-                      false => Radius.circular(hasFollowUp ? 15 : 3),
-                    },
-                    bottomRight: switch (isSentByMe) {
-                      true => Radius.circular(hasFollowUp ? 15 : 3),
-                      false => Radius.circular(15),
-                    },
-                  ),
-                  child: InkWell(
-                    onLongPress: () => onLongPress(context, account),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                      bottomLeft: switch (isSentByMe) {
-                        true => Radius.circular(15),
-                        false => Radius.circular(hasFollowUp ? 15 : 3),
-                      },
-                      bottomRight: switch (isSentByMe) {
-                        true => Radius.circular(hasFollowUp ? 15 : 3),
-                        false => Radius.circular(15),
-                      },
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: HtmlWidget(
-                        message.message.shortHtml,
-                        renderMode: RenderMode.column,
-                        customStylesBuilder: buildStyles,
-                        customWidgetBuilder:
-                            (element) => buildHtmlWidget(element, settings),
-                        onTapUrl: (url) {
-                          UrlUtil.openUrl(url);
-                          return true;
-                        },
-                      ),
-                    ),
-                  ),
                 ),
               ),
             ),
+          ),
+        ),
       ),
     );
   }
@@ -179,6 +146,18 @@ class ChatBubble extends StatelessWidget {
       );
     }
     return null;
+  }
+
+  BorderRadius getBubbleBorderRadius() {
+    final bottomLeft = isSentByMe ? 15.0 : (hasFollowUp ? 15.0 : 3.0);
+    final bottomRight = isSentByMe ? (hasFollowUp ? 15.0 : 3.0) : 15.0;
+
+    return BorderRadius.only(
+      topLeft: const Radius.circular(15),
+      topRight: const Radius.circular(15),
+      bottomLeft: Radius.circular(bottomLeft),
+      bottomRight: Radius.circular(bottomRight),
+    );
   }
 
   void onLongPress(BuildContext context, Account account) {

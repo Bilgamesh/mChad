@@ -76,10 +76,14 @@ class MchatSync {
           latestMessage.id,
           globals.logIdMap[account]!,
         );
-        if (chatData.add != null) onAdd(chatData.add!);
-        if (chatData.edit != null) onEdit(chatData.edit!);
-        if (chatData.del != null) onDel(chatData.del!);
-        if (chatData.log != null) updateLogId(chatData.log!);
+        if (chatData.add != null && chatData.add!.isNotEmpty)
+          onAdd(chatData.add!);
+        if (chatData.edit != null && chatData.edit!.isNotEmpty)
+          onEdit(chatData.edit!);
+        if (chatData.del != null && chatData.del!.isNotEmpty)
+          onDel(chatData.del!);
+        if (chatData.log != null && chatData.log!.isNotEmpty)
+          updateLogId(chatData.log!);
       }
 
       /* When running application is resumed from background
@@ -185,17 +189,20 @@ class MchatSync {
 
   void onAddOld(List<Message> messages) {
     if (stopped) return;
+    bool updated = false;
     final existingMessages = messageMapNotifier.value[account] ?? <Message>[];
     for (var message in messages.reversed) {
       if (!existingMessages.contains(message)) {
         messageMapNotifier.value[account]?.add(message);
+        updated = true;
       }
     }
-    messageMapNotifier.notifyListeners();
+    if (updated) messageMapNotifier.notifyListeners();
   }
 
   void onAdd(List<Message> messages) {
     if (stopped) return;
+    bool updated = false;
     if (messages.isNotEmpty && messages[0].logId != null) {
       updateLogId(messages[0].logId!);
     }
@@ -203,9 +210,10 @@ class MchatSync {
     for (var message in messages) {
       if (!existingMessages.contains(message)) {
         messageMapNotifier.value[account]?.insert(0, message);
+        updated = true;
       }
     }
-    messageMapNotifier.notifyListeners();
+    if (updated) messageMapNotifier.notifyListeners();
     messageMapNotifier.value[account]?.firstOrNull?.saveAsLatest(account);
   }
 
@@ -227,14 +235,16 @@ class MchatSync {
 
   void onEdit(List<Message> messages) {
     if (stopped) return;
+    bool updated = false;
     for (var message in messages) {
       message.read();
       final index = messageMapNotifier.value[account]?.indexOf(message);
       if (index != -1 && index != null) {
         messageMapNotifier.value[account]?[index] = message;
+        updated = true;
       }
     }
-    messageMapNotifier.notifyListeners();
+    if (updated) messageMapNotifier.notifyListeners();
   }
 
   void onEmoticons(List<Emoticon> emoticons) {
@@ -293,9 +303,12 @@ class MchatSync {
         creationTime: account.creationTime!,
       );
 
-      if (response.add != null) onAdd(response.add!);
-      if (response.del != null) onDel(response.del!);
-      if (response.edit != null) onEdit(response.edit!);
+      if (response.add != null && response.add!.isNotEmpty)
+        onAdd(response.add!);
+      if (response.del != null && response.del!.isNotEmpty)
+        onDel(response.del!);
+      if (response.edit != null && response.edit!.isNotEmpty)
+        onEdit(response.edit!);
 
       refreshStatusNotifier.value[account] = VerificationStatus.success;
       refreshStatusNotifier.notifyListeners();
@@ -324,9 +337,12 @@ class MchatSync {
         creationTime: account.creationTime!,
       );
 
-      if (response.add != null) onAdd(response.add!);
-      if (response.del != null) onDel(response.del!);
-      if (response.edit != null) onEdit(response.edit!);
+      if (response.add != null && response.add!.isNotEmpty)
+        onAdd(response.add!);
+      if (response.del != null && response.del!.isNotEmpty)
+        onDel(response.del!);
+      if (response.edit != null && response.edit!.isNotEmpty)
+        onEdit(response.edit!);
 
       refreshStatusNotifier.value[account] = VerificationStatus.success;
       refreshStatusNotifier.notifyListeners();
@@ -356,9 +372,12 @@ class MchatSync {
         creationTime: account.creationTime!,
       );
 
-      if (response.add != null) onAdd(response.add!);
-      if (response.del != null) onDel(response.del!);
-      if (response.edit != null) onEdit(response.edit!);
+      if (response.add != null && response.add!.isNotEmpty)
+        onAdd(response.add!);
+      if (response.del != null && response.del!.isNotEmpty)
+        onDel(response.del!);
+      if (response.edit != null && response.edit!.isNotEmpty)
+        onEdit(response.edit!);
 
       refreshStatusNotifier.value[account] = VerificationStatus.success;
       refreshStatusNotifier.notifyListeners();

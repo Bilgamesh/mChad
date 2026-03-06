@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
+import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/views/widgets/avatar_widget.dart';
 import 'package:mchad/views/widgets/chat_bubble_widget.dart';
@@ -23,6 +24,7 @@ class MessageRowWidget extends StatefulWidget {
     required this.hasFollowUp,
     required this.isFollowUp,
     required this.transitionAnimations,
+    required this.settings,
   }) : isSender = message.user.id == account.userId,
        avatarSrc = message.avatar.src,
        super(key: key);
@@ -38,6 +40,7 @@ class MessageRowWidget extends StatefulWidget {
   final bool hasFollowUp;
   final bool isFollowUp;
   final bool transitionAnimations;
+  final SettingsModel settings;
 
   @override
   State<MessageRowWidget> createState() => _MessageRowWidgetState();
@@ -78,13 +81,20 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
       child: VisibilityDetector(
         key: Key('${widget.message.id}-padding'),
         onVisibilityChanged: (info) {
-          widget.message.read();
+          bool statusChanged = false;
+          if (widget.message.isRead != true) {
+            widget.message.read();
+            statusChanged = true;
+          }
           for (var message in widget.messages.where(
             (message) => message.id < widget.message.id,
           )) {
-            message.read();
+            if (message.isRead != true) {
+              message.read();
+              statusChanged = true;
+            }
           }
-          messageMapNotifier.notifyListeners();
+          if (statusChanged) messageMapNotifier.notifyListeners();
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -132,6 +142,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                         textController: widget.textController,
                         hasFollowUp: widget.hasFollowUp,
                         isFollowUp: widget.isFollowUp,
+                        settings: widget.settings,
                       ),
                     ],
                   ),

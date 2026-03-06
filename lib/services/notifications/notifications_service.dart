@@ -22,7 +22,9 @@ class NotificationsService {
         AndroidInitializationSettings(KNotificationsConfig.icon);
     final InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    await flutterLocalNotificationsPlugin.initialize(
+      settings: initializationSettings,
+    );
     notificationsInitialized = true;
   }
 
@@ -68,10 +70,8 @@ class NotificationsService {
     final accountIndex = await account.getIndex();
 
     await flutterLocalNotificationsPlugin.show(
-      accountIndex,
-      null,
-      null,
-      NotificationDetails(
+      id: accountIndex,
+      notificationDetails: NotificationDetails(
         android: AndroidNotificationDetails(
           KNotificationsConfig.channelId,
           KNotificationsConfig.channelName,

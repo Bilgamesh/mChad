@@ -275,18 +275,22 @@ class _LoginPageState extends State<LoginPage> {
       urls,
       () => !pageActive || addressFocusCountOld != addressFocusCount,
     );
-    if (discoverySuccess == true) {
-      setState(() {
-        addressVerificationStatus = VerificationStatus.success;
-      });
-    } else if (discoverySuccess == false) {
-      setState(() {
-        addressVerificationStatus = VerificationStatus.error;
-      });
-    } else if (discoverySuccess == null) {
-      setState(() {
-        addressVerificationStatus = VerificationStatus.none;
-      });
+    switch (discoverySuccess) {
+      case true:
+        setState(() {
+          addressVerificationStatus = VerificationStatus.success;
+        });
+        break;
+      case false:
+        setState(() {
+          addressVerificationStatus = VerificationStatus.error;
+        });
+        break;
+      case null:
+        setState(() {
+          addressVerificationStatus = VerificationStatus.none;
+        });
+        break;
     }
     validated = validate();
   }
