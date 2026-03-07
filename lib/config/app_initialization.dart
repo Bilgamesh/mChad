@@ -62,6 +62,52 @@ Future<AppInitializationData> initApp() async {
     chatScrollOffsetNotifier.value = 0;
   });
 
+  selectedTabNotifier.addListener(() {
+    print("selectedTabNotifier triggered!");
+  });
+  chatScrollOffsetNotifier.addListener(() {
+    print("chatScrollOffsetNotifier triggered!");
+  });
+  accountsNotifier.addListener(() {
+    print("accountsNotifier triggered!");
+  });
+  messageMapNotifier.addListener(() {
+    print("messageMapNotifier triggered!");
+  });
+  bbtagMapNotifier.addListener(() {
+    print("bbtagMapNotifier triggered!");
+  });
+  emoticonMapNotifer.addListener(() {
+    print("emoticonMapNotifer triggered!");
+  });
+  onlineUsersMapNotifer.addListener(() {
+    print("onlineUsersMapNotifer triggered!");
+  });
+  editDeleteLimitMapNotifier.addListener(() {
+    print("editDeleteLimitMapNotifier triggered!");
+  });
+  messageLimitMapNotifier.addListener(() {
+    print("messageLimitMapNotifier triggered!");
+  });
+  selectedAccountNotifier.addListener(() {
+    print("selectedAccountNotifier triggered!");
+  });
+  refreshTimeMapNotifer.addListener(() {
+    print("refreshTimeMapNotifer triggered!");
+  });
+  refreshStatusNotifier.addListener(() {
+    print("refreshStatusNotifier triggered!");
+  });
+  settingsNotifier.addListener(() {
+    print("settingsNotifier triggered!");
+  });
+  updateNotifier.addListener(() {
+    print("updateNotifier triggered!");
+  });
+  packageInfoNotifier.addListener(() {
+    print("packageInfoNotifier triggered!");
+  });
+
   return AppInitializationData(isLoggedIn: accounts.isNotEmpty);
 }
 
