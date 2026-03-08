@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
-import 'package:mchad/utils/crypto_util.dart';
+import 'package:mchad/utils/json_util.dart';
 
 class ChatEmoticonWidget extends StatelessWidget {
   const ChatEmoticonWidget({
@@ -16,7 +16,8 @@ class ChatEmoticonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cacheKey = '${CryptoUtil.serializeHeaders(account.getHeaders())}|${attributes['src']}';
+    final cacheKey =
+        '${JsonUtil.serializeHeaders(account.getHeaders())}|${attributes['src']}';
     return ClipRRect(
       borderRadius: BorderRadius.circular(12.0),
       child: CachedNetworkImage(

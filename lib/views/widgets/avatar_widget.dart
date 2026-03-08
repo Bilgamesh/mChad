@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
-import 'package:mchad/utils/crypto_util.dart';
+import 'package:mchad/utils/json_util.dart';
 
 class AvatarWidget extends StatelessWidget {
   const AvatarWidget({Key? key, required this.avatarSrc, required this.account})
@@ -30,7 +30,7 @@ class AvatarWidget extends StatelessWidget {
           imageUrl: avatarSrc!,
           httpHeaders: account.getHeaders(src: avatarSrc),
           cacheKey:
-              '${CryptoUtil.serializeHeaders(account.getHeaders())}|$avatarSrc',
+              '${JsonUtil.serializeHeaders(account.getHeaders())}|$avatarSrc',
           placeholder:
               (context, url) =>
                   Image.asset('assets/images/no_avatar.gif', fit: BoxFit.cover),

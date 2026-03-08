@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/emoticons_response_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/utils/crypto_util.dart';
+import 'package:mchad/utils/json_util.dart';
 import 'package:mchad/utils/haptics_util.dart';
 
 final emptyImage = Image.asset(
@@ -32,7 +32,7 @@ class EmoticonTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final borderRadius = BorderRadius.circular(12);
     final cacheKey =
-        '${CryptoUtil.serializeHeaders(account.getHeaders())}|${emoticon.pictureUrl}';
+        '${JsonUtil.serializeHeaders(account.getHeaders())}|${emoticon.pictureUrl}';
 
     return ClipRRect(
       borderRadius: borderRadius,

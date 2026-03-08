@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
-import 'package:mchad/utils/crypto_util.dart';
+import 'package:mchad/utils/json_util.dart';
 import 'package:mchad/views/pages/image_page.dart';
 
 class ChatImageWidget extends StatelessWidget {
@@ -24,7 +24,7 @@ class ChatImageWidget extends StatelessWidget {
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
-    final cacheKey = '${CryptoUtil.serializeHeaders(account.getHeaders())}|$src';
+    final cacheKey = '${JsonUtil.serializeHeaders(account.getHeaders())}|$src';
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: GestureDetector(

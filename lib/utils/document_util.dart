@@ -8,7 +8,7 @@ import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/bbtag_model.dart';
 import 'package:mchad/data/models/message_model.dart';
-import 'package:mchad/utils/crypto_util.dart';
+import 'package:mchad/utils/json_util.dart';
 import 'package:mchad/utils/logging_util.dart';
 import 'package:mchad/data/state/globals.dart' as globals;
 
@@ -318,7 +318,7 @@ class DocumentUtil {
       await precacheImage(
         CachedNetworkImageProvider(
           src,
-          cacheKey: '${CryptoUtil.serializeHeaders(account.getHeaders())}|$src',
+          cacheKey: '${JsonUtil.serializeHeaders(account.getHeaders())}|$src',
           headers: account.getHeaders(src: src),
         ),
         globals.navigatorKey.currentContext!,
