@@ -5,6 +5,7 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/state/notifiers.dart';
+import 'package:mchad/utils/ui_util.dart';
 import 'package:mchad/views/widgets/avatar_widget.dart';
 import 'package:mchad/views/widgets/chat_bubble_widget.dart';
 import 'package:intl/intl.dart';
@@ -46,6 +47,11 @@ class MessageRowWidget extends StatefulWidget {
   State<MessageRowWidget> createState() => _MessageRowWidgetState();
 }
 
+const onlineDot = Padding(
+  padding: EdgeInsets.only(left: 35.0, top: 35.0),
+  child: Icon(Icons.circle, color: Colors.green, size: 15),
+);
+
 class _MessageRowWidgetState extends State<MessageRowWidget> {
   bool loaded = false;
 
@@ -64,6 +70,24 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
     super.initState();
   }
 
+  List<Widget> buildLeftAvatar() {
+    return [
+      if (widget.hasFollowUp)
+        const SizedBox(width: 50.0)
+      else
+        AvatarWidget(avatarSrc: widget.avatarSrc, account: widget.account),
+      if (widget.isOnline && !widget.hasFollowUp) onlineDot,
+    ];
+  }
+
+  List<Widget> buildRightAvatar() {
+    return [
+      if (widget.hasFollowUp) const SizedBox(width: 50.0),
+      if (!widget.hasFollowUp && widget.isSender)
+        AvatarWidget(avatarSrc: widget.avatarSrc, account: widget.account),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateFormat formatter = DateFormat(
@@ -74,26 +98,38 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
         '${formatter.format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.time) * 1000))} '
             .replaceAll(RegExp(r':\d{2} '), ' ')
             .trim();
+    final mainAxisAlignment =
+        widget.isSender ? MainAxisAlignment.end : MainAxisAlignment.start;
+    final label =
+        widget.isSender
+            ? '$dateTime • ${widget.message.user.name}'
+            : '${widget.message.user.name} • $dateTime';
 
-    return AnimatedOpacity(
-      opacity: (loaded && !widget.message.isDeleting) ? 1.0 : 0.0,
-      duration: Duration(milliseconds: widget.transitionAnimations ? 500 : 0),
+    final labelWidget = Row(
+      mainAxisAlignment: mainAxisAlignment,
+      children: [Text(label, style: const TextStyle(fontSize: 10.0))],
+    );
+
+    return UiUtil.wrapConditionally(
+      condition: widget.transitionAnimations,
+      wrapper:
+          (child) => AnimatedOpacity(
+            opacity: (loaded && !widget.message.isDeleting) ? 1.0 : 0.0,
+            duration: Duration(
+              milliseconds: widget.transitionAnimations ? 500 : 0,
+            ),
+            child: child,
+          ),
       child: VisibilityDetector(
         key: Key('${widget.message.id}-padding'),
         onVisibilityChanged: (info) {
           bool statusChanged = false;
-          if (widget.message.isRead != true) {
-            widget.message.read();
-            statusChanged = true;
-          }
-          for (var message in widget.messages.where(
-            (message) => message.id < widget.message.id,
-          )) {
-            if (message.isRead != true) {
-              message.read();
-              statusChanged = true;
-            }
-          }
+          widget.messages
+              .where((m) => m.id <= widget.message.id && m.isRead != true)
+              .forEach((m) {
+                m.read();
+                statusChanged = true;
+              });
           if (statusChanged) messageMapNotifier.notifyListeners();
         },
         child: Padding(
@@ -101,36 +137,10 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: switch (widget.isSender) {
-                  true => MainAxisAlignment.end,
-                  false => MainAxisAlignment.start,
-                },
+                mainAxisAlignment: mainAxisAlignment,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (!widget.isSender)
-                    Stack(
-                      children: [
-                        if (widget.hasFollowUp)
-                          SizedBox(width: 50.0)
-                        else
-                          AvatarWidget(
-                            avatarSrc: widget.avatarSrc,
-                            account: widget.account,
-                          ),
-                        if (widget.isOnline && !widget.hasFollowUp)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 35.0,
-                              top: 35.0,
-                            ),
-                            child: Icon(
-                              Icons.circle,
-                              color: Colors.green,
-                              size: 15,
-                            ),
-                          ),
-                      ],
-                    ),
+                  if (!widget.isSender) Stack(children: [...buildLeftAvatar()]),
                   Column(
                     children: [
                       ChatBubble(
@@ -146,36 +156,10 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
                       ),
                     ],
                   ),
-                  if (widget.hasFollowUp) SizedBox(width: 50.0),
-                  if (!widget.hasFollowUp && widget.isSender)
-                    AvatarWidget(
-                      avatarSrc: widget.avatarSrc,
-                      account: widget.account,
-                    ),
+                  ...buildRightAvatar(),
                 ],
               ),
-              if (!widget.hasFollowUp)
-                Material(
-                  color: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: switch (widget.isSender) {
-                      true => MainAxisAlignment.end,
-                      false => MainAxisAlignment.start,
-                    },
-                    children: [
-                      if (widget.isSender)
-                        Text(
-                          '$dateTime • ${widget.message.user.name}',
-                          style: TextStyle(fontSize: 10.0),
-                        )
-                      else
-                        Text(
-                          '${widget.message.user.name} • $dateTime',
-                          style: TextStyle(fontSize: 10.0),
-                        ),
-                    ],
-                  ),
-                ),
+              if (!widget.hasFollowUp) labelWidget,
             ],
           ),
         ),

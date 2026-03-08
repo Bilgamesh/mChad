@@ -43,53 +43,41 @@ class ChatBubble extends StatelessWidget {
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
-
     final borderRadius = getBubbleBorderRadius();
 
-    return Padding(
-      padding: EdgeInsets.only(
-        top: isFollowUp ? 0.0 : 10.0,
-        bottom: hasFollowUp ? 3.0 : 10.0,
-      ),
-      child: Align(
-        alignment: switch (isSentByMe) {
-          true => Alignment.centerRight,
-          false => Alignment.centerLeft,
-        },
-        child: Container(
-          margin: EdgeInsets.only(
-            top: isFollowUp ? 0 : 4,
-            bottom: hasFollowUp ? 0 : 4,
-            left: 10,
-            right: 10,
-          ),
-          constraints: BoxConstraints(maxWidth: constraint),
-          decoration: BoxDecoration(
-            color: switch (isSentByMe) {
-              true => settings.colorScheme.primaryContainer,
-              false => settings.colorScheme.surfaceContainerHighest,
-            },
+    return Align(
+      alignment: switch (isSentByMe) {
+        true => Alignment.centerRight,
+        false => Alignment.centerLeft,
+      },
+      child: Container(
+        margin: EdgeInsets.only(
+          top: isFollowUp ? 0 : 14,
+          bottom: hasFollowUp ? 3 : 14,
+          left: 10,
+          right: 10,
+        ),
+        constraints: BoxConstraints(maxWidth: constraint),
+        child: Material(
+          color: switch (isSentByMe) {
+            true => settings.colorScheme.primaryContainer,
+            false => settings.colorScheme.surfaceContainerHighest,
+          },
+          borderRadius: borderRadius,
+          child: InkWell(
+            onLongPress: () => onLongPress(context, account),
             borderRadius: borderRadius,
-          ),
-          child: Material(
-            color: Colors.transparent,
-            borderRadius: borderRadius,
-            child: InkWell(
-              onLongPress: () => onLongPress(context, account),
-              borderRadius: borderRadius,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: HtmlWidget(
-                  message.message.shortHtml,
-                  renderMode: RenderMode.column,
-                  customStylesBuilder: buildStyles,
-                  customWidgetBuilder:
-                      (element) => buildHtmlWidget(element, settings),
-                  onTapUrl: (url) {
-                    UrlUtil.openUrl(url);
-                    return true;
-                  },
-                ),
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              child: HtmlWidget(
+                message.message.shortHtml,
+                renderMode: RenderMode.column,
+                customStylesBuilder: buildStyles,
+                customWidgetBuilder: buildHtmlWidget,
+                onTapUrl: (url) {
+                  UrlUtil.openUrl(url);
+                  return true;
+                },
               ),
             ),
           ),
@@ -106,7 +94,7 @@ class ChatBubble extends StatelessWidget {
     return {'border-radius': '10px'};
   }
 
-  Widget? buildHtmlWidget(dom.Element element, SettingsModel settings) {
+  Widget? buildHtmlWidget(dom.Element element) {
     if (element.outerHtml == '<br>') {
       return SizedBox.shrink();
     }

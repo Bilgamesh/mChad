@@ -35,4 +35,13 @@ class UiUtil {
       ),
     );
   }
+
+  static Widget wrapConditionally({
+    required bool condition,
+    required Widget child,
+    required Widget Function(Widget child) wrapper,
+  }) {
+    if (condition) return wrapper(child);
+    return child;
+  }
 }
