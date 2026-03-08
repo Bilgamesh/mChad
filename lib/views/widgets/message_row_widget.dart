@@ -113,9 +113,7 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
       wrapper:
           (child) => AnimatedOpacity(
             opacity: (loaded && !widget.message.isDeleting) ? 1.0 : 0.0,
-            duration: Duration(
-              milliseconds: widget.transitionAnimations ? 500 : 0,
-            ),
+            duration: const Duration(milliseconds: 500),
             child: child,
           ),
       child: VisibilityDetector(
