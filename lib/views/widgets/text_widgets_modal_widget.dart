@@ -33,6 +33,8 @@ class _TextWidgetsModalWidgetState extends State<TextWidgetsModalWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     tab ??= {widget.tab};
     return SizedBox(
       width: double.infinity,
@@ -42,12 +44,12 @@ class _TextWidgetsModalWidgetState extends State<TextWidgetsModalWidget> {
             segments: [
               ButtonSegment(
                 value: Tabs.bbcodes,
-                label: Text(AppLocalizations.of(context).bbcodes),
+                label: Text(l10n.bbcodes),
                 icon: Icon(Icons.code),
               ),
               ButtonSegment(
                 value: Tabs.emoticons,
-                label: Text(AppLocalizations.of(context).emoticons),
+                label: Text(l10n.emoticons),
                 icon: Icon(Icons.emoji_emotions_outlined),
               ),
             ],

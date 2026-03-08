@@ -90,10 +90,8 @@ class _MessageRowWidgetState extends State<MessageRowWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat(
-      null,
-      AppLocalizations.of(context).localeName,
-    );
+    final l10n = AppLocalizations.of(context);
+    final DateFormat formatter = DateFormat(null, l10n.localeName);
     final dateTime =
         '${formatter.format(DateTime.fromMillisecondsSinceEpoch(int.parse(widget.message.time) * 1000))} '
             .replaceAll(RegExp(r':\d{2} '), ' ')

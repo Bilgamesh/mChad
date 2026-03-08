@@ -17,6 +17,8 @@ class SettingsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ValueListenablesBuilder(
       listenables: [settingsNotifier, updateNotifier, packageInfoNotifier],
       builder: (context, values, child) {
@@ -39,7 +41,7 @@ class SettingsTab extends StatelessWidget {
                 if (update != UpdateStatus.none) SizedBox(height: 20.0),
                 ListTile(
                   title: Text(
-                    AppLocalizations.of(context).colorStyle,
+                    l10n.colorStyle,
                     style: KTextStyle.settingsLabelText,
                   ),
                 ),
@@ -49,18 +51,15 @@ class SettingsTab extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0),
                 SettingsToggleRowWidget(
-                  label: AppLocalizations.of(context).lowConstrast,
-                  subtitle:
-                      AppLocalizations.of(
-                        context,
-                      ).lowersBackgroundColorContrast,
+                  label: l10n.lowConstrast,
+                  subtitle: l10n.lowersBackgroundColorContrast,
                   value: settings.lowContrastBackground,
                   onValueChanged:
                       (value) =>
                           settings.setLowContrastBackground(value).save(),
                 ),
                 SettingsToggleRowWidget(
-                  label: AppLocalizations.of(context).notifications,
+                  label: l10n.notifications,
                   value: settings.notifications,
                   onValueChanged: (value) async {
                     if (value == false) {
@@ -73,32 +72,32 @@ class SettingsTab extends StatelessWidget {
                   },
                 ),
                 SettingsToggleRowWidget(
-                  label: AppLocalizations.of(context).haptics,
+                  label: l10n.haptics,
                   value: settings.haptics,
                   onValueChanged: (value) => settings.setHaptics(value).save(),
                 ),
                 SettingsToggleRowWidget(
-                  label: AppLocalizations.of(context).transitionAnimations,
+                  label: l10n.transitionAnimations,
                   value: settings.transitionAnimations,
                   onValueChanged:
                       (value) => settings.setTransitionAnimations(value).save(),
                 ),
                 SettingsToggleRowWidget(
-                  label: AppLocalizations.of(context).externalBrowser,
-                  subtitle: AppLocalizations.of(context).openLinksInBrowser,
+                  label: l10n.externalBrowser,
+                  subtitle: l10n.openLinksInBrowser,
                   value: settings.openLinksInBrowser,
                   onValueChanged:
                       (value) => settings.setOpenLinksInBrowser(value).save(),
                 ),
                 SettingsDropdownWidget(
-                  label: AppLocalizations.of(context).font,
+                  label: l10n.font,
                   value: settings.fontIndex,
                   menuItems: List.generate(
                     KAppTheme.fontNames.length + 1,
                     (index) => DropdownMenuItem(
                       value: index,
                       child: switch (index) {
-                        0 => Text(AppLocalizations.of(context).defaultFont),
+                        0 => Text(l10n.defaultFont),
                         _ => Text(
                           KAppTheme.fontNames[index - 1],
                           style: KAppTheme.textStyles[index - 1],
@@ -110,24 +109,18 @@ class SettingsTab extends StatelessWidget {
                       (value) => settings.setFontIndex(value ?? 3).save(),
                 ),
                 SettingsDropdownWidget(
-                  label: AppLocalizations.of(context).languageLabel,
+                  label: l10n.languageLabel,
                   value: settings.languageIndex,
                   menuItems: [
-                    DropdownMenuItem(
-                      value: 0,
-                      child: Text(AppLocalizations.of(context).english),
-                    ),
-                    DropdownMenuItem(
-                      value: 1,
-                      child: Text(AppLocalizations.of(context).polish),
-                    ),
+                    DropdownMenuItem(value: 0, child: Text(l10n.english)),
+                    DropdownMenuItem(value: 1, child: Text(l10n.polish)),
                   ],
                   onChanged: (value) => settings.setLanguage(value ?? 0).save(),
                 ),
                 Divider(),
                 ListTile(
                   title: Text(
-                    AppLocalizations.of(context).version,
+                    l10n.version,
                     style: KTextStyle.settingsLabelText,
                   ),
                   subtitle: Text(packageInfo?.version ?? ""),
@@ -136,7 +129,7 @@ class SettingsTab extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(
-                    AppLocalizations.of(context).license,
+                    l10n.license,
                     style: KTextStyle.settingsLabelText,
                   ),
                   subtitle: Text('GPL-3.0'),
@@ -146,7 +139,7 @@ class SettingsTab extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(
-                    AppLocalizations.of(context).sourceCode,
+                    l10n.sourceCode,
                     style: KTextStyle.settingsLabelText,
                   ),
                   subtitle: Text(KRepositoryInfo.repoUrl),
@@ -156,7 +149,7 @@ class SettingsTab extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(
-                    AppLocalizations.of(context).issueTracker,
+                    l10n.issueTracker,
                     style: KTextStyle.settingsLabelText,
                   ),
                   subtitle: Text(KRepositoryInfo.issueTrackerUrl),
@@ -166,7 +159,7 @@ class SettingsTab extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(
-                    AppLocalizations.of(context).licenses,
+                    l10n.licenses,
                     style: KTextStyle.settingsLabelText,
                   ),
                   minVerticalPadding: 20,

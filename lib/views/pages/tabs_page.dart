@@ -24,6 +24,8 @@ class TabsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ValueListenablesBuilder(
       listenables: [
         settingsNotifier,
@@ -46,8 +48,7 @@ class TabsPage extends StatelessWidget {
                       child: Material(
                         color: Colors.transparent,
                         child: Text(
-                          selectedAccount?.forumName ??
-                              AppLocalizations.of(context).appName,
+                          selectedAccount?.forumName ?? l10n.appName,
                           style: TextStyle(fontSize: 22.0),
                         ),
                       ),

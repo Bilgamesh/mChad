@@ -28,6 +28,8 @@ class MessageOptionsModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return ValueListenableBuilder(
       valueListenable: editDeleteLimitMapNotifier,
       builder: (context, editDeleteLimitMap, child) {
@@ -40,29 +42,29 @@ class MessageOptionsModal extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: Icon(Icons.copy),
-                    title: Text(AppLocalizations.of(context).copy),
+                    title: Text(l10n.copy),
                     onTap: () => copy(context, message),
                   ),
                   ListTile(
                     leading: Icon(Icons.share),
-                    title: Text(AppLocalizations.of(context).share),
+                    title: Text(l10n.share),
                     onTap: () => share(context, message),
                   ),
                   if (!isSelf)
                     ListTile(
                       leading: Icon(Icons.alternate_email),
-                      title: Text(AppLocalizations.of(context).reply),
+                      title: Text(l10n.reply),
                       onTap: () => reply(context, message),
                     ),
                   ListTile(
                     leading: Icon(Icons.format_quote),
-                    title: Text(AppLocalizations.of(context).quote),
+                    title: Text(l10n.quote),
                     onTap: () => quote(context, message),
                   ),
                   if (!isSelf)
                     ListTile(
                       leading: Icon(Icons.thumb_up),
-                      title: Text(AppLocalizations.of(context).like),
+                      title: Text(l10n.like),
                       onTap: () => like(context, message),
                     ),
                   if (isSelf &&
@@ -72,7 +74,7 @@ class MessageOptionsModal extends StatelessWidget {
                       ))
                     ListTile(
                       leading: Icon(Icons.edit),
-                      title: Text(AppLocalizations.of(context).edit),
+                      title: Text(l10n.edit),
                       onTap: () => edit(context, message),
                     ),
                   if (isSelf &&
@@ -84,7 +86,7 @@ class MessageOptionsModal extends StatelessWidget {
                       iconColor: Colors.red,
                       leading: Icon(Icons.delete),
                       title: Text(
-                        AppLocalizations.of(context).delete,
+                        l10n.delete,
                         style: TextStyle(color: Colors.red),
                       ),
                       onTap: () => delete(context, message),
@@ -127,11 +129,11 @@ class MessageOptionsModal extends StatelessWidget {
   }
 
   void like(BuildContext context, Message selectedMessage) {
+    final l10n = AppLocalizations.of(context);
     HapticsUtil.vibrate();
     Navigator.pop(context);
     final likeMessage =
-        globals.likeMessageMap[account] ??
-        AppLocalizations.of(context).defaultLikeMessage;
+        globals.likeMessageMap[account] ?? l10n.defaultLikeMessage;
     textController.text =
         '${'${textController.text.trim()} [i]$likeMessage[/i][quote="${selectedMessage.user.name}" post_id=${selectedMessage.id} time=${selectedMessage.time} user_id=${selectedMessage.user.id}] ${selectedMessage.message.text.replaceAll('\n', ' ')} [/quote]'.trim()} ';
     chatboxFocusNode.requestFocus();
@@ -147,20 +149,19 @@ class MessageOptionsModal extends StatelessWidget {
   }
 
   void delete(BuildContext context, Message selectedMessage) {
+    final l10n = AppLocalizations.of(context);
     HapticsUtil.vibrate();
     Navigator.pop(context);
     showDialog(
       context: context,
       builder:
           (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context).deleteMessageTitle),
-            content: Text(
-              AppLocalizations.of(context).deleteMessageConfirmation,
-            ),
+            title: Text(l10n.deleteMessageTitle),
+            content: Text(l10n.deleteMessageConfirmation),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: Text(AppLocalizations.of(context).cancel),
+                child: Text(l10n.cancel),
               ),
               TextButton(
                 onPressed: () async {
@@ -171,10 +172,7 @@ class MessageOptionsModal extends StatelessWidget {
                         .onError((error, trace) => ModalUtil.showError(error)),
                   );
                 },
-                child: Text(
-                  AppLocalizations.of(context).confirm,
-                  style: TextStyle(color: Colors.red),
-                ),
+                child: Text(l10n.confirm, style: TextStyle(color: Colors.red)),
               ),
             ],
           ),

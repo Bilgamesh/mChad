@@ -16,6 +16,8 @@ class UpdateButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Badge(
       label: Text('!'),
       child: ElevatedButton(
@@ -45,7 +47,7 @@ class UpdateButtonWidget extends StatelessWidget {
             },
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text(AppLocalizations.of(context).updateAvailable),
+              child: Text(l10n.updateAvailable),
             ),
           ],
         ),

@@ -61,8 +61,11 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: widget.settings.transitionAnimations ? 150 : 0),
+      duration: Duration(
+        milliseconds: widget.settings.transitionAnimations ? 150 : 0,
+      ),
       transitionBuilder:
           (child, animation) => SlideTransition(
             position: (animation.value == 1 ? offset2 : offset1).animate(
@@ -117,9 +120,11 @@ class _ChatboxWidgetState extends State<ChatboxWidget> {
                       ],
                     ),
                   ),
-                  hintText: AppLocalizations.of(context).chatboxHint,
+                  hintText: l10n.chatboxHint,
                   labelText: labelText.isNotEmpty ? labelText : null,
-                  labelStyle: TextStyle(color: widget.settings.colorScheme.error),
+                  labelStyle: TextStyle(
+                    color: widget.settings.colorScheme.error,
+                  ),
                   contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),

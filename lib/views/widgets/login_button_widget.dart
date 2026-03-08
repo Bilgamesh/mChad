@@ -8,9 +8,11 @@ class LoginButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return FloatingActionButton.extended(
       icon: Icon(Icons.login),
-      label: Text(AppLocalizations.of(context).loginButtonLabel),
+      label: Text(l10n.loginButtonLabel),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
         HapticsUtil.vibrate();

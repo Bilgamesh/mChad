@@ -41,6 +41,7 @@ class AccountsTab extends StatelessWidget {
           final refreshStatusMap =
               values[4] as Map<Account, VerificationStatus>;
           final messageMap = values[5] as Map<Account, List<Message>>;
+          final l10n = AppLocalizations.of(context);
 
           return ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 800),
@@ -70,11 +71,9 @@ class AccountsTab extends StatelessWidget {
                           context: context,
                           builder:
                               (context) => AlertDialog(
-                                title: Text(
-                                  AppLocalizations.of(context).logout,
-                                ),
+                                title: Text(l10n.logout),
                                 content: Text(
-                                  '${AppLocalizations.of(context).logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${AppLocalizations.of(context).account}?',
+                                  '${l10n.logoutConfirmation} ${accounts.elementAt(index).userName}@${accounts.elementAt(index).forumName} ${l10n.account}?',
                                 ),
                                 actions: [
                                   TextButton(
@@ -82,9 +81,7 @@ class AccountsTab extends StatelessWidget {
                                       HapticsUtil.vibrate();
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text(
-                                      AppLocalizations.of(context).cancel,
-                                    ),
+                                    child: Text(l10n.cancel),
                                   ),
                                   TextButton(
                                     onPressed:
@@ -92,9 +89,7 @@ class AccountsTab extends StatelessWidget {
                                           context,
                                           accounts.elementAt(index),
                                         ),
-                                    child: Text(
-                                      AppLocalizations.of(context).confirm,
-                                    ),
+                                    child: Text(l10n.confirm),
                                   ),
                                 ],
                               ),

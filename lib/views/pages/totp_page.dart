@@ -50,10 +50,11 @@ class _TotpPageState extends State<TotpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).appName),
+        title: Text(l10n.appName),
         actions: [DarkModeButtonWidget()],
       ),
       body: Column(
@@ -70,7 +71,7 @@ class _TotpPageState extends State<TotpPage> {
                     SizedBox(height: 20.0),
                     Center(
                       child: Text(
-                        AppLocalizations.of(context).loginPageLabel,
+                        l10n.loginPageLabel,
                         style: TextStyle(fontSize: 20.0),
                       ),
                     ),
@@ -83,8 +84,7 @@ class _TotpPageState extends State<TotpPage> {
                         if (validated) onSubmit(context);
                       },
                       decoration: InputDecoration(
-                        labelText:
-                            AppLocalizations.of(context).totpTextFieldHint,
+                        labelText: l10n.totpTextFieldHint,
                       ),
                     ),
                     SizedBox(height: 20.0),
@@ -93,9 +93,7 @@ class _TotpPageState extends State<TotpPage> {
                         true => (() => onSubmit(context)),
                         false => null,
                       },
-                      child: Text(
-                        AppLocalizations.of(context).loginButtonLabel,
-                      ),
+                      child: Text(l10n.loginButtonLabel),
                     ),
                   ],
                 ),

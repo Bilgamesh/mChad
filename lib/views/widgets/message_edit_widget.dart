@@ -46,8 +46,10 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).editTitle),
+      title: Text(l10n.editTitle),
       content: SizedBox(
         child: TextField(
           controller: editController,
@@ -69,7 +71,7 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
             HapticsUtil.vibrate();
             Navigator.of(context).pop();
           },
-          child: Text(AppLocalizations.of(context).cancel),
+          child: Text(l10n.cancel),
         ),
         TextButton(
           onPressed: switch (validated) {
@@ -91,7 +93,7 @@ class _MessageEditWidgetState extends State<MessageEditWidget> {
               );
             },
           },
-          child: Text(AppLocalizations.of(context).confirm),
+          child: Text(l10n.confirm),
         ),
       ],
     );

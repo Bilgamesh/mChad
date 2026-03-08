@@ -14,6 +14,8 @@ class OnlineUsersModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return SizedBox(
       width: double.infinity,
       child: Padding(
@@ -22,7 +24,7 @@ class OnlineUsersModal extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context).onlineUsers,
+              l10n.onlineUsers,
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Expanded(
@@ -67,9 +69,7 @@ class OnlineUsersModal extends StatelessWidget {
                             Icon(Icons.public_off_outlined),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                '${AppLocalizations.of(context).hiddenUsers}: $hiddenCount',
-                              ),
+                              child: Text('${l10n.hiddenUsers}: $hiddenCount'),
                             ),
                           ],
                         ),

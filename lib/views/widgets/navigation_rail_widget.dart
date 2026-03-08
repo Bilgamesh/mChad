@@ -29,6 +29,7 @@ class NavigationRailWidget extends StatelessWidget {
         final messageMap = values[2] as Map<Account, List<Message>>;
         final messages = messageMap[account] ?? [];
         final update = values[3] as UpdateStatus;
+        final l10n = AppLocalizations.of(context);
         final unreadMessagesCurrent = messages.where(
           (m) => !(m.isRead ?? false),
         );
@@ -61,8 +62,7 @@ class NavigationRailWidget extends StatelessWidget {
                   child: Material(
                     color: Colors.transparent,
                     child: Text(
-                      account?.forumName ??
-                          AppLocalizations.of(context).appName,
+                      account?.forumName ?? l10n.appName,
                       style: TextStyle(fontSize: 22.0),
                     ),
                   ),
@@ -81,7 +81,7 @@ class NavigationRailWidget extends StatelessWidget {
                   _ => Icon(Icons.chat_outlined),
                 },
               ),
-              label: Text(AppLocalizations.of(context).chatLabelValue),
+              label: Text(l10n.chatLabelValue),
             ),
 
             NavigationRailDestination(
@@ -93,7 +93,7 @@ class NavigationRailWidget extends StatelessWidget {
                   _ => Icon(Icons.people_outline),
                 },
               ),
-              label: Text(AppLocalizations.of(context).accountsLabelValue),
+              label: Text(l10n.accountsLabelValue),
             ),
 
             NavigationRailDestination(
@@ -105,7 +105,7 @@ class NavigationRailWidget extends StatelessWidget {
                   _ => Icon(Icons.settings_outlined),
                 },
               ),
-              label: Text(AppLocalizations.of(context).settingsLabelValue),
+              label: Text(l10n.settingsLabelValue),
             ),
           ],
 

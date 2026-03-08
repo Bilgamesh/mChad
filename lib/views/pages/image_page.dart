@@ -139,6 +139,7 @@ class _ImagePageState extends State<ImagePage> {
     BuildContext context,
   ) async {
     HapticsUtil.vibrate();
+    final l10n = AppLocalizations.of(context);
     try {
       if (!hasExtension(fileName)) {
         fileName += '.png';
@@ -162,9 +163,7 @@ class _ImagePageState extends State<ImagePage> {
       final res = await get(Uri.parse(url));
       await file.writeAsBytes(res.bodyBytes);
       if (!context.mounted) return;
-      ModalUtil.showMessage(
-        '${AppLocalizations.of(context).imageSaved} $fileName',
-      );
+      ModalUtil.showMessage('${l10n.imageSaved} $fileName');
     } catch (e) {
       ModalUtil.showError(e);
     }

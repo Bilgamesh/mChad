@@ -5,31 +5,31 @@ import 'package:mchad/l10n/generated/app_localizations.dart';
 class TimeUtil {
   static Future<String> convertToAgo(DateTime input) async {
     Duration diff = DateTime.now().difference(input);
-    final localization = await LocalizationUtil.currentLocalization;
+    final l10n = await LocalizationUtil.currentLocalization;
 
     if (diff.inSeconds >= 1) {
       return '${diff.inSeconds} ${diff.inSeconds == 1
-          ? localization.secondAgo
+          ? l10n.secondAgo
           : diff.inSeconds >= 2 && diff.inSeconds <= 4
-          ? localization.secondsAgo
-          : localization.secondsAgo2}';
+          ? l10n.secondsAgo
+          : l10n.secondsAgo2}';
     } else {
-      return localization.justNow;
+      return l10n.justNow;
     }
   }
 
   static String convertToAgoSync(DateTime input, BuildContext context) {
     Duration diff = DateTime.now().difference(input);
-    final localization = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context);
 
     if (diff.inSeconds >= 1) {
       return '${diff.inSeconds} ${diff.inSeconds == 1
-          ? localization.secondAgo
+          ? l10n.secondAgo
           : diff.inSeconds >= 2 && diff.inSeconds <= 4
-          ? localization.secondsAgo
-          : localization.secondsAgo2}';
+          ? l10n.secondsAgo
+          : l10n.secondsAgo2}';
     } else {
-      return localization.justNow;
+      return l10n.justNow;
     }
   }
 

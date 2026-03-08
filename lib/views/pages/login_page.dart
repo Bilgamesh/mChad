@@ -72,13 +72,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context).appName,
-          style: TextStyle(fontSize: 22.0),
-        ),
+        title: Text(l10n.appName, style: TextStyle(fontSize: 22.0)),
         actions: [DarkModeButtonWidget()],
       ),
       body: Center(
@@ -103,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(height: 20.0),
                         Center(
                           child: Text(
-                            AppLocalizations.of(context).loginPageLabel,
+                            l10n.loginPageLabel,
                             style: TextStyle(fontSize: 20.0),
                           ),
                         ),
@@ -120,15 +119,11 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(
                             label: Row(
                               children: [
-                                Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  ).addressTextFieldHint,
-                                ),
+                                Text(l10n.addressTextFieldHint),
                                 if (addressVerificationStatus ==
                                     VerificationStatus.error)
                                   Text(
-                                    ' - ${AppLocalizations.of(context).mChatNotFound}',
+                                    ' - ${l10n.mChatNotFound}',
                                     style: TextStyle(color: Colors.red),
                                   ),
                               ],
@@ -149,14 +144,10 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(
                             label: Row(
                               children: [
-                                Text(
-                                  AppLocalizations.of(
-                                    context,
-                                  ).usernameTextFieldHint,
-                                ),
+                                Text(l10n.usernameTextFieldHint),
                                 if (existingUser)
                                   Text(
-                                    ' - ${AppLocalizations.of(context).existingUserError}',
+                                    ' - ${l10n.existingUserError}',
                                     style: TextStyle(color: Colors.red),
                                   ),
                               ],
@@ -177,10 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                           enableSuggestions: false,
                           autocorrect: false,
                           decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(
-                                  context,
-                                ).passwordTextFieldHint,
+                            labelText: l10n.passwordTextFieldHint,
                             suffixIcon: IconButton(
                               onPressed: () {
                                 HapticsUtil.vibrate();
@@ -201,9 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                             true => (() => onLogin(context)),
                             false => null,
                           },
-                          child: Text(
-                            AppLocalizations.of(context).loginButtonLabel,
-                          ),
+                          child: Text(l10n.loginButtonLabel),
                         ),
                       ],
                     ),

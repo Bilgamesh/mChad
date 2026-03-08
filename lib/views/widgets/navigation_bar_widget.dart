@@ -25,6 +25,7 @@ class NavigationBarWidget extends StatelessWidget {
         final messageMap = values[2] as Map<Account, List<Message>>;
         final messages = messageMap[account] ?? [];
         final update = values[3] as UpdateStatus;
+        final l10n = AppLocalizations.of(context);
         final unreadMessagesCurrent = messages.where(
           (m) => !(m.isRead ?? false),
         );
@@ -56,7 +57,7 @@ class NavigationBarWidget extends StatelessWidget {
                   _ => Icon(Icons.chat_outlined),
                 },
               ),
-              label: AppLocalizations.of(context).chatLabelValue,
+              label: l10n.chatLabelValue,
             ),
 
             NavigationDestination(
@@ -68,7 +69,7 @@ class NavigationBarWidget extends StatelessWidget {
                   _ => Icon(Icons.people_outline),
                 },
               ),
-              label: AppLocalizations.of(context).accountsLabelValue,
+              label: l10n.accountsLabelValue,
             ),
 
             NavigationDestination(
@@ -80,7 +81,7 @@ class NavigationBarWidget extends StatelessWidget {
                   _ => Icon(Icons.settings_outlined),
                 },
               ),
-              label: AppLocalizations.of(context).settingsLabelValue,
+              label: l10n.settingsLabelValue,
             ),
           ],
         );
