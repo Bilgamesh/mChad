@@ -318,7 +318,7 @@ class DocumentUtil {
       await precacheImage(
         CachedNetworkImageProvider(
           src,
-          cacheKey: CryptoUtil.generateMd5('${account.getHeaders()}$src'),
+          cacheKey: '${CryptoUtil.serializeHeaders(account.getHeaders())}|$src',
           headers: account.getHeaders(src: src),
         ),
         globals.navigatorKey.currentContext!,

@@ -28,3 +28,4 @@ final refreshStatusNotifier = PropertyValueNotifier(
 final settingsNotifier = PropertyValueNotifier(SettingsModel.defaultSettings);
 final updateNotifier = ValueNotifier(UpdateStatus.none);
 final packageInfoNotifier = ValueNotifier<PackageInfo?>(null);
+final timeRelativeMapNotifier = PropertyValueNotifier(<Account, String>{});

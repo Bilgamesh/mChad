@@ -29,7 +29,8 @@ class AvatarWidget extends StatelessWidget {
           fadeOutDuration: Duration.zero,
           imageUrl: avatarSrc!,
           httpHeaders: account.getHeaders(src: avatarSrc),
-          cacheKey: CryptoUtil.generateMd5('${account.getHeaders()}$avatarSrc'),
+          cacheKey:
+              '${CryptoUtil.serializeHeaders(account.getHeaders())}|$avatarSrc',
           placeholder:
               (context, url) =>
                   Image.asset('assets/images/no_avatar.gif', fit: BoxFit.cover),

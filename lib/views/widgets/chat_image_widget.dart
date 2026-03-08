@@ -24,7 +24,7 @@ class ChatImageWidget extends StatelessWidget {
       MediaQuery.sizeOf(context).width / 1.5,
       MediaQuery.sizeOf(context).height / 1.5,
     );
-    final cacheKey = CryptoUtil.generateMd5('${account.getHeaders()}$src');
+    final cacheKey = '${CryptoUtil.serializeHeaders(account.getHeaders())}|$src';
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: GestureDetector(

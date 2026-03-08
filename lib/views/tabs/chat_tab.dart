@@ -128,7 +128,7 @@ class _ChatTabState extends State<ChatTab> {
             initialChildSize: 0.5,
             minChildSize: 0.5,
             maxChildSize: 1.0,
-            snapSizes: [0.5, 1.0],
+            snapSizes: const [0.5, 1.0],
             expand: false,
             builder:
                 (context, scrollController) => TextWidgetsModalWidget(

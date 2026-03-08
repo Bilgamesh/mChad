@@ -47,20 +47,22 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
   String? lastCookies;
   @override
   void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
+    timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
       updateTime();
     });
     refreshTimeMapNotifer.addListener(updateTime);
     super.initState();
   }
 
-  void updateTime() async {
-    final timeRelativeNew = await TimeUtil.convertToAgo(
+  void updateTime() {
+    final timeRelativeNew = TimeUtil.convertToAgoSync(
       refreshTimeMapNotifer.value[widget.account] ?? DateTime.now(),
+      context,
     );
-    setState(() {
-      timeRelative = timeRelativeNew;
-    });
+    if (timeRelative != timeRelativeNew)
+      setState(() {
+        timeRelative = timeRelativeNew;
+      });
   }
 
   String getTimeRelative(BuildContext context) {
@@ -83,7 +85,9 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
     final refreshStatus =
         widget.refreshStatusMap[widget.account] ?? VerificationStatus.none;
     final messages = widget.messageMap[widget.account] ?? [];
-    final unreadMessages = messages.where((m) => !(m.isRead ?? false));
+    final unreadMessagesCount =
+        messages.where((m) => !(m.isRead ?? false)).length;
+    final l10n = AppLocalizations.of(context);
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       child: ListTile(
@@ -116,7 +120,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
             FittedBox(
               child: switch (widget.isSelected) {
                 true => Text(
-                  '@${widget.account.forumName} - ${AppLocalizations.of(context).currentlySelected}',
+                  '@${widget.account.forumName} - ${l10n.currentlySelected}',
                 ),
                 false => Text('@${widget.account.forumName}'),
               },
@@ -125,7 +129,7 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
               child: Row(
                 children: [
                   Text(
-                    '${AppLocalizations.of(context).numberOfUsers}: ${onlineUsers?.totalCount ?? 0}',
+                    '${l10n.numberOfUsers}: ${onlineUsers?.totalCount ?? 0}',
                   ),
                   IconButton(
                     onPressed: () {
@@ -137,11 +141,11 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                 ],
               ),
             ),
-            if (!widget.isSelected && unreadMessages.isNotEmpty)
+            if (!widget.isSelected && unreadMessagesCount > 0)
               SizedBox(
                 height: 30,
                 child: Text(
-                  '${AppLocalizations.of(context).unreadMessages}: ${unreadMessages.length}',
+                  '${l10n.unreadMessages}: $unreadMessagesCount',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -150,15 +154,13 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                 SizedBox(
                   height: 38,
                   child: switch (refreshStatus) {
-                    VerificationStatus.loading => Text(
-                      AppLocalizations.of(context).chatRefreshing,
-                    ),
+                    VerificationStatus.loading => Text(l10n.chatRefreshing),
                     VerificationStatus.error => Text(
-                      '${AppLocalizations.of(context).chatRefreshError} ${timeRelative ?? getTimeRelative(context)}',
+                      '${l10n.chatRefreshError} ${timeRelative ?? getTimeRelative(context)}',
                       style: TextStyle(color: Colors.red),
                     ),
                     _ => Text(
-                      '${AppLocalizations.of(context).chatRefreshed} ${timeRelative ?? getTimeRelative(context)}',
+                      '${l10n.chatRefreshed} ${timeRelative ?? getTimeRelative(context)}',
                     ),
                   },
                 ),
@@ -171,21 +173,13 @@ class _AccountCardWidgetState extends State<AccountCardWidget> {
                 OutlinedButton(
                   onPressed: widget.onOpen,
                   child: Row(
-                    children: [
-                      Icon(Icons.menu_open),
-                      Text(' ${AppLocalizations.of(context).open} '),
-                    ],
+                    children: [Icon(Icons.menu_open), Text(' ${l10n.open} ')],
                   ),
                 ),
                 SizedBox(width: 10.0),
                 OutlinedButton(
                   onPressed: widget.onLogout,
-                  child: Row(
-                    children: [
-                      Icon(Icons.logout),
-                      Text(AppLocalizations.of(context).logout),
-                    ],
-                  ),
+                  child: Row(children: [Icon(Icons.logout), Text(l10n.logout)]),
                 ),
               ],
             ),
