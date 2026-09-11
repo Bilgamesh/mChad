@@ -16,9 +16,9 @@ final logger = LoggingUtil(module: 'background_sync');
 @pragma('vm:entry-point')
 class BackgroundSync {
   @pragma('vm:entry-point')
-  static Future<void> backgroundFetchHeadlessTask(HeadlessTask task) async {
-    String taskId = task.taskId;
-    bool isTimeout = task.timeout;
+  static Future<void> backgroundFetchHeadlessTask(HeadlessEvent event) async {
+    String taskId = event.taskId;
+    bool isTimeout = event.timeout;
     if (isTimeout) {
       logger.info('[BackgroundFetch] Headless task timed-out: $taskId');
       BackgroundFetch.finish(taskId);

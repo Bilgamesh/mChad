@@ -5,7 +5,7 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/views/widgets/message_row_widget.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mchad/views/widgets/shimmer_skeletonizer.dart';
 
 class PlaceholderMessageWidget extends StatefulWidget {
   const PlaceholderMessageWidget({
@@ -52,8 +52,8 @@ class _PlaceholderMessageWidgetState extends State<PlaceholderMessageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Skeletonizer(
-      enabled: true,
+    return ShimmerSkeletonizer(
+      colorScheme: widget.settings.colorScheme,
       child: MessageRowWidget(
         index: widget.index - 1,
         settings: widget.settings,

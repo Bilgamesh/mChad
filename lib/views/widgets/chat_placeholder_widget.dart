@@ -5,7 +5,7 @@ import 'package:mchad/data/models/account_model.dart';
 import 'package:mchad/data/models/message_model.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/views/widgets/chat_widget.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mchad/views/widgets/shimmer_skeletonizer.dart';
 
 class ChatPlaceholderWidget extends StatefulWidget {
   const ChatPlaceholderWidget({Key? key, required this.settings})
@@ -72,8 +72,8 @@ class _ChatPlaceholderWidgetState extends State<ChatPlaceholderWidget> {
       wasPreviouslySelected: false,
     );
 
-    return Skeletonizer(
-      enabled: true,
+    return ShimmerSkeletonizer(
+      colorScheme: widget.settings.colorScheme,
       child: ChatWidget(
         account: account,
         messages: messages,

@@ -5,7 +5,7 @@ import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/notifier_util.dart';
 import 'package:mchad/views/widgets/emoticon_wrap_widget.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mchad/views/widgets/shimmer_skeletonizer.dart';
 
 class EmoticonListWidget extends StatelessWidget {
   const EmoticonListWidget({
@@ -37,8 +37,8 @@ class EmoticonListWidget extends StatelessWidget {
               final settings = values[1] as SettingsModel;
               return SafeArea(
                 child: switch (emoticons.length) {
-                  0 => Skeletonizer(
-                    enabled: true,
+                  0 => ShimmerSkeletonizer(
+                    colorScheme: settings.colorScheme,
                     child: EmoticonWrapWidget(
                       account: account,
                       settings: settings,
