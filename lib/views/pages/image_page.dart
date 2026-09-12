@@ -41,9 +41,9 @@ class _ImagePageState extends State<ImagePage> {
     }
     // Since the Image Page always has dark AppBar background,
     // if rest of the app is in light theme
-    // flutter sometimes uses wrong status bar theme.
+    // flutter sometimes uses wrong status bar theme on Android.
     // Manual refresh when exiting Image Page fixes it
-    UiUtil.refreshStatusBarTheme(widget.settings);
+    if (!Platform.isAndroid) UiUtil.refreshStatusBarTheme(widget.settings);
     super.dispose();
   }
 
