@@ -23,7 +23,7 @@
 
 ## Installation
 
-Download the APK from [GitHub Releases](https://github.com/Bilgamesh/mChad/releases) and install it.
+Download the APK/IPA from [GitHub Releases](https://github.com/Bilgamesh/mChad/releases) and install it.
 
 ## Screenshots
 
