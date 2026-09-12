@@ -35,7 +35,8 @@ class UiUtil {
             Platform.isIOS ? sameBrightness : oppositeBrightness,
         systemNavigationBarIconBrightness:
             Platform.isIOS ? sameBrightness : oppositeBrightness,
-        statusBarBrightness: oppositeBrightness,
+        statusBarBrightness:
+            Platform.isIOS ? sameBrightness : oppositeBrightness,
       ),
     );
   }
