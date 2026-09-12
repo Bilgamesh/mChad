@@ -1,0 +1,65 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:
+
+env:
+  APP_NAME: mChad
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: *//')
+          echo "VERSION=$VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS archive
+        run: flutter build ipa --release --no-codesign
+
+      - name: Create unsigned IPA
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          mkdir -p build/ios/ipa/Payload
+
+          cp -R \
+            build/ios/archive/Runner.xcarchive/Products/Applications/Runner.app \
+            build/ios/ipa/Payload/Runner.app
+
+          cd build/ios/ipa
+
+          zip -r -q "${APP_NAME}_v${VERSION}.ipa" Payload
+
+      - name: Verify IPA
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          IPA="build/ios/ipa/${APP_NAME}_v${VERSION}.ipa"
+
+          echo "Created: $IPA"
+          echo
+          echo "IPA contents:"
+          unzip -l "$IPA"
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP_NAME }}-ipa
+          path: build/ios/ipa/${{ env.APP_NAME }}_v*.ipa
