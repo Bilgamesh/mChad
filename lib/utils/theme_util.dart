@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,6 +27,10 @@ class ThemeUtil {
         colorScheme.brightness == Brightness.dark
             ? Brightness.light
             : Brightness.dark;
+    final sameBrightness =
+        colorScheme.brightness == Brightness.dark
+            ? Brightness.dark
+            : Brightness.light;
     var baseThemeData = ThemeData(
       colorScheme: colorScheme,
       appBarTheme: AppBarTheme(
@@ -34,8 +39,8 @@ class ThemeUtil {
           systemNavigationBarColor: Colors.transparent,
           systemNavigationBarContrastEnforced: false,
           systemStatusBarContrastEnforced: false,
-          statusBarIconBrightness: oppositeBrightness,
-          systemNavigationBarIconBrightness: oppositeBrightness,
+          statusBarIconBrightness: Platform.isAndroid ? oppositeBrightness : sameBrightness,
+          systemNavigationBarIconBrightness: Platform.isAndroid ? oppositeBrightness : sameBrightness,
         ),
       ),
     );
