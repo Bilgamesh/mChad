@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/utils/haptics_util.dart';
+import 'package:mchad/utils/ui_util.dart';
 
 class DarkModeButtonWidget extends StatelessWidget {
   const DarkModeButtonWidget({Key? key, this.hero}) : super(key: key);
@@ -16,6 +18,7 @@ class DarkModeButtonWidget extends StatelessWidget {
               onPressed: () async {
                 HapticsUtil.vibrate();
                 await settings.setDarkMode(!settings.isDark).save();
+                if (Platform.isIOS) UiUtil.refreshStatusBarTheme(settings);
               },
               icon: switch (settings.isDark) {
                 true => Icon(Icons.light_mode),
