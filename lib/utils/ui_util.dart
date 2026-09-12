@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -23,14 +24,17 @@ class UiUtil {
   static void refreshStatusBarTheme(SettingsModel settings) {
     final oppositeBrightness =
         settings.isDark ? Brightness.light : Brightness.dark;
+    final sameBrightness = settings.isDark ? Brightness.dark : Brightness.light;
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarColor: Colors.transparent,
         systemNavigationBarContrastEnforced: false,
         systemStatusBarContrastEnforced: false,
-        statusBarIconBrightness: oppositeBrightness,
-        systemNavigationBarIconBrightness: oppositeBrightness,
+        statusBarIconBrightness:
+            Platform.isIOS ? sameBrightness : oppositeBrightness,
+        systemNavigationBarIconBrightness:
+            Platform.isIOS ? sameBrightness : oppositeBrightness,
         statusBarBrightness: oppositeBrightness,
       ),
     );
