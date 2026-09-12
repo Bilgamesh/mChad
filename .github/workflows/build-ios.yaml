@@ -16,7 +16,7 @@ jobs:
 
       - name: Disable background_fetch for iOS
         run: |
-          sed -i "/background_fetch:/d" pubspec.yaml
+          sed -i '' '/background_fetch:/d' pubspec.yaml
           rm lib/config/background_fetch_init.dart
           mv lib/config/background_fetch_init_ios.dart lib/config/background_fetch_init.dart
 
