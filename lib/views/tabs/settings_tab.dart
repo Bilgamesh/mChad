@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/settings_model.dart';
 import 'package:mchad/data/state/notifiers.dart';
@@ -12,7 +13,7 @@ import 'package:mchad/views/widgets/settings_dropdown_widget.dart';
 import 'package:mchad/views/widgets/settings_slider_widget.dart';
 import 'package:mchad/views/widgets/settings_toggle_row_widget.dart';
 import 'package:mchad/views/widgets/update_button_widget.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:mchad/utils/ui_util.dart';
 
 class SettingsTab extends StatelessWidget {
   const SettingsTab({Key? key}) : super(key: key);
@@ -55,7 +56,10 @@ class SettingsTab extends StatelessWidget {
                 SettingsToggleRowWidget(
                   label: l10n.darkMode,
                   value: settings.isDark,
-                  onValueChanged: (value) => settings.setDarkMode(value).save(),
+                  onValueChanged: (value) {
+                    settings.setDarkMode(value).save();
+                    if (Platform.isIOS) UiUtil.refreshStatusBarTheme(settings);
+                  },
                 ),
                 SettingsToggleRowWidget(
                   label: l10n.showAppBar,
