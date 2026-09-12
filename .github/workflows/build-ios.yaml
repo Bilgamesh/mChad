@@ -14,6 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Disable background_fetch for iOS
+        run: |
+          sed -i "/background_fetch:/d" pubspec.yaml
+          rm lib/config/background_fetch_init.dart
+          mv lib/config/background_fetch_init_ios.dart lib/config/background_fetch_init.dart
+
       - name: Read version from pubspec.yaml
         id: version
         run: |

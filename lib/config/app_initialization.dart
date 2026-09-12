@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:mchad/config/background_fetch_init.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/data/state/globals.dart' as globals;
-import 'package:background_fetch/background_fetch.dart';
 import 'package:mchad/data/persistent-stores/account_store.dart';
 import 'package:mchad/data/persistent-stores/settings_store.dart';
-import 'package:mchad/jobs/mchat/mchat_background_sync.dart';
 import 'package:mchad/services/lifecycle/lifecycle_service.dart';
 import 'package:mchad/services/notifications/notifications_service.dart';
 import 'package:mchad/utils/logging_util.dart';
@@ -89,23 +88,3 @@ Future<void> initPackageInfo() async {
   packageInfoNotifier.value = packageInfo;
 }
 
-Future<void> initBackgroundFetch() async {
-  int status = await BackgroundFetch.configure(
-    BackgroundFetchConfig(
-      minimumFetchInterval: 15,
-      stopOnTerminate: false,
-      enableHeadless: true,
-      requiresBatteryNotLow: false,
-      requiresCharging: false,
-      requiresStorageNotLow: false,
-      requiresDeviceIdle: false,
-      requiredNetworkType: NetworkType.ANY,
-    ),
-    BackgroundSync.backgroundFetchTask,
-    BackgroundSync.backgroundFetchTimeout,
-  );
-  BackgroundFetch.registerHeadlessTask(
-    BackgroundSync.backgroundFetchHeadlessTask,
-  );
-  logger.info('[BackgroundFetch] configure success: $status');
-}
