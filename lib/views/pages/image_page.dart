@@ -64,7 +64,7 @@ class _ImagePageState extends State<ImagePage> {
         backgroundColor: uiVisible ? Colors.black54 : Colors.transparent,
         iconTheme: IconThemeData(color: Colors.white),
         actions: [
-          if (uiVisible)
+          if (uiVisible && !Platform.isIOS)
             IconButton(
               onPressed: () => download(widget.src, fileName, context),
               icon: Icon(Icons.download),

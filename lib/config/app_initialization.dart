@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mchad/data/state/notifiers.dart';
 import 'package:mchad/data/state/globals.dart' as globals;
@@ -35,11 +36,13 @@ Future<AppInitializationData> initApp() async {
     if (account.wasPreviouslySelected == true) account.select();
   }
 
-  await initBackgroundFetch();
-  NotificationsService.initialize();
+  if (!Platform.isIOS) {
+    await initBackgroundFetch();
+    NotificationsService.initialize();
+  }
 
   globals.syncManager.startAll();
-  globals.updateCheck.startCheck();
+  if (!Platform.isIOS) globals.updateCheck.startCheck();
 
   LifecycleService().addListener((AppLifecycleState state) {
     switch (state) {
@@ -48,12 +51,12 @@ Future<AppInitializationData> initApp() async {
       case AppLifecycleState.hidden:
       case AppLifecycleState.inactive:
         globals.syncManager.stopAll();
-        globals.updateCheck.stopCheck();
+        if (!Platform.isIOS) globals.updateCheck.stopCheck();
         globals.background = true;
         break;
       default:
         globals.syncManager.startAll();
-        globals.updateCheck.startCheck();
+        if (!Platform.isIOS) globals.updateCheck.startCheck();
         globals.background = false;
     }
   }).startListening();

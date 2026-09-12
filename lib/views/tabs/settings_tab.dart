@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:mchad/config/constants.dart';
 import 'package:mchad/data/models/settings_model.dart';
@@ -58,19 +59,20 @@ class SettingsTab extends StatelessWidget {
                       (value) =>
                           settings.setLowContrastBackground(value).save(),
                 ),
-                SettingsToggleRowWidget(
-                  label: l10n.notifications,
-                  value: settings.notifications,
-                  onValueChanged: (value) async {
-                    if (value == false) {
-                      settings.setNotifications(value).save();
-                      return;
-                    }
-                    NotificationsService.requestPermission().then(
-                      (value) => settings.setNotifications(value).save(),
-                    );
-                  },
-                ),
+                if (!Platform.isIOS)
+                  SettingsToggleRowWidget(
+                    label: l10n.notifications,
+                    value: settings.notifications,
+                    onValueChanged: (value) async {
+                      if (value == false) {
+                        settings.setNotifications(value).save();
+                        return;
+                      }
+                      NotificationsService.requestPermission().then(
+                        (value) => settings.setNotifications(value).save(),
+                      );
+                    },
+                  ),
                 SettingsToggleRowWidget(
                   label: l10n.haptics,
                   value: settings.haptics,
