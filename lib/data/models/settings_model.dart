@@ -21,6 +21,8 @@ class SettingsModel {
     required this.openLinksInBrowser,
     required this.lowContrastBackground,
     required this.fontIndex,
+    required this.showAppBar,
+    required this.fontSize,
   });
   int colorIndex;
   bool isDark;
@@ -31,6 +33,8 @@ class SettingsModel {
   bool lowContrastBackground;
   int languageIndex;
   int fontIndex;
+  bool showAppBar;
+  int fontSize;
 
   static SettingsModel fromString(String strinfigiedSettings) {
     final props = List<String>.from(jsonDecode(strinfigiedSettings));
@@ -44,6 +48,8 @@ class SettingsModel {
       openLinksInBrowser: props.elementAtOrNull(6) == 'true',
       lowContrastBackground: props.elementAtOrNull(7) == 'true',
       fontIndex: int.tryParse(props.elementAtOrNull(8) ?? '0') ?? 0,
+      showAppBar: (props.elementAtOrNull(9) ?? 'true') == 'true',
+      fontSize: int.tryParse(props.elementAtOrNull(10) ?? "14") ?? 14,
     );
   }
 
@@ -62,6 +68,8 @@ class SettingsModel {
       openLinksInBrowser: false,
       lowContrastBackground: false,
       fontIndex: 0,
+      showAppBar: true,
+      fontSize: 14,
     );
   }
 
@@ -148,6 +156,16 @@ class SettingsModel {
 
   SettingsModel setFontIndex(int value) {
     fontIndex = value;
+    return this;
+  }
+
+  SettingsModel setShowAppBar(bool value) {
+    showAppBar = value;
+    return this;
+  }
+
+  SettingsModel setFontSize(int value) {
+    fontSize = value;
     return this;
   }
 

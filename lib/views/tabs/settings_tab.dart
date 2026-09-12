@@ -9,6 +9,7 @@ import 'package:mchad/utils/notifier_util.dart';
 import 'package:mchad/views/widgets/color_picker_widget.dart';
 import 'package:mchad/l10n/generated/app_localizations.dart';
 import 'package:mchad/views/widgets/settings_dropdown_widget.dart';
+import 'package:mchad/views/widgets/settings_slider_widget.dart';
 import 'package:mchad/views/widgets/settings_toggle_row_widget.dart';
 import 'package:mchad/views/widgets/update_button_widget.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -51,6 +52,17 @@ class SettingsTab extends StatelessWidget {
                   child: ColorPickerWidget(settings: settings),
                 ),
                 SizedBox(height: 20.0),
+                SettingsToggleRowWidget(
+                  label: l10n.darkMode,
+                  value: settings.isDark,
+                  onValueChanged: (value) => settings.setDarkMode(value).save(),
+                ),
+                SettingsToggleRowWidget(
+                  label: l10n.showAppBar,
+                  value: settings.showAppBar,
+                  onValueChanged:
+                      (value) => settings.setShowAppBar(value).save(),
+                ),
                 SettingsToggleRowWidget(
                   label: l10n.lowConstrast,
                   subtitle: l10n.lowersBackgroundColorContrast,
@@ -109,6 +121,12 @@ class SettingsTab extends StatelessWidget {
                   ),
                   onChanged:
                       (value) => settings.setFontIndex(value ?? 3).save(),
+                ),
+                SettingsSliderWidget(
+                  label: l10n.fontSize,
+                  value: settings.fontSize.toDouble(),
+                  onChanged:
+                      (value) => settings.setFontSize(value.toInt()).save(),
                 ),
                 SettingsDropdownWidget(
                   label: l10n.languageLabel,

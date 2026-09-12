@@ -216,4 +216,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get issueTracker => 'Issue tracker';
+
+  @override
+  String get showAppBar => 'Show app bar';
+
+  @override
+  String get darkMode => 'Dark mode';
+
+  @override
+  String get fontSize => 'Font size';
 }

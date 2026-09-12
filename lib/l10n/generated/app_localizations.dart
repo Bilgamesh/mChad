@@ -511,6 +511,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Issue tracker'**
   String get issueTracker;
+
+  /// No description provided for @showAppBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Show app bar'**
+  String get showAppBar;
+
+  /// No description provided for @darkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get darkMode;
+
+  /// No description provided for @fontSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Font size'**
+  String get fontSize;
 }
 
 class _AppLocalizationsDelegate

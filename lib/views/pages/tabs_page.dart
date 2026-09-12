@@ -43,6 +43,7 @@ class TabsPage extends StatelessWidget {
                 resizeToAvoidBottomInset: false,
                 appBar: switch (orientation) {
                   Orientation.portrait => AppBar(
+                    toolbarHeight: settings.showAppBar ? null : 0,
                     title: Hero(
                       tag: 'appBarTitle',
                       child: Material(

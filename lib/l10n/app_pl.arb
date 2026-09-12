@@ -67,5 +67,8 @@
   "license": "Licencja",
   "licenses": "Licencje",
   "sourceCode": "Kod źródłowy",
-  "issueTracker": "Śledzenie problemów"
+  "issueTracker": "Śledzenie problemów",
+  "showAppBar": "Pasek aplikacji",
+  "darkMode": "Tryb ciemny",
+  "fontSize": "Rozmiar czcionki"
 }

@@ -215,4 +215,13 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get issueTracker => 'Śledzenie problemów';
+
+  @override
+  String get showAppBar => 'Pasek aplikacji';
+
+  @override
+  String get darkMode => 'Tryb ciemny';
+
+  @override
+  String get fontSize => 'Rozmiar czcionki';
 }

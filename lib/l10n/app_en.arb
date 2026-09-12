@@ -67,5 +67,8 @@
   "license": "License",
   "licenses": "Licenses",
   "sourceCode": "Source code",
-  "issueTracker": "Issue tracker"
+  "issueTracker": "Issue tracker",
+  "showAppBar": "Show app bar",
+  "darkMode": "Dark mode",
+  "fontSize": "Font size"
 }

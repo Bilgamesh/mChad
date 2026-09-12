@@ -74,6 +74,7 @@ class ChatBubble extends StatelessWidget {
                 renderMode: RenderMode.column,
                 customStylesBuilder: buildStyles,
                 customWidgetBuilder: buildHtmlWidget,
+                textStyle: TextStyle(fontSize: settings.fontSize.toDouble()),
                 onTapUrl: (url) {
                   UrlUtil.openUrl(url);
                   return true;
