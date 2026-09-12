@@ -2,7 +2,7 @@ name: mchad
 description: "A free mobile client for mChat - phpBB's chat extension"
 publish_to: 'none'
 
-version: 0.9.13
+version: 0.9.14
 
 environment:
   sdk: ^3.7.2
