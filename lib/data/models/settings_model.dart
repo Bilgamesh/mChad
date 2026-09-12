@@ -85,6 +85,8 @@ class SettingsModel {
       openLinksInBrowser.toString(),
       lowContrastBackground.toString(),
       fontIndex.toString(),
+      showAppBar.toString(),
+      fontSize.toString(),
     ]);
   }
 
